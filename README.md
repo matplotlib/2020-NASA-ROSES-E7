@@ -17,3 +17,9 @@ Grant proposal responding to the 2020 NASA ROSES E7 solicitation.
  - [NSPIRES page](https://nspires.nasaprs.com/external/solicitations/summary.do?solId={958CF134-D655-E512-B5AD-84501D14A0C1}&path=&method=init)
   - [Full Solicitation](https://nspires.nasaprs.com/external/viewrepositorydocument/cmdocumentid=735966/solicitationId=%7B958CF134-D655-E512-B5AD-84501D14A0C1%7D/viewSolicitationDocument=1/FULL%20ROSES-2020_Amend78_clarify.pdf) (SoS a(pages 8-72) and Appendix E7 (pages 864-867) are relevant.
  - [pdf guide](https://nspires.nasaprs.com/tutorials/PDF_Guidelines.pdf)
+
+
+## Dates
+
+ - 2021-01-11: NumFOCUS internal deadline
+ - 2021-01-19: Submission deadline
