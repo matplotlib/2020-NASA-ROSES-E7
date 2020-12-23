@@ -8,10 +8,10 @@
 % NOTE: I actually use XeLaTeX, which allows me to get the fonts
 % exactly the way that I want them. For proposals, this means
 % I can use Times New Roman instead of the default Computer
-% Modern. I actually like Computer Modern, but since Times New
-% Roman is standard, there's no point in throwing off a reviewer
+% Modern. I actually like Computer Modern, but since Arial
+% is what the solicitation suggests there's no point in throwing off a reviewer
 % with an unexpected font, particularly one with such a
-% polarizing reaction in readers. New upset the reviewrers, I
+% polarizing reaction in readers. Never upset the reviewrers, I
 % always say.
 %
 % What's the point of this bit of rambling? If you do not want to use
@@ -20,16 +20,13 @@
 % font commands.
 %
 % If you want to use XeLaTeX but want different fonts, then you
-% just need to change the name in the argument for \setmainfont
-% and \setsansfont. Make sure that the font you use is loaded on
+% just need to change the name in the argument for \setmainfont.
+% Make sure that the font you use is loaded on
 % your machine and your TeX distribution knows how to find it.
 % See Google if you need to learn more about this.
 %
-%\usepackage{fontspec}
-%\usepackage{xunicode}
-%\setmainfont[Mapping=tex-text]{Times New Roman}
-%\setsansfont[Mapping=tex-text,Color=000]{Ariel}
-
+\usepackage{fontspec}
+\setmainfont{Arial}
 
 %%%
 %% Packages that I use on a regular basis.
@@ -104,7 +101,7 @@
 \titlespacing{\subsubsection}{0pt}{14pt plus 2pt minus 2pt}{4pt plus 2pt minus 2pt}[0pt]
 
 %%%
-%% These commands get the lists to work the way that I want therm to.
+%% These commands get the lists to work the way that I want them to.
 %%%
 % i.e. I want less space wrapping around the list.
 \usepackage{enumitem}
@@ -119,30 +116,12 @@
 \usepackage{multirow}
 \usepackage{array}
 
-%%%
-%%% Package to create Gantt schedules
-%%%
-\usepackage{pgfgantt}
-
 
 %%%
 %%% Formatting urls
 %%%
 \usepackage{url}
 \urlstyle{rm}
-
-
-%%%
-%% A few new commands to handle some frequently used symbols.
-%%%
-% I work with temperatures, approximations, and Mars a lot, alright?
-\newcommand{\cotwo}{\hbox{CO$_{2}$ }}     % CO2
-\newcommand{\degree}{^{\circ}}     % degrees
-\newcommand{\simmod}{\raise.17ex\hbox{$\scriptstyle\sim$}}     % tilde
-\newcolumntype{L}{>{\arraybackslash}m{2.6in}}
-\newcolumntype{Q}{>{\centering\arraybackslash}m{0.25in}}
-\newcolumntype{S}{>{\centering\arraybackslash}m{0.78in}}
-\newcolumntype{T}{>{\centering\arraybackslash}m{0.5in}}
 
 %% The lineno packages adds line numbers. Start line numbering with
 %% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
@@ -153,7 +132,6 @@
 %% 'sidecap' package.
 \usepackage[rightcaption]{sidecap}
 \sidecaptionvpos{figure}{t}
-
 
 %% For more control of the enumeration environment (lists with numbers)
 %% use the enumitem package.
@@ -168,6 +146,7 @@
 % To use symbols for the footnotes:
 \renewcommand{\thefootnote}{\fnsymbol{footnote}}
 
+% set up the page numbers as 1-N, 2-N, ...
 \numberwithin{page}{section}
 \renewcommand{\thepage}{\thesection-\arabic{page}}
 
@@ -190,27 +169,29 @@
 \begin{document}
 \title{Improving the Foundations and Maintenance of Matplotlib and CartoPy}
 \author{Dr. Thomas A Caswell\\Dr. Ryan May}
-% This date field is blank becauseI usually don't put a date. It's not necessary and it's usually the wrong one.
 \date{}
 \maketitle
 
 % First, let's get that TOC in there. NASA likes it.
-%\renewcommand{\contentsname}{Science/Technical/Management}
 \setcounter{tocdepth}{2}
 \tableofcontents
-
 \thispagestyle{empty}
-
 % Let's leave this TOC alone on this page and start a new one for
 % proposal body.
-%\newpage
-
-% Let's reset the page counter. This way the title/table-of-contents page is not included in the page numbering.
-
 \newpage
+
 \section{Scientific/Technical/Management (S/T/M)}
+% Let's reset the page counter.
 \setcounter{page}{1}
+% the subsection are a combination of the lines labeled "Content" in
+% Table 1 (on ROSES-20 SoS-51) and the text in E.7.3 (on E.7-2 -
+% E.7-3) describing what needs to be in the proposal.
+
+% not sure that this order is right, but I think we need to hit all of
+% these points.  Maybe want to rename the section headings or merge
+% some of them?
 \subsection{description of software and relevance to SMD}
+
 Matplotlib is an established open source plotting library with a
 BSD-derived license that is currently used through out both the SMD
 science community and the wider scientific community for both
@@ -220,15 +201,17 @@ initial work was done in 2001-2002. Over the last 17 years the project
 has grown to have over 1,000 individual contributors, over a million
 users, and is in the top 100 most downloaded Python packages. We are a
 dependency of many down-stream libraries, including yt, astropy,
-ArviZ, and xarray. CartoPy is a Matplotlib extension library that
-brings support for mapping applications to Matplotlib, providing
-support for plotting using a variety of map projections (both
-terrestrial and non) as well as providing out-of-the-box support for
-many terrestrial map features. CartoPy is currently the only
-Matplotlib-based plotting library for mapping applications being
-actively developed in the Python ecosystem. CartoPy is frequently used
-for earth science applications, including many uses of NASA Earth
-science datasets.
+ArviZ, and xarray.
+
+
+CartoPy is a Matplotlib extension library that brings support for
+mapping applications to Matplotlib, providing support for plotting
+using a variety of map projections (both terrestrial and non) as well
+as providing out-of-the-box support for many terrestrial map
+features. CartoPy is currently the only Matplotlib-based plotting
+library for mapping applications being actively developed in the
+Python ecosystem. CartoPy is frequently used for earth science
+applications, including many uses of NASA Earth science datasets.
 
 
 \subsection{Objectives and Significance}
@@ -312,7 +295,8 @@ developer has the full history on their computer which provides
 significant redundancy.  Tagged releases of the software are published
 to pypi (in both source and binary forms).  In addition, Anaconada,
 macports, homebrew, and all major Linux distributions independently
-build, package, and host Matplotlib.
+build, package, and host Matplotlib.  User facing documentation is built
+and hosted at \url{https://matplotlib.org}.
 
 Cartopy is currently developed in the open on GitHub and is released
 under the LGPL.  All work done on Matplotlib as part of this grant
@@ -323,10 +307,8 @@ which provides significant redundancy.
 
 %do we need something about shape files / map tiles?
 
-
 Any new libraries created as part of the ROSES award will be developed
 in the open on GitHub and will released under a BSD-3 license.
-
 
 % do we need this?
 Any incidental work on other software packages, either upstream or
