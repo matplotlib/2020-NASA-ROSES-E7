@@ -215,6 +215,7 @@ applications, including many uses of NASA Earth science datasets.
 
 
 \subsection{Objectives and Significance}
+\subsubsection{Unit work}
 Matplotlib supports plotting unit-aware data structures which have
 been used to support spaceflight operations by Monte, JPL's mission
 design and navigation software system. Initial development of this
@@ -228,6 +229,7 @@ guides to working with unit-aware data in Matplotlib, add 100\% test
 coverage of unit support in our plotting routines, and fix any issues
 and inconsistencies discovered in this process.
 
+\subsubsection{Cartopy guts}
 CartoPy's mapping capabilities leverages the widely-used PROJ library
 for mapping projections and the GEOS library for geometry
 applications. Currently, CartoPy maintains custom code to interface
@@ -238,6 +240,7 @@ reduce CartoPy's overall amount of code and enhance maintainability,
 but it will also address two of the biggest challenges that occur in
 packaging CartoPy for its user-base.
 
+\subsubsection{General maintenance}
 
 Matplotlib and Cartopy are community-driven projects, but we have
 grown to the point where we need developers with the time to organize,
@@ -254,21 +257,141 @@ will request will help to significantly reduce, but not eliminate,
 this backlog.
 
 \subsection{Perceived impact of work}
+\begin{enumerate}
+\item increased reliability of unit-aware plotting
+\item improvement in general reliability of software
+\item improved responsively to issues
+\item easier installation and deployment
+\end{enumerate}
 \subsection{Relevance to program element}
+
+Need more examples of SMD using Matplotlib!
+
+Need more examples of SMD using Cartopy!
+
+Matplotlib supports plotting unit-aware data structures which have
+been used to support spaceflight operations by Monte, JPL's mission
+design and navigation software system. (expand this!)
+
 \subsection{Technical approach and methodology}
+
+our standard practice?
+
 \subsection{sources of uncertainty}
+
+may be more work than expected when we start digging in?
+
 \subsection{mitigation to risk}
+
+Will not regress from functional status quo, all work will be an
+improvement but maybe not as much as we plan for.
+
 \subsection{roles of team members}
+\begin{enumerate}
+\item Caswell: PI + maintenance + community
+\item May: Cartopy refactor + unit expertise + maintenance
+\item RSE: lead unit work + maintenance
+\end{enumerate}
 \subsection{workplan with milestones}
 
 \subsection{Project Management}
 \subsubsection{Governance}
-\subsubsection{License}
-\subsubsection{sustainability metrics}
-\subsubsection{collaboration with related projects}
-\subsubsection{inclusive practices}
-\subsubsection{information dissemination}
+Matplotlib is a NumFOCUS Fiscally Sponsored Project.  The governance
+is specified by
+\url{https://github.com/matplotlib/governance/blob/master/governance.md}.
+The project has a Project Lead (Caswell) who is the final authority in
+all decisions, however when possible all decisions are made by
+community consensus.  In addition to the Project Lead, there is a
+formalized Steering Council which is responsible for the overall
+direction of the project, and several Deputy Project Leads who have
+day-to-day technical responsibilities.
 
+
+
+\subsubsection{License}
+
+BSD-derived and LGPL
+
+\subsubsection{sustainability metrics}
+\begin{enumerate}
+\item Regular releases
+\item Number of new regular contributors
+\item Total number of open PRs / Issues
+\end{enumerate}
+
+\subsubsection{collaboration with related projects}
+Matplotlib has well established relationships with both up and
+downstream projects.
+
+The strongest relationships, both historical and current, are with
+projects where we have shared developers.  For example Ryan May and
+Elliot sales de Andre are both core contributors to Matplotlib and
+Cartopy.  Micheal Droettboom, the previous Matplotlib Project lead,
+was also a core developer on Astropy.  Almost all of the Matplotlib
+contributors are expert Matplotlib users in their primary science
+domain.
+
+We maintain multiple communication channels with related projects.
+These include on-line communication, such as reporting issues to each
+other's issue trackers, asking questions on mailing lists or
+discussions forums, and submitting patches.  Inter-project
+relationships are also facilitated by meetings and conferences
+organized by NumFOCUS.
+
+
+
+\subsubsection{inclusive practices}
+
+Matplotlib strives to be an inclusive and open project and have
+adopted a Code of Conduct
+\url{https://github.com/matplotlib/matplotlib/blob/master/CODE_OF_CONDUCT.md}. Anyone
+who is willing to contribute to the project should be able to do.  It
+is important for everyone working on the project to feel safe to make
+mistakes.
+
+One challenge of being an open community developed project is that we do not
+have reliable demographics on a vast majority of our contributors.
+
+We have recently started two efforts to improve the development and
+retention of new contributors: an ``incubator'' channel on gitter and
+a Triage Team.
+
+The hardest part of getting started to contributing to open source
+projects is can be simply getting started.  The incubator is a
+semi-closed chat room where new contributors can get support on any
+aspect of contributing to Matplotlib.  This include the technical
+aspects of the code they are working on, help with git/github, our
+review process, or the social expectations and norms of the community.  The
+goal is that by providing this support to first time contributors we will
+retain more of them as regular contributors and then maintainers.
+
+The issue tracker is important to communication in the project because
+it serves as the centralized location for making feature requests,
+reporting bugs, identifying major projects to work on, and discussing
+priorities.  For this reason, it is important to curate the issue
+list, adding labels to issues and closing issues that are resolved or
+unresolvable. Triaging issues does not require any particular
+expertise in the internals of Matplotlib but is extremely valuable to
+the project.  To this end we have created a ``Triage Team'' in the
+organization who have power to tag, milestone, and close issues.  In
+addition to the direct benefit of improving the issue triage and
+freeing the core-developers to spend more time reviewing PRs, this
+role will bring more people into the developer community and may
+provide a path way to becoming regular contributors and maintainers.
+
+
+We will work with NumFOCUS to develop metrics and evaluate the efficacy of
+these efforts at diversifying our contributor base.
+
+\subsubsection{information dissemination}
+\begin{enumerate}
+\item docs
+\item github
+\item discourse
+\item mailing lists
+\item pydata events
+\item twitter
+\end{enumerate}
 
 \subsection{describe current workflow}
 
