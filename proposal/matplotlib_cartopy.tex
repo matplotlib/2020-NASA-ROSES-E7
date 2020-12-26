@@ -62,6 +62,80 @@
 % Numbered references:
 \usepackage[numbers,super]{natbib}
 \bibliographystyle{unsrtnat}
+% needed for AAS citation
+\let\jnl@style=\rm
+\def\ref@jnl#1{{\jnl@style#1}}
+
+\def\aj{\ref@jnl{AJ}}                   % Astronomical Journal
+\def\actaa{\ref@jnl{Acta Astron.}}      % Acta Astronomica
+\def\araa{\ref@jnl{ARA\&A}}             % Annual Review of Astron and Astrophys
+\def\apj{\ref@jnl{ApJ}}                 % Astrophysical Journal
+\def\apjl{\ref@jnl{ApJ}}                % Astrophysical Journal, Letters
+\def\apjs{\ref@jnl{ApJS}}               % Astrophysical Journal, Supplement
+\def\ao{\ref@jnl{Appl.~Opt.}}           % Applied Optics
+\def\apss{\ref@jnl{Ap\&SS}}             % Astrophysics and Space Science
+\def\aap{\ref@jnl{A\&A}}                % Astronomy and Astrophysics
+\def\aapr{\ref@jnl{A\&A~Rev.}}          % Astronomy and Astrophysics Reviews
+\def\aaps{\ref@jnl{A\&AS}}              % Astronomy and Astrophysics, Supplement
+\def\azh{\ref@jnl{AZh}}                 % Astronomicheskii Zhurnal
+\def\baas{\ref@jnl{BAAS}}               % Bulletin of the AAS
+\def\bac{\ref@jnl{Bull. astr. Inst. Czechosl.}}
+                % Bulletin of the Astronomical Institutes of Czechoslovakia
+\def\caa{\ref@jnl{Chinese Astron. Astrophys.}}
+                % Chinese Astronomy and Astrophysics
+\def\cjaa{\ref@jnl{Chinese J. Astron. Astrophys.}}
+                % Chinese Journal of Astronomy and Astrophysics
+\def\icarus{\ref@jnl{Icarus}}           % Icarus
+\def\jcap{\ref@jnl{J. Cosmology Astropart. Phys.}}
+                % Journal of Cosmology and Astroparticle Physics
+\def\jrasc{\ref@jnl{JRASC}}             % Journal of the RAS of Canada
+\def\memras{\ref@jnl{MmRAS}}            % Memoirs of the RAS
+\def\mnras{\ref@jnl{MNRAS}}             % Monthly Notices of the RAS
+\def\na{\ref@jnl{New A}}                % New Astronomy
+\def\nar{\ref@jnl{New A Rev.}}          % New Astronomy Review
+\def\pra{\ref@jnl{Phys.~Rev.~A}}        % Physical Review A: General Physics
+\def\prb{\ref@jnl{Phys.~Rev.~B}}        % Physical Review B: Solid State
+\def\prc{\ref@jnl{Phys.~Rev.~C}}        % Physical Review C
+\def\prd{\ref@jnl{Phys.~Rev.~D}}        % Physical Review D
+\def\pre{\ref@jnl{Phys.~Rev.~E}}        % Physical Review E
+\def\prl{\ref@jnl{Phys.~Rev.~Lett.}}    % Physical Review Letters
+\def\pasa{\ref@jnl{PASA}}               % Publications of the Astron. Soc. of Australia
+\def\pasp{\ref@jnl{PASP}}               % Publications of the ASP
+\def\pasj{\ref@jnl{PASJ}}               % Publications of the ASJ
+\def\rmxaa{\ref@jnl{Rev. Mexicana Astron. Astrofis.}}%
+                % Revista Mexicana de Astronomia y Astrofisica
+\def\qjras{\ref@jnl{QJRAS}}             % Quarterly Journal of the RAS
+\def\skytel{\ref@jnl{S\&T}}             % Sky and Telescope
+\def\solphys{\ref@jnl{Sol.~Phys.}}      % Solar Physics
+\def\sovast{\ref@jnl{Soviet~Ast.}}      % Soviet Astronomy
+\def\ssr{\ref@jnl{Space~Sci.~Rev.}}     % Space Science Reviews
+\def\zap{\ref@jnl{ZAp}}                 % Zeitschrift fuer Astrophysik
+\def\nat{\ref@jnl{Nature}}              % Nature
+\def\iaucirc{\ref@jnl{IAU~Circ.}}       % IAU Cirulars
+\def\aplett{\ref@jnl{Astrophys.~Lett.}} % Astrophysics Letters
+\def\apspr{\ref@jnl{Astrophys.~Space~Phys.~Res.}}
+                % Astrophysics Space Physics Research
+\def\bain{\ref@jnl{Bull.~Astron.~Inst.~Netherlands}}
+                % Bulletin Astronomical Institute of the Netherlands
+\def\fcp{\ref@jnl{Fund.~Cosmic~Phys.}}  % Fundamental Cosmic Physics
+\def\gca{\ref@jnl{Geochim.~Cosmochim.~Acta}}   % Geochimica Cosmochimica Acta
+\def\grl{\ref@jnl{Geophys.~Res.~Lett.}} % Geophysics Research Letters
+\def\jcp{\ref@jnl{J.~Chem.~Phys.}}      % Journal of Chemical Physics
+\def\jgr{\ref@jnl{J.~Geophys.~Res.}}    % Journal of Geophysics Research
+\def\jqsrt{\ref@jnl{J.~Quant.~Spec.~Radiat.~Transf.}}
+                % Journal of Quantitiative Spectroscopy and Radiative Transfer
+\def\memsai{\ref@jnl{Mem.~Soc.~Astron.~Italiana}}
+                % Mem. Societa Astronomica Italiana
+\def\nphysa{\ref@jnl{Nucl.~Phys.~A}}   % Nuclear Physics A
+\def\physrep{\ref@jnl{Phys.~Rep.}}   % Physics Reports
+\def\physscr{\ref@jnl{Phys.~Scr}}   % Physica Scripta
+\def\planss{\ref@jnl{Planet.~Space~Sci.}}   % Planetary Space Science
+\def\procspie{\ref@jnl{Proc.~SPIE}}   % Proceedings of the SPIE
+
+\let\astap=\aap
+\let\apjlett=\apjl
+\let\apjsupp=\apjs
+\let\applopt=\ao
 
 
 %%%
@@ -192,11 +266,11 @@
 % some of them?
 \subsection{description of software and relevance to SMD}
 
-Matplotlib is an established open source plotting library with a
-BSD-derived license that is currently used through out both the SMD
-science community and the wider scientific community for both
-publication quality figures and for interactive data exploration.  The
-initial commits in our version history date to early 2003 and the
+Matplotlib \cite{Hunter:2007} is an established open source plotting
+library with a BSD-derived license that is currently used through out
+both the SMD science community and the wider scientific community for
+both publication quality figures and for interactive data exploration.
+The initial commits in our version history date to early 2003 and the
 initial work was done in 2001-2002. Over the last 17 years the project
 has grown to have over 1,000 individual contributors, over a million
 users, and is in the top 100 most downloaded Python packages. We are a
@@ -212,6 +286,29 @@ features. CartoPy is currently the only Matplotlib-based plotting
 library for mapping applications being actively developed in the
 Python ecosystem. CartoPy is frequently used for earth science
 applications, including many uses of NASA Earth science datasets.
+
+
+Matplotlib is used through out all of the program elements of the SMD.
+In Earth observation Matplotlib has been used to study thunderstorms
+\cite{https://doi.org/10.1002/2016JD025299,https://doi.org/10.1029/2019JD030874},
+seasonal ocean winds \cite{https://doi.org/10.1002/2017JD027516} and
+tropical storms \cite{Lang_2020}.  Matplotlib was used in the first
+science paper from the Parker Solar probe\cite{Bale2019}.  Matplotlib
+has been used as part of the Martian science program in both an
+orbiter \cite{https://doi.org/10.1029/2019JE006188} and
+rover\cite{https://doi.org/10.1002/2016EA000219} contexts.
+Historically, Matplotlib was used as part of ground operations from
+the Phoenix Lander.  Matplotlib was used on data from Kepler and K2
+missions to study Trojan asteroids\cite{Nixon_2019} and Titan
+\cite{Ryan_2017,2019PASP..131h4505P}.
+Matplotlib is used for visualization of scheduling, safety+constraint checks, and telemetry by the Swift science operations team \cite{swift_ops,2020ApJ...900...35T}.
+Both the Hubble and James Web Space Telescopes data processing
+developed by Space Telescope Science Institute rely on Matplotlib [CITE NEEDED].
+Matplotlib is used to support spaceflight operations by Monte, JPL's
+mission design and navigation software system [CITE NEEDED].
+
+
+
 
 
 \subsection{Objectives and Significance}
