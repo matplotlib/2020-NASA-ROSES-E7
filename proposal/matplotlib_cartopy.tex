@@ -288,24 +288,28 @@ they are built upon.
 
 
 \subsection{Objectives and Significance}
-We propose a three prongs of work:
+We propose a four prongs of work:
 
-\begin{enumerate}
+\begin{itemize}
 \item Overhaul how cartopy binds to PROJ
-\item Increase documentation and test coverage of unit-aware plotting
+\item Fully Document and test existing unit handling code in Matplotlib.
+\item Improve the user experience of working with unit-aware data.
 \item General maintenance of Matplotlib and cartopy
-\end{enumerate}
+\end{itemize}
 
-With a primarily volunteer project there are some projects that are
-difficult to get done, either because they require longer blocks of
-dedicated effort than can easily be done by volunteers or are tedious.
-While there is a lot of work that can be done on a volunteer
-best-effort, the work that does not get done can be critical and
-un-block further volunteer effort.  Refactoring how cartopy binds
-to PROJ is a project that is too big to be readily accomplished by
-volunteers for [TODO REASONS].  Similarly, documenting and
-completing the test coverage on unit support is both bigger than
-can be done by a volunteer, it is also tedious.
+These tasks are the sort of work that is least suited to volunteer
+work: they either require significant dedicated effort or do not
+attract volunteer effort.
+
+Overhauling the cartopy binding to PROJ and improving the user
+experience of unit-aware plotting are project that are too big to
+realistically carried about by a volunteer.  They will require a
+significant fraction of an FTE of work and dedicated blocks of time
+due to the scope of the work.  Documenting and testing the current
+functionality is important work that we have not been able to do with
+volunteer effort because it is tedious thankless work that does not
+produce the same dopamine hit that fixing a bug or implementing a new
+feature does.
 
 Maintenance is inherently reactive, we do not know about new bugs,
 user issues, or breaking changes in upstream packages until they are
@@ -329,14 +333,15 @@ packaging CartoPy for its user-base.
 \subsubsection{Unit work}
 
 Units are fundamental to science, however most numerical software is
-unit-naive, making it the users responsibility to track and convert
-the units prior to any computation.  Failing to do so can be
-catastrophic [TODO cite the Mars mission lost due to unit issues? Too
-  soon?].  Matplotlib has the ability to support plotting unit-aware
-data structures.  The initial development of this capability was
-supported by NASA and it is currently used to support spaceflight
-operations by Monte, JPL's mission design and navigation software
-system.
+unit-naive.  It the user's responsibility to keep track of and
+correctly convert data to commensurate units prior to any computation.
+Failing to do so leads to the most insidious of bugs: everything
+``works'' but silently gives the wrong answer.  There are several
+high-level libraries for unit-aware data structures in Python and
+Matplotlib supports their use for unit-aware plotting.  The initial
+development of this capability was supported by NASA and it is
+currently used to support spaceflight operations by Monte, JPL's
+mission design and navigation software system.
 
 However, this support is under documented making it difficult for
 users to understand how to fully make use of the capability and for
@@ -346,15 +351,61 @@ handle units we have had a number of regressions in the functionality.
 We will propose to write thorough user and technical guides to working
 with unit-aware data in Matplotlib, add 100\% test coverage of unit
 support in our plotting routines, and fix any issues and
-inconsistencies discovered in this process.
+inconsistencies discovered in this process.  Once we have hardened the
+existing functionality to make working with unit-full data easier.
 
-\begin{enumerate}
-\item how unit dispatch works
-\item how unit testing works
-\item expect to find bugs that need fixing
-\item level of effort (.2-.5 FTE for a year)
-\item coordinate with Monte developers
-\end{enumerate}
+Almost of all of the plotting functions in Matplotlib take in
+container objects (e.g. lists, arrays) of a scalar values
+(e.g. floats, ints).  The first step of the plotting routines is to
+inspect the input and determine if either the container or the scalar
+types are ones that we know to be unit-full.  If we detect a data
+structure with units attached, we then look up the correct conversion
+function to map to unit-naive values and the configure the Axis to
+place ticks and format the tick labels correctly.  In addition to the
+types that Matplotlib registers by default, this is the mechanism by
+which we support plotting date-time and string-categorical data, there
+is an API for users and third-party to register their data structures.
+
+The first task is to document the full details, both at the API and
+conceptual level, how the dispatch system works and where the
+resulting state is stored internally.  This documentation will be
+aimed at other Matplotlib developers and developers of third-party
+libraries that want to make use of the unit system.  Understanding the
+current state of the library and laying out how it should work will be
+the foundation of the rest of the unit work
+
+The second task is to write several user-facing tutorials making use
+of the unit-full types we support by default and well-known
+down-stream unit libraries such as
+\texttt{unyt}\footnote{\url{https://unyt.readthedocs.io/en/stable/}}
+and
+\texttt{pint}\footnote{\url{https://pint.readthedocs.io/en/stable/}}.
+In parallel we will reach out to the community to find any additional
+users, such as the Monte developers, who depend on the unit machinery
+to make sure that the examples are representative of how they actually
+use the functionality.  As with the developer documentation this will
+serve as foundation for how it is expected to work.
+
+The third task is to ensure that all of the plotting methods support
+unit-full data in a uniform way, with both the initially passed and
+updated data.  During this process we expect to find both bugs and
+inconsistencies in how the unit-full data is handled across the
+library.  We will make use of the documentation developed as part of
+the first two tasks to guide how we resolve any inconsistencies in the
+behavior.
+
+The forth task is to extend the unit machinery to extend the
+functionality and improve the user experience.  There are a number of
+long standing requests, such as the ability to uniformly change the
+displayed unit on an axis without resetting the data (to the degree
+supported by the underlying unit library).  Implementing these
+features may require significant refactoring of the internal
+representation of the user supplied and converted data.  To be
+confident that we are doing is this a way that does not introduce more
+regressions we will rely on the documentation and testing work.  This
+work will likely compliment and build on the ongoing work to redesign
+the Artist layer.
+
 
 \subsubsection{General maintenance}
 
