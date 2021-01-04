@@ -288,12 +288,11 @@ they are built upon.
 
 
 \subsection{Objectives and Significance}
-We propose a four prongs of work:
+We propose a three prongs of work:
 
 \begin{itemize}
 \item Overhaul how cartopy binds to PROJ
 \item Fully Document and test existing unit handling code in Matplotlib.
-\item Improve the user experience of working with unit-aware data.
 \item General maintenance of Matplotlib and cartopy
 \end{itemize}
 
@@ -356,7 +355,7 @@ existing functionality to make working with unit-full data easier.
 
 Almost of all of the plotting functions in Matplotlib take in
 container objects (e.g. lists, arrays) of a scalar values
-(e.g. floats, ints).  The first step of the plotting routines is to
+(e.g. floats, Inst).  The first step of the plotting routines is to
 inspect the input and determine if either the container or the scalar
 types are ones that we know to be unit-full.  If we detect a data
 structure with units attached, we then look up the correct conversion
@@ -388,23 +387,24 @@ serve as foundation for how it is expected to work.
 
 The third task is to ensure that all of the plotting methods support
 unit-full data in a uniform way, with both the initially passed and
-updated data.  During this process we expect to find both bugs and
-inconsistencies in how the unit-full data is handled across the
-library.  We will make use of the documentation developed as part of
-the first two tasks to guide how we resolve any inconsistencies in the
-behavior.
+updated data.  During this process we will address known bugs and
+inconsistencies, and expect to find additional bugs, in how the
+unit-full data is handled across the library.  We will make use of the
+documentation developed as part of the first two tasks to guide how we
+resolve any inconsistencies in the behavior. Fixing these issues may
+require significant refactoring of the internal representation of the
+user supplied and converted data.  This work will likely compliment
+and build on the ongoing work to redesign the Artist layer.
 
-The forth task is to extend the unit machinery to extend the
-functionality and improve the user experience.  There are a number of
-long standing requests, such as the ability to uniformly change the
-displayed unit on an axis without resetting the data (to the degree
-supported by the underlying unit library).  Implementing these
-features may require significant refactoring of the internal
-representation of the user supplied and converted data.  To be
-confident that we are doing is this a way that does not introduce more
-regressions we will rely on the documentation and testing work.  This
-work will likely compliment and build on the ongoing work to redesign
-the Artist layer.
+
+A final task is to extend the unit machinery to improve the user
+experience.  Currently much of the mechanism of unit-handling is
+implicit and automatic based on type inference.  We propose to extend
+the interface to allow direct control of the unit machinery by
+advanced users and third-party library developers.  We will rely
+on the documentation and testing from the previous work to ensure that we
+do not introduce any new regressions or inconsistencies.
+
 
 
 \subsubsection{General maintenance}
