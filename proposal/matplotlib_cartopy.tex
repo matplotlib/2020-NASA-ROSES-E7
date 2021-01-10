@@ -196,18 +196,19 @@
 % some of them?
 \subsection{description of software and relevance to SMD}
 
-Billions of dollars of SMD funding, across all 4 divisions, critically
-relies on the scientific Python ecosystem (SPE) for data analysis,
-scientific computation and visualization, this includes flagship
-missions like Hubble and JWST.  The Scientific Python Ecosystem is a
-loosely defined community of projects and programmers with the common
-goal of advancing Science through the use of the Python programming
-language.  This development is largely volunteer work, or work that is
-sponsored implicitly by specific science projects.  SPE, shown with a
-rough schematic in Figure \ref{fig:ecosystem}, has a core of general
-purpose domain-agnostic tools, like NumPy\cite{Harris2020} and
-SciPy\cite{Virtanen2020}, with concentric rings of increasingly domain
-specific tools, like AstroPy\cite{robitaille2013astropy} and
+Billions of dollars of SMD funding, across all 4 SMD divisions,
+critically relies on the scientific Python ecosystem (SPE) for data
+analysis, scientific computation and visualization.  This includes
+flagship missions like Hubble, JWST, and the Curiosity Rover.  The
+Scientific Python Ecosystem is a loosely defined community of projects
+and programmers with the common goal of advancing Science through the
+use of the Python programming language.  This development is largely
+volunteer work, or work that is sponsored implicitly by specific
+science projects.  SPE, shown with a rough schematic in Figure
+\ref{fig:ecosystem}, has a core of general purpose domain-agnostic
+tools, like NumPy\cite{Harris2020} and SciPy\cite{Virtanen2020}, with
+concentric rings of increasingly domain specific tools, like
+AstroPy\cite{robitaille2013astropy} and
 SunPy\cite{sunpy_community2020}, extending the core.
 Matplotlib\cite{Hunter:2007} is the fundamental data visualization
 library for the SPE. This layered approach gives scientists and
@@ -347,14 +348,13 @@ support in our plotting routines, and fix any issues and
 inconsistencies discovered in this process.  Once we have hardened the
 existing functionality to make working with unit-full data easier.
 
-The first step of the plotting routines in Matplotlib is to inspect
-the input and determine if it has units attached.  If we detect units
-then we look up the correct conversion function to map to unit-naive
-values we need internally and the configure the Axis to place ticks
-and format the tick labels correctly.  By default Matplotlib registers
-a converters for time and string-categorical data. Users and
-third-party libraries can register their data structures and
-converters at run time to extend this dispatch mechanism.
+If Matplotlib detects units on user input then we look up the correct
+conversion function to map to unit-naive values we need internally and
+the configure the Axis to place ticks and format the tick labels
+correctly.  By default Matplotlib registers a converters for time and
+string-categorical data. Users and third-party libraries can register
+their data structures and converters at run time to extend this
+dispatch mechanism.
 
 The first task is to document the full details, both at the conceptual
 and API level, how the unit dispatch system works in theory and how it
@@ -369,9 +369,9 @@ work.
 The second task is to write several user-facing tutorials making use
 of the unit-full types we support by default and commonly used
 down-stream unit libraries such as
-\texttt{unyt}\footnote{\url{https://unyt.readthedocs.io/en/stable/}}
+\texttt{unyt} (\url{https://unyt.readthedocs.io/en/stable/})
 and
-\texttt{pint}\footnote{\url{https://pint.readthedocs.io/en/stable/}}.
+\texttt{pint} (\url{https://pint.readthedocs.io/en/stable/}).
 In parallel we will reach out to the community to find any additional
 users, such as the Monte developers, who depend on the unit machinery
 to make sure that the examples are representative of how they actually
@@ -514,6 +514,16 @@ applied has a positive benefit, if less than initially planned.  In a
 worst case where we have to abandon the work we will maintain the
 status quo.
 
+We anticipate that all the work can be done incrementally and will be
+merged to the default branch of Matplotlib throughout the performance
+period.  This necessary because, as a community project, any work that
+goes in needs to go through the same review process.  Many smaller PRs
+are much easier to review than a single huge PR.  This process in turn
+inherently reduces the risk of this work as we will be continuously
+merging any progress made to the default branch.  These improvements,
+both to the code and documentation, will be released to users as part
+of our standard 6mo release cadence.
+
 Maintenance is extremely low risk.  There is large volume of
 individually small tasks that need to be addressed: the issue and PR backlogs.
 Any dedicated effort devoted to clearing the backlog will meaningfully improve
@@ -529,6 +539,101 @@ both libraries.
 \end{enumerate}
 
 \subsection{workplan with milestones}
+
+
+Starting from July 2021 onward Dr. Caswell will devote 10\% FTE to
+this work.  This time will be split between managementand Matplotlib
+maintenance.  Both of these are on-going tasks.  This will supplement
+separately funded 30\% FTE from Dr. Caswell on Matplotlib related work
+through 2021.  The first task will be the recruitment and hiring of
+the RSE.
+
+The Research Software Engineer, whom needs to be identified, will
+devote 100\% FTE to this project.  This will be split evenly with 50\%
+FTE being spent on the unit work and 50\% being spent on maintenance
+of Matplotlib and Cartopy until the unit work is complete.  If the
+unit work is completed faster than expected, the RSE will devote 100\%
+of their effort to Matplotlib and Cartopy maintenance.  Because
+Matplotlib is a community project, the work of the RSE will still go
+through the normal review process.  The interaction with community
+makes it advantageous to spread out the unit work.  The first task,
+producing developer-facing documentation about how the unit system
+works we expect to take 20\% FTE with will be spread across the first
+6mo of the grant.  Similarly, writing the user-facing documentation
+should take about 25\% FTE which will be done is the 7-12mos of the
+performance period.  The remaining work on units, adding the tests,
+fixing any bugs and inconsistencies, and any required internal
+refactoring, will take 1 FTE and will be spread across final 2 years
+of the performance period.  Incremental progress will be merged and
+released as part of the normal release cycle throughout the
+performance period.  The RSE will present the status of the work at
+two conferences, expected to be SciPy in July and one of PyData
+conferences in the winter.
+
+
+\begin{description}
+
+\item[Y1Q1] Begin first units task (documenting current behavior)
+\item[Y1Q2] Finish first task. Have developer documentation merged to
+  Matplotlib docs.
+\item[Y1Q3] Begin second task.
+\item[Y1Q4] Finish second task. Have user-facing documentation merged
+  to Matplotlib docs. Present at SciPy and/or pydata.
+
+\item[Y2Q1] Begin third task.  Develop detailed development plan.
+\item[Y2Q2] Continue third task.
+\item[Y2Q3] Continue third task.
+\item[Y2Q4] Present at SciPy and/or pydata.
+
+
+\item[Y3Q1] Continue third task. Evaluate progress on development
+  plan, adjust if needed.
+\item[Y3Q2] Continue third task.
+\item[Y3Q3] Continue third task.
+\item[Y3Q4] Completed third task. Present at SciPy and/or pydata.
+
+\end{description}
+
+From July 2021 onward Dr. May will devote 25\% FTE to this work.  That
+effort will be split between overhauling the CartoPy binding to PROJ
+and GEOS, providing technical assistance to the RSE for the unit work,
+and general maintenance of both Matplotlib and Cartopy.
+
+
+\begin{description}
+
+\item[Y1Q1]
+\item[Y1Q2]
+\item[Y1Q3]
+\item[Y1Q4]
+
+\item[Y2Q1]
+\item[Y2Q2]
+\item[Y2Q3]
+\item[Y2Q4]
+
+
+\item[Y3Q1]
+\item[Y3Q2]
+\item[Y3Q3]
+\item[Y3Q4]
+
+\end{description}
+
+
+\subsubsection{Grant Management Plan}
+
+Dr. Caswell of BNL is the PI of the proposed development and is.  the
+Matplotlib Lead Developer.  He is responsible for the quality and
+direction of the proposed work and the proper use of all awarded
+funds.  He is also responsible for all management, and budget issues
+and is the final authority for this task.
+
+Dr. May is responsible for the quality and direction of the work as
+related to Cartopy.
+
+Dr. Caswell and Dr. May will share responsibility of supervising the
+RSE.
 
 
 
@@ -648,11 +753,11 @@ The weekly developer calls are typically attended by six to eight
 people and are used for high-bandwidth discussions about both the
 overall direction of the project and technical issues depending on the
 day.  The agenda and minutes are publicly
-available\footnote{\url{https://hackmd.io/team/matplotlib}} and the
+available (\url{https://hackmd.io/team/matplotlib}) and the
 calls are open to all.
 
 Matplotlib has an active
-gitter\footnote{\url{https://gitter.im/matplotlib/matplotlib}} chat
+gitter (\url{https://gitter.im/matplotlib/matplotlib}) chat
 room.  This is used for real-time chat for general coordination,
 resolving small technical issues, and user support.  While the chat
 room's history is persistent it is treated as transient.  For more in
@@ -661,17 +766,17 @@ tracker, for bug reports and PR discussions, or discourse, for user
 support.
 
 The center of gravity of Matplotlib development takes place on
-GitHub\footnote{\url{https://github.com/matplotlib/matplotlib}} via
+GitHub (\url{https://github.com/matplotlib/matplotlib}) via
 Issues and PRs.  We try to keep the discussions on GitHub restricted
 to bug reports, feature requests, and discussions about the code in
 PRs.  In addition to the source, the official documentation is hosted
 in the same repository.  Our governance is tracked in a different
 repository, also on
-GitHub\footnote{\url{https://github.com/matplotlib/governance}}.
+GitHub (\url{https://github.com/matplotlib/governance}).
 
 For user support and more general discussion we maintain a mailing
-list\footnote{\url{https://mail.python.org/mailman/listinfo/matplotlib-users}}
-and a discourse\footnote{\url{https://discourse.matplotlib.org}}
+list (\url{https://mail.python.org/mailman/listinfo/matplotlib-users})
+and a discourse (\url{https://discourse.matplotlib.org})
 instance.  While users have to subscribe and register respectively,
 these forums are open to all.
 
@@ -679,31 +784,19 @@ When we could travel Matplotlib developers would frequently attend
 in-person meetings including SciPy and PyData events.
 
 We publish extensive prose, example, and API
-documentation\footenote{\url{https://matplotilb.org}} that is
+documentation (\url{https://matplotilb.org}) that is
 refreshed with each release.  In addition to the top-level docs, which
 always refer to the most recent release, we also host historical and
 development versions of the documentation.  We have between 700k-1M
 unique visitors a month to the documentation.
 
-We have a blog\footnote{\url{https://matplotlib.org/matplotblog/}}
+We have a blog (\url{https://matplotlib.org/matplotblog/})
 which hosts user-submitted content highlighting work they have done
-using Matplotlib.  We have project accounts on several social media platform
-including twitter and Instagram.
+using Matplotlib.
 
+We have project accounts on several social media platform including
+twitter and Instagram.
 
-
-
-\begin{enumerate}
-\item weekly call
-\item gitter
-\item github
-\item mailing lists
-\item discourse
-\item pydata events
-\item docs
-\item blog
-\item twitter
-\end{enumerate}
 
 \subsection{current workflow}
 
@@ -715,9 +808,9 @@ rely on the judgment of our maintainers.
 
 Matplotlib manages proposing and reviewing contributions to the
 library and documentation though a variation on the ``git flow''
-process\footnote{\url{https://guides.github.com/introduction/flow/}}
-on GitHub documented at
-\url{https://matplotlib.org/devel/coding_guide.html}.  A contributor,
+process (\url{https://guides.github.com/introduction/flow/})
+on GitHub (
+\url{https://matplotlib.org/devel/coding_guide.html}).  A contributor,
 either one of our core maintainers or a first time contributor, will
 open a ``Pull Request'' from their fork of Matplotlib to propose some
 change.  Once the PR is opened continuous integration (CI) is
