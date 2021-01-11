@@ -199,22 +199,24 @@
 Billions of dollars of SMD funding, across all 4 SMD divisions,
 critically relies on the scientific Python ecosystem (SPE) for data
 analysis, scientific computation and visualization.  This includes
-flagship missions like Hubble, JWST, and the Curiosity Rover.  The
-Scientific Python Ecosystem is a loosely defined community of projects
-and programmers with the common goal of advancing Science through the
-use of the Python programming language.  This development is largely
-volunteer work, or work that is sponsored implicitly by specific
+flagship missions like the Hubble Space Telescope, the James Web Space
+Telescope, and the Curiosity rover
+Mastcam\cite{https://doi.org/10.1002/2016EA000219}.  The Scientific
+Python Ecosystem is a loosely defined community of projects and
+programmers with the common goal of advancing Science through the use
+of the Python programming language.  This development is largely
+volunteer work or work that is sponsored implicitly by specific
 science projects.  SPE, shown with a rough schematic in Figure
 \ref{fig:ecosystem}, has a core of general purpose domain-agnostic
-tools, like NumPy\cite{Harris2020} and SciPy\cite{Virtanen2020}, with
-concentric rings of increasingly domain specific tools, like
+tools, like NumPy\cite{Harris2020} and SciPy\cite{Virtanen2020}. In
+the next ring is specialized, but still domain agnostic tools like
+Matplotlib\cite{Hunter:2007}, the fundamental data visualization
+library for the SPE, and advanced data structures like Pandas and
+XArray.  The outer rings are increasingly domain specific tools, like
 AstroPy\cite{robitaille2013astropy} and
-SunPy\cite{sunpy_community2020}, extending the core.
-Matplotlib\cite{Hunter:2007} is the fundamental data visualization
-library for the SPE. This layered approach gives scientists and
-engineers convenient high level tools while enabling direct access to
-the underlying libraries when needed.
-
+SunPy\cite{sunpy_community2020}.  This layered approach gives
+scientists and engineers convenient and powerful high level tools
+while enabling direct access to the underlying libraries when needed.
 
 
 \begin{wrapfigure}{r}{0.5\textwidth}
@@ -235,162 +237,168 @@ the underlying libraries when needed.
 Matplotlib \cite{Hunter:2007} is an established open source plotting
 library with a BSD-derived license that is currently used through out
 both the SMD science community and the wider scientific community.
-The initial commits in the Matplotlib history date to early 2003 and
-the initial work was done in 2001-2002. Matplotlib has been actively
-developed and maintained by a vibrant, primarily volunteer, community
-over the last 17 years.  Matplotlib has over 1,300 individual
-contributors to the code base, is in top 100 most downloaded Python
-packages from pypi, and is packaged by every major linux distribution.
-Matplotlib has an API for both quick plotting, as required from
-exploratory data analysis, a low-level API that gives full control the
-visualization for fine-tuning plots for publication, tools to write
-GUI independent interactive data exploration tools, animation support,
-and the ability to write out to a variety of vector and raster
-formats.
+The initial work on Matplotlib was done in 2001-2002 and the earliest
+commits in the Matplotlib history date to early 2003.  Over the last
+17 years Matplotlib has been actively developed and maintained by a
+vibrant, primarily volunteer, community.  Matplotlib has over 1,250
+individual contributors to the code base with countless more
+individuals having contributed in ways not easily track, such as
+answering user questions on the mailing list or reporting issues.
 
-The most common visualizations in a domain need to be fluid for the
-end-practitioners, with the ``obvious'' customization options
-exposed. Much of the domain-specific specialization is carried in the
-structure, semantics and assumptions of the data, and in the standard
-visualizations of the domain. These specializations can vary widely,
-in contradictory ways, between domains. Because no high-level API can
-simultaneously satisfy all of the visualization needs, there has
-developed a rich ecosystem of domain specific plotting tools including
-including yt, astropy, ArviZ, xarray, cartopy, astropy,
-fast\_histogram, CartoPy, and metpy [tune to be more NASA specific?].
+Matplotlib has a layered API, supporting both a terse high-level API
+for interactive exploratory data analysis, a low-level API that gives
+full control of every detail of the plot, ideal for tuning figures for
+publication.  In addition Matplotlib can be embedded in all major GUI
+toolkits, including Jupyter, and provides full access to user
+interface events to build GUI-agnostic interactive visualizations.
+Matplotlib is also capable of writing out to a wide range of vector
+and raster file formats including \texttt{svg}, \texttt{eps},
+\texttt{pdf}, and \texttt{png}.
 
-
-CartoPy is a Matplotlib extension library that brings support for
-mapping applications to Matplotlib, providing support for plotting
-using a variety of map projections (both terrestrial and non) as well
-as providing out-of-the-box support for many terrestrial map
-features. CartoPy is currently the only Matplotlib-based plotting
-library for mapping applications being actively developed in the
-Python ecosystem. CartoPy is frequently used for earth science
-applications, including many uses of NASA Earth science datasets [TODO cites].
+Matplotlib APIs as readily extendable.  The most common visualizations
+in a domain need to be fluid for the end-practitioners, with the
+``obvious'' customization options exposed. Much of the domain-specific
+specialization is carried in the structure, semantics and assumptions
+of the data, and in the standard visualizations of the domain. These
+specializations can vary widely, in contradictory ways, between
+domains. Because no high-level API can simultaneously satisfy all of
+the visualization needs, there has developed a rich ecosystem of
+domain specific plotting tools including including yt, astropy, ArviZ,
+seaborn, xarray, astropy, fast\_histogram extending the core
+Matplotlib APIs.
 
 
 While large parts of the scientific computing community rely on the
 SPE, the open nature of these infrastructure tools makes measuring
 their influence hard.  Conservative estimates, based on downloads and
 web traffic on the documentation, are that Matplotlib has over a
-million users.  We expect that a large fraction of NASA SMD-sponsored
-projects rely on this shared infrastructure to some degree, but this
-is hard to prove in practice.  In particular, scientific work does not
-usually cite the software that was used for computation, and usage and
-download statistics are hard to gather for widely used open source
-packages.  Even though citation counts are likely to vastly
-under-represent the scientific use of these packages,
-Matplotlib~\cite{Hunter:2007} over 6000 citations while a common
-reference of NumPy\cite{walt2011numpy} has over 3200 citations [TODO
-  update the citation counts]. These counts already illustrate a
-problem in measuring usage using citations, as every user of
-Matplotlib also uses NumPy, but Matplotlib has twice as many
-citations.  Domain specific tools, like
-AstroPy~\cite{robitaille2013astropy} for astronomy (about 2000
-citations) often have high citation counts compared to the core
-packages like NumPy, SciPy and Matplotlib that they are built upon.
+million users.  Matplotlib is in top 100 most downloaded Python
+packages from pypi, and is packaged by every major linux distribution.
+We expect that a large fraction of NASA SMD-sponsored projects rely on
+this shared infrastructure to some degree, but this is hard to prove
+in practice.  In particular, scientific work does not usually cite the
+software that was used for computation, and usage and download
+statistics are hard to gather for widely used open source packages.
+Even though citation counts are likely to vastly under-represent the
+scientific use of these packages, Matplotlib~\cite{Hunter:2007} over
+12,750 citations while a common reference of NumPy\cite{walt2011numpy}
+has over 6,800 citations. These counts already illustrate a problem in
+measuring usage using citations, as every user of Matplotlib also uses
+NumPy, but Matplotlib has almost twice as many citations.  Domain
+specific tools, like AstroPy~\cite{robitaille2013astropy} for
+astronomy (about 4,500 citations) often have high citation counts
+compared to the core packages like NumPy, SciPy and Matplotlib that
+they are built upon.
 
 
 \subsection{Objectives and Significance}
-We propose a three prongs of work:
-\begin{itemize}
-\item Fully Document, test, and fix existing unit handling code in Matplotlib.
-\item Overhaul how cartopy binds to PROJ and GEOS
-\item General maintenance of Matplotlib and cartopy
+
+
+Matplotlib is a primarily community-driven project, but we have grown to the
+point where we need supported developers with the time to organize, plan, and
+make decisions.  To maintain Matplotlib's health we need to:
+\begin{itemize}[noitemsep]
+\item fix critical bugs and regressions;
+\item triage the backlog of Issues and PRs in terms of topic,
+  difficulty, and urgency and promptly triage newly opened Issues and
+  PRs;
+\item maintain backward compatibility and extensively document
+  intentional changes;
+\item on-board new contributors to sustain and diversify developer
+  team;
+\item maintain the CI infrastructure;
+\item manage the release process;
+\item and manage discussions about proposed enhancements, features,
+  and API changes.
 \end{itemize}
-These tasks are ill suited to volunteer work: they either require
-significant dedicated effort or simply do not attract volunteer
-effort.  The first two tasks will likely require a large fraction of
-an FTE and need long blocks of un-interrupted work time to complete.
-Maintenance is inherently reactive, we do not know about new bugs,
-user issues, or breaking changes in upstream packages until they are
-reported to us.  Many of our volunteers are fixing a bugs or
-implementing a features that they affect them personally which
-provides an inherent motivation..  While this critical work can be
-done by volunteers, if we want to commit to a service level we need
-paid developer time.
+The requested support for developers is intended to complement and
+facilitate, not replace, crucial volunteer work.  We aim to better
+co-ordinate and nurture their efforts, with the goal of growing and
+sustaining a diverse community of volunteer and paid expert
+contributors.
 
+[TODO remove or reword this?] Maintenance is inherently reactive, we
+do not know about new bugs, user issues, or breaking changes in
+upstream packages until they are reported gobto us.  While this critical
+work can be done by volunteers, if we want to commit to a service
+level we need paid developer time.
 
-\subsubsection{Cartopy guts}
-CartoPy's mapping capabilities leverages the widely-used PROJ library
-for mapping projections and the GEOS library for geometry
-applications. Currently, CartoPy maintains custom code to interface
-Python with these C-based libraries. As part of this work, we propose
-porting Cartopy to instead use existing libraries that provide Python
-bindings for these libraries, PyPROJ and PyGEOS. Not only will this
-reduce CartoPy's overall amount of code and enhance maintainability,
-but it will also address two of the biggest challenges that occur in
-packaging CartoPy for its user-base.
+With supported developers we also be able to tackle larger scale
+problems with the library that are too big to be done with volunteer
+effort.  One such task is fully documenting, testing, and fixing (as
+needed) the existing unit handling code in Matplotlib, which we
+estimate to be 1.5FTE worth of effort by a single person and will
+require long stretches of uninterpreted work time.
 
 
 \subsubsection{Unit work}
 
 Units are fundamental to science, however most numerical software is
 unit-naive.  It the user's responsibility to keep track of and
-correctly convert data to commensurate units prior to any computation.
+correctly convert data to consistent units prior to any computation.
 Failing to do so leads to the most insidious of bugs: everything
-``works'' but silently gives the wrong answer.  Matplotlib supports
-their use for unit-aware plotting using any of the high-level
-libraries for unit-aware data structures in Python.  The initial
-development of this capability was supported by NASA and it is
-currently used to support spaceflight operations by Monte, JPL's
-mission design and navigation software system.
+``works'' but silently gives incorrect results!  There are several
+libraries which provide unit-aware data structures in Python and
+Matplotlib, if passed these data structures, can use them for
+unit-aware plotting.  This capability it is currently used to support
+spaceflight operations by Monte, JPL's mission design and navigation
+software system and the initial development was supported by NASA.
 
 However, this support is under documented making it difficult for
-users to understand how to fully make use of the capability and for
-developers to extend it.  Further, because we do not have full test
-coverage of all plotting functions to verify that they correctly
-handle units we have had a number of regressions in the functionality.
-We will propose to write thorough user and technical guides to working
-with unit-aware data in Matplotlib, add 100\% test coverage of unit
-support in our plotting routines, and fix any issues and
-inconsistencies discovered in this process.  Once we have hardened the
-existing functionality to make working with unit-full data easier.
+users to understand and use the capability and for developers to
+extend it.  Further, because we do not have 100\% test coverage to
+verify that all the plotting methods correctly handle units we have
+had a number of regressions, some still unresolved, in unit-aware
+plotting.  We propose to write thorough user and developer guides to
+working with unit-aware data in Matplotlib, add 100\% test coverage of
+unit support in our plotting routines, and fix any issues and
+inconsistencies discovered in this process.  Once we have documented
+and fixed the existing functionality we will look into improving and
+extending the user interface and API.
 
-If Matplotlib detects units on user input then we look up the correct
-conversion function to map to unit-naive values we need internally and
-the configure the Axis to place ticks and format the tick labels
-correctly.  By default Matplotlib registers a converters for time and
-string-categorical data. Users and third-party libraries can register
-their data structures and converters at run time to extend this
-dispatch mechanism.
+[TODO delete this paragraph?]  If Matplotlib detects units on user
+input, we look up a conversion function to map from the unit-aware
+data to unit-naive values we use internally.  Additionally we
+configure the Axis to place ticks and format the tick labels.  By
+default Matplotlib registers a converters for time and
+string-categorical data and users and third-party libraries can
+register their data structures and converters at run time to extend
+this dispatch mechanism.
 
-The first task is to document the full details, both at the conceptual
-and API level, how the unit dispatch system works in theory and how it
-works in practice.  This documentation will be aimed at Matplotlib and
-third-party library developers that want to use and extend the unit
-system.  The original authors of the unit code are no longer active
-with the project so we may have to reverse engineer some aspects.
-Understanding and documenting the current state of the library and how
-it was intended to work will be the foundation of the rest of the
-work.
+The first task is to document, both at the conceptual and API level,
+how the unit dispatch system works in theory and how it works in
+practice.  This documentation will be aimed at Matplotlib and
+third-party library developers who want to use or extend the unit
+system.  For unit-aware plotting to be effective, it must be available
+on every plotting method so almost all Matplotlib maintainers will
+need to be familiar with the mechanism.  Unfortunately, the original
+authors of the unit-handling code are no longer active with the
+project so we may have to reverse engineer some aspects of the code
+and motivation.  Understanding and documenting how the unit-mechanism
+was intended to work and the current state of the library and how it
+will be the foundation of the rest of the work.
 
 The second task is to write several user-facing tutorials making use
 of the unit-full types we support by default and commonly used
-down-stream unit libraries such as
-\texttt{unyt} (\url{https://unyt.readthedocs.io/en/stable/})
-and
-\texttt{pint} (\url{https://pint.readthedocs.io/en/stable/}).
-In parallel we will reach out to the community to find any additional
-users, such as the Monte developers, who depend on the unit machinery
-to make sure that the examples are representative of how they actually
-use the functionality.  As with the developer documentation this will
-serve as foundation for the rest of the work, however this
-documentation may be prescriptive of the behavior we want to have
-rather than the currently implemented behavior.
+down-stream unit libraries such as \texttt{unyt}
+(\url{https://unyt.readthedocs.io/en/stable/}) and \texttt{pint}
+(\url{https://pint.readthedocs.io/en/stable/}).  We will reach out to
+current users, such as the Monte developers at JPL, and the AstroPy,
+yt, and pandas developers, who depend on the unit machinery to ensure
+that the examples are representative of how they use the functionality
+in practice.  As with the developer documentation this will serve as
+foundation for the rest of the work, however this documentation may be
+prescriptive of the behavior we want to have rather than strictly
+documenting the currently implemented behavior.
 
 The third task is to ensure that all of the plotting methods support
-unit-full data in a uniform way.  This should include handling units
-on the initially passed, if the data is updated, and changing the
-displayed units.  We will address known bugs and inconsistencies, and
-expect to find additional bugs that will need to be addressed.  The
-documentation developed as part of the first two tasks will guide how
-we resolve any inconsistencies.  Fixing these issues may require
-significant refactoring of the internal representation of the
-un-converted and converted data; this work will likely compliment and
-build on the ongoing work to refactor the Artist and data storage
-layers.
+unit-full data in a uniform way.  The documentation developed as part
+of the first two tasks will guide how we resolve any inconsistencies.
+We will address known bugs and inconsistencies and expect to find
+additional bugs in the course of the work.  Fixing all of these issues
+may require significant refactoring of the internal representation of
+user data and will compliment the ongoing work to refactor the Artist
+and data storage layers.
 
 A final task is to extend the unit machinery to improve the user
 experience.  Currently much of the mechanism of unit-handling is
@@ -404,52 +412,24 @@ not introduce any new regressions or inconsistencies.
 
 \subsubsection{General maintenance}
 
-Matplotlib and Cartopy are community-driven projects, but we have
-grown to the point where we need developers with the time to organize,
-plan, and make decisions.
 
-To maintain Matplotlib's and Cartopy's health we need to:
-\begin{itemize}[noitemsep]
-\item fix critical bugs and regressions;
-\item triage the backlog of Issues and PRs in terms of topic,
-  difficulty, and urgency and promptly triage newly opened Issues and
-  PRs;
-\item maintain backward compatibility and extensively document
-  intentional changes;
-\item on-board new contributors to sustain and diversify developer
-  team;
-\item and manage discussions about proposed enhancements, features,
-  and API changes.
-\end{itemize}
-The requested support for developers is intended to complement and
-facilitate, not replace, crucial volunteer work.  We aim to better
-co-ordinate and nurture their efforts, with the goal of growing and
-sustaining a diverse community of volunteer and paid expert
-contributors.
-
-
-Pull Requests (PRs) and Issues are submitted faster than they can be
-reviewed; Matplotlib has accumulated about 300 open PRs 1300 open
-Issues due to this imbalance, while CartoPy currently stands at 40
-open PRs and 229 open Issues.  This imbalance is not due lack of
-activity, in 2020 Matplotlib resolved 125-200 PRs and 75-125 Issues a
-month but only reduced the PR backlog by 70 open PRs and made no
-progress on reducing the Issue backlog.
-
-There may be critical bug reports or insightful feature requests among
-the issue backlog, while among the PR backlog are useful contributions
-or bug fixes that would improve the libraries for direct users and
-downstream packages.  The large backlog is discouraging for new and
-occasional contributors and distracting for core developers.  The
-resources we will request will help to significantly reduce, but not
-eliminate, this backlog.
+Historically, Pull Requests (PRs) and Issues are submitted faster than
+they can be reviewed; Matplotlib has accumulated about 300 open PRs
+1300 open Issues due to this imbalance, There may be critical bug
+reports or insightful feature requests among the issue backlog, while
+among the PR backlog are useful contributions or bug fixes that would
+improve the libraries for direct users and downstream packages.  The
+large backlog is discouraging for new and occasional contributors and
+distracting for core developers.  The resources we will request will
+help to significantly reduce, but not eliminate, this backlog.
 
 
 For 10 months in 2020 we had a full time RSE working on Matplotlib who
 had a measurable impact on both the rate of PR review, the rate of
-issue resolution, and fixed a number of long standing bugs.  He has
-had the time and bandwidth to address a number of long-standing issues
-such as [TODO highlights from Elliott].
+issue resolution, and fixed a number of long standing bugs.  In 2020
+Matplotlib resolved 125-200 PRs and 75-125 Issues a month, however
+even with this dedicated effort we only reduced the PR backlog by 70
+open PRs and made no progress on reducing the Issue backlog.
 
 There are a number of unglamorous tasks that are required to ``keep
 the lights on'' on a Python package include things like maintaining
@@ -694,6 +674,15 @@ Elliot sales de Andre are both core contributors to Matplotlib and
 Cartopy.  Micheal Droettboom, the previous Matplotlib Project lead,
 was also a core developer on Astropy.
 
+
+As a NumFOCUS project, we recognize the importance of every project
+that is part of our open source scientific computing community. Though
+we would like for our work to be funded we are committed to supporting
+and collaborating with other NumFOCUS projects that receive funding
+regardless of our own outcome. We believe that this attitude is
+crucial for the success of our community and the sustainability of
+open source projects. It is our hope that this sentiment will be taken
+into consideration when evaluating our proposal.
 
 
 \subsubsection{inclusive practices}
