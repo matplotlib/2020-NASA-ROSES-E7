@@ -172,7 +172,7 @@
 %% Finally, we get to the document.
 \begin{document}
 \title{Improving the Foundations and Maintenance of Matplotlib}
-\author{Dr. Thomas A Caswell\\Dr. Ryan May}
+\author{Dr. Thomas A Caswell}
 \date{}
 \maketitle
 
@@ -225,8 +225,7 @@ while enabling direct access to the underlying libraries when needed.
     center we have the Python language itself with concentric rings of
     domain agnostic to domain specific libraries.  Both AstroPy (top
     left) and SunPy (top right), used in the astrophysics and
-    heliophysics divisions respectively, rely on Matplotlib. Cartopy,
-    which is not shown, would be placed in the outer [CHECK] ring.
+    heliophysics divisions respectively, rely on Matplotlib.
     Credit: Jake van der Plas, "The Unexpected Effectiveness of Python
     in Science", PyCon 2017}
   \label{fig:ecosystem}
@@ -545,22 +544,21 @@ will devote 100\% FTE to this project.  This will be split evenly with
 50\% FTE being spent on the unit work and 50\% being spent on general
 maintenance until the unit work is complete.  If the unit work is
 completed faster than expected, the RSE will devote 100\% of their
-effort to Matplotlib and Cartopy maintenance.  Because Matplotlib is a
-community project, the work of the RSE will still go through the
-normal review process.  The interaction with community makes it
-advantageous to spread out the unit work.  The first task, producing
-developer-facing documentation about how the unit system works we
-expect to take 25\% FTE with will be spread across the first two
-quarters of the grant.  Similarly, writing the user-facing
-documentation should take about 25\% FTE which will be done is the
-third and forth quarters of the performance period.  The remaining
-work on units, adding the tests, fixing any bugs and inconsistencies,
-and any required internal refactoring, will take 1 FTE spread across
-final 2 years of the performance period.  Incremental progress will be
-merged and released as part of the normal release cycle throughout the
-performance period.  The RSE will present the status of the work at
-two conferences, expected to be SciPy in July and one of PyData
-conferences in the winter, yearly.
+effort to maintenance.  Because Matplotlib is a community project, the
+work of the RSE will still go through the normal review process.  The
+interaction with community makes it advantageous to spread out the
+unit work.  The first task, producing developer-facing documentation
+about how the unit system works we expect to take 25\% FTE with will
+be spread across the first two quarters of the grant.  Similarly,
+writing the user-facing documentation should take about 25\% FTE which
+will be done is the third and forth quarters of the performance
+period.  The remaining work on units, adding the tests, fixing any
+bugs and inconsistencies, and any required internal refactoring, will
+take 1 FTE spread across final 2 years of the performance period.
+Incremental progress will be merged and released as part of the normal
+release cycle throughout the performance period.  The RSE will present
+the status of the work at two conferences, expected to be SciPy in
+July and one of PyData conferences in the winter, yearly.
 
 
 \begin{description}
@@ -924,13 +922,6 @@ macports, homebrew, and all major Linux distributions independently
 build, package, and host Matplotlib.  User facing documentation is built
 and hosted at \url{https://matplotlib.org}.
 
-Cartopy is currently developed in the open on GitHub and is released
-under the LGPL.  All work done on Matplotlib as part of this grant
-will be done through the current workflow, will be publicly available,
-and released under the same license. Cartopy uses git for version
-control, thus every developer has the full history on their computer
-which provides significant redundancy.
-
 %do we need something about shape files / map tiles?
 
 Any new libraries created as part of the ROSES award will be developed
@@ -938,8 +929,8 @@ in the open on GitHub and will released under a BSD-3 license.
 
 % do we need this?
 Any incidental work on other software packages, either upstream or
-downstream of Matplotlib and Cartopy, will have to follow the license
-and development of process of those projects.
+downstream of Matplotlib, will have to follow the license and
+development of process of those projects.
 
 
 \newpage
@@ -969,12 +960,8 @@ this reason significant portions of the budget will need to be
 subcontracted to the primary institutions of key individuals who are
 uniquely qualified for this work.
 
-Salary support is requested for PI Thomas Caswell (0.10 FTE in years
+Salary support is requested for PI Thomas Caswell (0.25 FTE in years
 1-3).  He will oversee the Matplotlib aspects of the proposed work and
-co-supervise the RSE.
-
-Salary support is requested for co-PI Ryan May (0.25 FTE in years
-1-3).  May will be responsible for the cartopy aspect of the work and
 co-supervise the RSE.
 
 Salary support is requested for a Research Software Engineer (1 FTE in
@@ -1013,33 +1000,18 @@ registration fee.
 \item [total for one person] \$1,800
 \end{description}
 
-Support is requested for 2 in-person 2-day meetings in Denver.  May is
-based in Denver and will to require travel support for this
-meeting. Cost estimates are based on the following: Meal and hotel per
-diem from the GSA website for Denver in April, and airfare from NYC to
-Denver from \url{https://travel.google.com}.
 
-\begin{description}
-\item [airfare] \$250
-\item [lodging] \$597 (3 nights at \$199/night)
-\item [per diem] \$366 (\$76/day)
-\item [misk ground transport] \$100
-\item [total for one person] \$1,313
-\end{description}
-
-
-Total requested for travel: \$15,424
+Total requested for travel: \$12,798
 
 
 \newpage
 \section{Facilities and Equipment}
 \setcounter{page}{1}
 
-No special facilities are required, standard desktop workstations that
-Caswell and May have access to, either through their home institution
-or personal hardware, are sufficient for this work.
+Standard desktop workstations that Caswell has access to, either
+through BNL or personal hardware, is sufficient for this work.
 
-We request \$3,000 to purchase a computer, monitor, and accessories
+We request \$4,000 to purchase a computer, monitor, and accessories
 for the RSE.
 
 
@@ -1050,14 +1022,6 @@ for the RSE.
 \newpage
 \section{Detailed Budget}
 \setcounter{page}{1}
-
-\begin{itemize}
-\item computer + monitor for RSE (2-3k\$)
-\item 6-8x conference travel (RSE to scipy and pydata every year + 2
-  trips between May / Caswell)
-\item 2x trip to JPL
-\item 1.5k other IT expenses (discourse, CI, more mac stadium, hosting, ...)
-\end{itemize}
 
 
 
