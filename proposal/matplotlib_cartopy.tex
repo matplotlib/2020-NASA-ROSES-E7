@@ -194,7 +194,7 @@
 % not sure that this order is right, but I think we need to hit all of
 % these points.  Maybe want to rename the section headings or merge
 % some of them?
-\subsection{description of software and relevance to SMD}
+\subsection{Description of software and relevance to SMD}
 
 Billions of dollars of SMD funding, across all 4 SMD divisions,
 critically relies on the scientific Python ecosystem (SPE) for data
@@ -203,7 +203,7 @@ flagship missions like the Hubble Space Telescope, the James Web Space
 Telescope, and the Curiosity rover
 Mastcam\cite{https://doi.org/10.1002/2016EA000219}.  The Scientific
 Python Ecosystem is a loosely defined community of projects and
-programmers with the common goal of advancing Science through the use
+programmers with the common goal of advancing science through the use
 of the Python programming language.  This development is largely
 volunteer work or work that is sponsored implicitly by specific
 science projects.  SPE, shown with a rough schematic in Figure
@@ -234,9 +234,9 @@ while enabling direct access to the underlying libraries when needed.
 
 
 Matplotlib \cite{Hunter:2007} is an established open source plotting
-library with a BSD-derived license that is currently used through out
+library with a BSD-derived license that is currently used throughout
 both the SMD science community and the wider scientific community.
-The initial work on Matplotlib was done in 2001-2002 and the earliest
+The initial work on Matplotlib was done in 2001-2002 and the first
 commits in the Matplotlib history date to early 2003.  Over the last
 17 years Matplotlib has been actively developed and maintained by a
 vibrant, primarily volunteer, community.  Matplotlib has over 1,250
@@ -244,15 +244,13 @@ individual contributors to the code base with countless more
 individuals having contributed in ways not easily track, such as
 answering user questions on the mailing list or reporting issues.
 
-Matplotlib has a layered API, supporting both a terse high-level API
-for interactive exploratory data analysis, a low-level API that gives
-full control of every detail of the plot, ideal for tuning figures for
-publication.  In addition Matplotlib can be embedded in all major GUI
-toolkits, including Jupyter, and provides full access to user
-interface events to build GUI-agnostic interactive visualizations.
-Matplotlib is also capable of writing out to a wide range of vector
-and raster file formats including \texttt{svg}, \texttt{eps},
-\texttt{pdf}, and \texttt{png}.
+Matplotlib has a high-level API for quick plotting, such as in
+exploratory data analysis, plus a low-level API that gives full control for
+fine-tuned publication-quality plots, for animations, for writing both
+GUI-independent and GUI-specific tools for interactive data plotting, and
+for output to a variety of vector and raster
+formats including \texttt{svg}, \texttt{eps},
+\texttt{pdf}, and \texttt{png}
 
 Matplotlib APIs as readily extendable.  The most common visualizations
 in a domain need to be fluid for the end-practitioners, with the
@@ -262,7 +260,7 @@ of the data, and in the standard visualizations of the domain. These
 specializations can vary widely, in contradictory ways, between
 domains. Because no high-level API can simultaneously satisfy all of
 the visualization needs, there has developed a rich ecosystem of
-domain specific plotting tools including including yt, astropy, ArviZ,
+domain specific plotting tools including yt, astropy, ArviZ,
 seaborn, xarray, astropy, fast\_histogram extending the core
 Matplotlib APIs.
 
@@ -272,22 +270,22 @@ SPE, the open nature of these infrastructure tools makes measuring
 their influence hard.  Conservative estimates, based on downloads and
 web traffic on the documentation, are that Matplotlib has over a
 million users.  Matplotlib is in top 100 most downloaded Python
-packages from pypi, and is packaged by every major linux distribution.
+packages from PyPI, and is packaged by every major Linux distribution.
 We expect that a large fraction of NASA SMD-sponsored projects rely on
 this shared infrastructure to some degree, but this is hard to prove
 in practice.  In particular, scientific work does not usually cite the
-software that was used for computation, and usage and download
-statistics are hard to gather for widely used open source packages.
-Even though citation counts are likely to vastly under-represent the
-scientific use of these packages, Matplotlib~\cite{Hunter:2007} over
-12,750 citations while a common reference of NumPy\cite{walt2011numpy}
-has over 6,800 citations. These counts already illustrate a problem in
-measuring usage using citations, as every user of Matplotlib also uses
-NumPy, but Matplotlib has almost twice as many citations.  Domain
-specific tools, like AstroPy~\cite{robitaille2013astropy} for
-astronomy (about 4,500 citations) often have high citation counts
-compared to the core packages like NumPy, SciPy and Matplotlib that
-they are built upon.
+software that was used for computation and plotting, and usage and
+download statistics are hard to gather for widely used open source
+packages.  Even though citation counts are likely to vastly
+under-represent the scientific use of these packages, a canonical
+reference for Matplotlib~\cite{Hunter:2007} has over 12,750 citations
+while a common reference of NumPy\cite{walt2011numpy} has over 6,800
+citations. These counts already illustrate a problem in measuring
+usage via citations, as every user of Matplotlib also uses NumPy, but
+Matplotlib has almost twice as many citations.  Domain specific tools,
+like AstroPy~\cite{robitaille2013astropy} for astronomy (about 4,500
+citations), often have high citation counts compared to the core
+packages like NumPy, SciPy and Matplotlib that they are built upon.
 
 
 \subsection{Objectives and Significance}
@@ -448,9 +446,9 @@ not eliminate, this backlog.
 
 As mentioned above, it is hard to estimate the prevalence of open
 source software due to it being freely distribute and not
-systematically cited.  Matplotlib is in the top 100 packages
-downloaded from pypi\cite{pypi_stats} and is packaged by every major
-linux and scientific Python distribution.  One path is static analysis
+systematically cited.  Matplotlib is in the top 100 most-downloaded
+packages from PyPI\cite{pypi_stats} and is packaged by every major
+Linux and scientific Python distribution.  One path is static analysis
 of publicly available code.  According to github over 299K
 repositories and over 12k packages hosted on Github depend on
 Matplotlib\cite{gh_deps:2021} and a recent study of the almost 10M
@@ -917,7 +915,7 @@ current workflow, will be publicly available, and released under the
 same license.  Matplotlib uses git for version control, thus every
 developer has the full history on their computer which provides
 significant redundancy.  Tagged releases of the software are published
-to pypi (in both source and binary forms).  In addition, Anaconada,
+to PyPI (in both source and binary forms).  In addition, Anaconada,
 macports, homebrew, and all major Linux distributions independently
 build, package, and host Matplotlib.  User facing documentation is built
 and hosted at \url{https://matplotlib.org}.
