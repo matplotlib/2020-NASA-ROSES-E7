@@ -171,7 +171,7 @@
 
 %% Finally, we get to the document.
 \begin{document}
-\title{Improving the Foundations and Maintenance of Matplotlib and CartoPy}
+\title{Improving the Foundations and Maintenance of Matplotlib}
 \author{Dr. Thomas A Caswell\\Dr. Ryan May}
 \date{}
 \maketitle
@@ -420,62 +420,80 @@ reports or insightful feature requests among the issue backlog, while
 among the PR backlog are useful contributions or bug fixes that would
 improve the libraries for direct users and downstream packages.  The
 large backlog is discouraging for new and occasional contributors and
-distracting for core developers.  The resources we will request will
-help to significantly reduce, but not eliminate, this backlog.
+distracting for core developers.
 
+There are a number of tasks that are required to ``keep the lights
+on'' on a Python package include maintaining the continuous
+integration systems, managing releases, tracking down
+platform-specific bugs, and tracking upstream changes.  These are
+tasks that are never ``done''; users find new ways to use the library
+which require new features or expose previously un-detected bugs and
+the world continues to changes around us.
 
 For 10 months in 2020 we had a full time RSE working on Matplotlib who
 had a measurable impact on both the rate of PR review, the rate of
 issue resolution, and fixed a number of long standing bugs.  In 2020
 Matplotlib resolved 125-200 PRs and 75-125 Issues a month, however
 even with this dedicated effort we only reduced the PR backlog by 70
-open PRs and made no progress on reducing the Issue backlog.
-
-There are a number of unglamorous tasks that are required to ``keep
-the lights on'' on a Python package include things like maintaining
-the CI, release management, tracking down platform specific bugs.
-These are tasks that are never ``done'', as users find new ways to use
-the library which require new features or as the world changes around
-us.
+open PRs and made no progress on reducing the Issue backlog.  The
+additional resources requested will help to significantly reduce, but
+not eliminate, this backlog.
 
 \subsection{Perceived impact of work}
 \begin{enumerate}
 \item increased reliability of unit-aware plotting
 \item improvement in general reliability of software
 \item improved responsively to issues
-\item easier installation and deployment
 \end{enumerate}
 \subsection{Relevance to program element}
 
-TODO make this flow...at all...
+As mentioned above, it is hard to estimate the prevalence of open
+source software due to it being freely distribute and not
+systematically cited.  Matplotlib is in the top 100 packages
+downloaded from pypi\cite{pypi_stats} and is packaged by every major
+linux and scientific Python distribution.  One path is static analysis
+of publicly available code.  According to github over 299K
+repositories and over 12k packages hosted on Github depend on
+Matplotlib\cite{gh_deps:2021} and a recent study of the almost 10M
+Jupyternotebooks on github found that over 3M of them have a
+Matplotlib import\cite{datalore:2020}.
 
-Matplotlib is used through out all of the program elements of the SMD.
-In Earth observation Matplotlib has been used to study thunderstorms
-\cite{https://doi.org/10.1002/2016JD025299,https://doi.org/10.1029/2019JD030874},
-seasonal ocean winds \cite{https://doi.org/10.1002/2017JD027516} and
-tropical storms \cite{Lang_2020}.  Matplotlib was used in the first
-science paper from the Parker Solar probe\cite{Bale2019}.  Matplotlib
-has been used as part of the Martian science program in both an
-orbiter \cite{https://doi.org/10.1029/2019JE006188} and
-rover\cite{https://doi.org/10.1002/2016EA000219} contexts.
-Historically, Matplotlib was used as part of ground operations from
-the Phoenix Lander.  Matplotlib was used on data from Kepler and K2
-missions to study Trojan asteroids\cite{Nixon_2019} and Titan
-\cite{Ryan_2017,2019PASP..131h4505P}.
-Matplotlib is used for visualization of scheduling, safety+constraint checks, and telemetry by the Swift science operations team \cite{swift_ops,2020ApJ...900...35T}.
-Both the Hubble and James Web Space Telescopes data processing
-developed by Space Telescope Science Institute rely on Matplotlib [CITE NEEDED].
-Matplotlib is used to support spaceflight operations by Monte, JPL's
-mission design and navigation software system [CITE NEEDED].
-Matplotlib is being used in the New Horizons Kuiper belt extended mission \cite{Porter_2018}.  Matplotlib
-has been used for fundamental research on graphene \cite{PhysRevLett.120.236802} and
-work on nuclear rockets \cite{leu_cerment}.
-
-Need more examples of SMD using Cartopy!
-
-Matplotlib supports plotting unit-aware data structures which have
-been used to support spaceflight operations by Monte, JPL's mission
-design and navigation software system. (TODO expand this!)
+All of these measures show broad impact but cover many uses outside of
+the SMD community.  Restricting static analysis to
+\url{https://github.com/nasa} shows usage of Matplotlib, however this
+does not capture the wider user base.  Soliciting for examples of
+Matplotlib in SMD research on social media yielded a (non-exhaustive)
+list of examples of using Matplotlib
+\begin{itemize}
+\item
+  to study
+  thunderstorms\cite{https://doi.org/10.1002/2016JD025299,https://doi.org/10.1029/2019JD030874},
+  seasonal ocean winds \cite{https://doi.org/10.1002/2017JD027516} and
+  tropical storms \cite{Lang_2020};
+\item in the first science paper from the Parker Solar
+  probe\cite{Bale2019};
+\item in the Martian science program in both orbiter
+  \cite{https://doi.org/10.1029/2019JE006188} and
+  rover\cite{https://doi.org/10.1002/2016EA000219} contexts;
+\item as part of ground operations from the Phoenix Lander;
+\item with data from Kepler and K2 missions to study Trojan
+  asteroids\cite{Nixon_2019} and Titan
+  \cite{Ryan_2017,2019PASP..131h4505P};
+\item on the New Horizons Kuiper belt extended mission
+  \cite{Porter_2018};
+\item for visualization of scheduling, safety and constraint checks,
+  and telemetry by the Swift science operations team
+  \cite{swift_ops,2020ApJ...900...35T};
+\item as port of the Hubble Space Telescope and James Web Space
+  Telescope data processing pipelines;
+\item in Monte, JPL's mission design
+  and navigation software system to support spaceflight operations;
+\item in fundamental research on graphene \cite{PhysRevLett.120.236802};
+\item and for work on nuclear rockets \cite{leu_cerment}.
+\end{itemize}
+This list shows the breadth of the use of Matplotlib across the
+four SMD divisions.  Small investments in Matplotlib will have returns
+across the entire SMD portfolio.
 
 \subsection{Technical approach and methodology}
 
@@ -483,72 +501,66 @@ our standard practice!
 
 \subsection{sources of uncertainty/mitigation to risk}
 
+
 The biggest risk with the proposed work is that we are underestimating
-the amount of work that will be required for both the unit work and
-the CartoPy refactoring.  Particularly with Matplotlib, there is the
-risk that when you start to pull on a thread the scope of work rapidly
-snow balls as there can be unexpected internal dependencies or edge
-cases that are not apparent at first glance but must be accounted for.
-However, by working incrementally we can ensure that any effort
-applied has a positive benefit, if less than initially planned.  In a
-worst case where we have to abandon the work we will maintain the
-status quo.
+the amount of work that will be required for the unit work.  There is
+always a risk while refactoring that the scope of work rapidly snow
+ball due to unexpected internal dependencies or edge cases must be
+accounted for.  In a worst case where we have to abandon the work we
+will maintain the status quo, but with significantly better
+documentation.
 
-We anticipate that all the work can be done incrementally and will be
-merged to the default branch of Matplotlib throughout the performance
-period.  This necessary because, as a community project, any work that
-goes in needs to go through the same review process.  Many smaller PRs
-are much easier to review than a single huge PR.  This process in turn
-inherently reduces the risk of this work as we will be continuously
-merging any progress made to the default branch.  These improvements,
-both to the code and documentation, will be released to users as part
-of our standard 6mo release cadence.
+We anticipate that all of the work can be done incrementally and will
+be merged to the default branch of Matplotlib throughout the
+performance period.  This is inline with our standard development
+process, work done under this proposal will not be exempt from review,
+and many small PRs are easier to review and merge than a single large
+PR.  This process inherently reduces the risk as we will be frequently
+merging improvements to the default branch.  These These improvements,
+both to the code and documentation, will in turn be released to users
+as part of our standard bi-yearly release cadence.
 
-Maintenance is extremely low risk.  There is large volume of
-individually small tasks that need to be addressed: the issue and PR backlogs.
-Any dedicated effort devoted to clearing the backlog will meaningfully improve
-both libraries.
+There is very little risk in the maintenance work.  There is large
+volume of individually small tasks that need to be addressed: the
+issue and PR backlogs.  Any dedicated effort devoted to clearing the
+backlog is positive and we have demonstrated that supported developers
+can reduce, or at least hold even, the backlogs.
 
-[section on effect of having an RSE]
 
 \subsection{roles of team members}
 \begin{enumerate}
+\item Caswell: PI + maintenance + supervise RSE (0.25FTE)
 \item RSE: maintenance + lead unit unit testing (1FTE)
-\item May: Cartopy refactor + unit expertise + maintenance (0.25FTE)
-\item Caswell: PI + maintenance + community/governance work (0.1FTE)
 \end{enumerate}
 
 \subsection{workplan with milestones}
 
+Starting from July 2021 onward Dr. Caswell will devote 25\% FTE to
+this work.  This time will be split between supervision of the RSE and
+maintenance work, both of these are on-going tasks.  The first task
+will be the recruitment and hiring of the RSE.
 
-Starting from July 2021 onward Dr. Caswell will devote 10\% FTE to
-this work.  This time will be split between managementand Matplotlib
-maintenance.  Both of these are on-going tasks.  This will supplement
-separately funded 30\% FTE from Dr. Caswell on Matplotlib related work
-through 2021.  The first task will be the recruitment and hiring of
-the RSE.
-
-The Research Software Engineer, whom needs to be identified, will
-devote 100\% FTE to this project.  This will be split evenly with 50\%
-FTE being spent on the unit work and 50\% being spent on maintenance
-of Matplotlib and Cartopy until the unit work is complete.  If the
-unit work is completed faster than expected, the RSE will devote 100\%
-of their effort to Matplotlib and Cartopy maintenance.  Because
-Matplotlib is a community project, the work of the RSE will still go
-through the normal review process.  The interaction with community
-makes it advantageous to spread out the unit work.  The first task,
-producing developer-facing documentation about how the unit system
-works we expect to take 20\% FTE with will be spread across the first
-6mo of the grant.  Similarly, writing the user-facing documentation
-should take about 25\% FTE which will be done is the 7-12mos of the
-performance period.  The remaining work on units, adding the tests,
-fixing any bugs and inconsistencies, and any required internal
-refactoring, will take 1 FTE and will be spread across final 2 years
-of the performance period.  Incremental progress will be merged and
-released as part of the normal release cycle throughout the
+The Research Software Engineer (RSE), whom needs to be identified,
+will devote 100\% FTE to this project.  This will be split evenly with
+50\% FTE being spent on the unit work and 50\% being spent on general
+maintenance until the unit work is complete.  If the unit work is
+completed faster than expected, the RSE will devote 100\% of their
+effort to Matplotlib and Cartopy maintenance.  Because Matplotlib is a
+community project, the work of the RSE will still go through the
+normal review process.  The interaction with community makes it
+advantageous to spread out the unit work.  The first task, producing
+developer-facing documentation about how the unit system works we
+expect to take 25\% FTE with will be spread across the first two
+quarters of the grant.  Similarly, writing the user-facing
+documentation should take about 25\% FTE which will be done is the
+third and forth quarters of the performance period.  The remaining
+work on units, adding the tests, fixing any bugs and inconsistencies,
+and any required internal refactoring, will take 1 FTE spread across
+final 2 years of the performance period.  Incremental progress will be
+merged and released as part of the normal release cycle throughout the
 performance period.  The RSE will present the status of the work at
 two conferences, expected to be SciPy in July and one of PyData
-conferences in the winter.
+conferences in the winter, yearly.
 
 
 \begin{description}
@@ -574,48 +586,15 @@ conferences in the winter.
 
 \end{description}
 
-From July 2021 onward Dr. May will devote 25\% FTE to this work.  That
-effort will be split between overhauling the CartoPy binding to PROJ
-and GEOS, providing technical assistance to the RSE for the unit work,
-and general maintenance of both Matplotlib and Cartopy.
-
-
-\begin{description}
-
-\item[Y1Q1]
-\item[Y1Q2]
-\item[Y1Q3]
-\item[Y1Q4]
-
-\item[Y2Q1]
-\item[Y2Q2]
-\item[Y2Q3]
-\item[Y2Q4]
-
-
-\item[Y3Q1]
-\item[Y3Q2]
-\item[Y3Q3]
-\item[Y3Q4]
-
-\end{description}
 
 
 \subsubsection{Grant Management Plan}
 
-Dr. Caswell of BNL is the PI of the proposed development and is.  the
-Matplotlib Lead Developer.  He is responsible for the quality and
-direction of the proposed work and the proper use of all awarded
+Dr. Caswell of BNL is the PI of the proposed development and is the
+Matplotlib Lead Developer.  He is solely responsible for the quality
+and direction of the proposed work and the proper use of all awarded
 funds.  He is also responsible for all management, and budget issues
 and is the final authority for this task.
-
-Dr. May is responsible for the quality and direction of the work as
-related to Cartopy.
-
-Dr. Caswell and Dr. May will share responsibility of supervising the
-RSE.
-
-
 
 
 \subsection{Project Management}
@@ -632,11 +611,9 @@ day-to-day technical responsibilities.
 
 TODO need to cover history of project lead changing
 
-
-
 \subsubsection{License}
 
-BSD-derived and LGPL
+BSD-derived
 
 \subsubsection{sustainability metrics}
 \begin{enumerate}
@@ -652,29 +629,30 @@ BSD-derived and LGPL
 \subsubsection{collaboration with related projects}
 
 None of the projects in the Scientific Python ecosystem existing in a
-vacuum; most users use more than one of the projects.  While developer
-communities exist around each of the code bases, there is also a
-broader community across the projects.  Matplotlib developers are part
-of this community and Matplotlib developers have well established
-relationships with the other projects in the ecosystem, including our
-key up and down stream dependencies.
+vacuum; a vast majority of our users use more than one of the
+projects.  In a mirror of that, while developer communities exist
+around each of the code bases, there is also a broader developer
+community across the projects.  Matplotlib developers are part of this
+community and have well established relationships with the other
+projects in the ecosystem, including our key up and down stream
+dependencies.
 
 Much of the communication is through the standard communication
-channels, such as reporting issues to each other's issue trackers,
-asking questions on mailing lists or discussions forums, and
-submitting patches.  Additionally, through NumFOCUS and domain
-conferences there are regular in-person meetings.
+channels, such as project issue trackers, mailing lists or discussions
+forums, and submitting PRs.  The strongest relationships, both
+historical and current, are with projects where we have shared
+developers.  For example Ryan May and Elliot sales de Andre are both
+core contributors to Matplotlib and Cartopy.  Micheal Droettboom, the
+previous Matplotlib Project lead, was a core developer on Astropy.
+Additionally, through NumFOCUS and domain-specific conferences there
+are regular in-person meetings.
 
-Almost all of the Matplotlib contributors, are domain experts in their
-primary domain and use Matplotlib for their research.
-
-The strongest relationships, both historical and current, are with
-projects where we have shared developers.  For example Ryan May and
-Elliot sales de Andre are both core contributors to Matplotlib and
-Cartopy.  Micheal Droettboom, the previous Matplotlib Project lead,
-was also a core developer on Astropy.
+[TODO not sure where this fits?] Almost all of the Matplotlib
+contributors, are domain experts in their primary domain and use
+Matplotlib for their research.
 
 
+% wording all NF projects are putting in
 As a NumFOCUS project, we recognize the importance of every project
 that is part of our open source scientific computing community. Though
 we would like for our work to be funded we are committed to supporting
@@ -690,12 +668,9 @@ into consideration when evaluating our proposal.
 Matplotlib strives to be an inclusive and open project and have
 adopted a Code of Conduct
 \url{https://github.com/matplotlib/matplotlib/blob/master/CODE_OF_CONDUCT.md}. Anyone
-who is willing to contribute to the project should be able to do.  It
-is important for everyone working on the project to feel safe to make
-mistakes.
-
-One challenge of being an open community developed project is that we do not
-have reliable demographics on a vast majority of our contributors.
+who is willing and able to contribute to the project should feel
+welcome to do so.  It is important for everyone working on the project
+to feel safe to make mistakes.
 
 We have recently started two efforts to improve the development and
 retention of new contributors: an ``incubator'' channel on gitter and
@@ -724,9 +699,11 @@ freeing the core-developers to spend more time reviewing PRs, this
 role will bring more people into the developer community and may
 provide a path way to becoming regular contributors and maintainers.
 
-
-We will work with NumFOCUS to develop metrics and evaluate the efficacy of
-these efforts at diversifying our contributor base.
+One challenge of being an open community developed project is that we
+do not have reliable demographics on a vast majority of our
+contributors.  Ongoing work at NumFOCUS to develop metrics will help
+us evaluate the efficacy of these efforts at diversifying our
+contributor base.
 
 \subsubsection{information dissemination}
 
