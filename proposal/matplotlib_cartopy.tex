@@ -704,112 +704,120 @@ contributor base.
 \subsubsection{information dissemination}
 
 As a project Matplotlib maintains a range of communication channels
-aimed at several, overlapping, audiences.  This include a weekly
-developer call, an active chat room on gitter, issues tracker and PRs
-on github, mailing lists, a discourse forum, in-person presentations
-at conferences and pydata events, the published documentation
-(inculding historical and ``future'' versions), a blog, and several
-social media accounts.
+aimed at several, overlapping, audiences.  This includes a
+the source, issue tracker and PRs on GitHub,
+the published documentation (inculding historical and ``future'' versions),
+weekly developer call,
+mailing lists,
+a discourse forum,
+an active chat room on gitter,
+
+in-person presentations at conferences and pydata events,
+a blog, and several social media accounts.
+
+
+The center of gravity of Matplotlib development takes place on GitHub
+(\url{https://github.com/matplotlib/matplotlib}) where the canonical
+repository for the source and documentation are hosted.  Around this
+repository we use Issues and PRs to track bug reports, feature
+requests, and to discuss proposed changes.  We also host our
+governance documents on GitHub
+(\url{https://github.com/matplotlib/governance}) and revise them via
+Pull Request.
+
+We publish extensive prose, example, and API documentation
+(\url{https://matplotilb.org}) that is refreshed with each release.
+In addition to the top-level docs, which always refer to the most
+recent release, we also host historical
+(\url{https://matplotilb.org/3.1.3} for the v3.1.3 documentation) and
+development versions of the documentation
+(\url{https://dev.matplotilb.org}).  In 2020 we had between 700k-1M
+unique visitors a month to the documentation.
+
 
 The weekly developer calls are typically attended by six to eight
 people and are used for high-bandwidth discussions about both the
 overall direction of the project and technical issues depending on the
-day.  The agenda and minutes are publicly
-available (\url{https://hackmd.io/team/matplotlib}) and the
-calls are open to all.
+day.  The agenda and minutes are publicly available
+(\url{https://hackmd.io/team/matplotlib}) and the calls are open to
+all.
 
-Matplotlib has an active
-gitter (\url{https://gitter.im/matplotlib/matplotlib}) chat
-room.  This is used for real-time chat for general coordination,
-resolving small technical issues, and user support.  While the chat
-room's history is persistent it is treated as transient.  For more in
-depth discussions we try to move the conversation to either the issue
-tracker, for bug reports and PR discussions, or discourse, for user
-support.
+Matplotlib has an active gitter
+(\url{https://gitter.im/matplotlib/matplotlib}) chat room.  Gitter is
+a real-time chat platform that we use for general coordination and
+resolving minor technical discussions.  While the chat room's history
+is technically persistent, we treat it as transient.  For more in
+depth discussions or anything we want a record of, we move the
+conversation to github, the mailing list, or discourse.
 
-The center of gravity of Matplotlib development takes place on
-GitHub (\url{https://github.com/matplotlib/matplotlib}) via
-Issues and PRs.  We try to keep the discussions on GitHub restricted
-to bug reports, feature requests, and discussions about the code in
-PRs.  In addition to the source, the official documentation is hosted
-in the same repository.  Our governance is tracked in a different
-repository, also on
-GitHub (\url{https://github.com/matplotlib/governance}).
-
-For user support and more general discussion we maintain a mailing
-list (\url{https://mail.python.org/mailman/listinfo/matplotlib-users})
-and a discourse (\url{https://discourse.matplotlib.org})
-instance.  While users have to subscribe and register respectively,
-these forums are open to all.
+For user support and general discussion we maintain two mailing lists
+(\url{https://mail.python.org/mailman/listinfo/matplotlib-users},
+\url{https://mail.python.org/mailman/listinfo/matplotlib-devel}) and a
+discourse (\url{https://discourse.matplotlib.org}) instance.  While
+users have to subscribe and register respectively to post, these
+forums are open to all.  We also maintain a read-only mailing list for
+announcements
+(\url{https://mail.python.org/mailman/listinfo/matplotlib-announce}).
 
 When we could travel Matplotlib developers would frequently attend
 in-person meetings including SciPy and PyData events.
 
-We publish extensive prose, example, and API
-documentation (\url{https://matplotilb.org}) that is
-refreshed with each release.  In addition to the top-level docs, which
-always refer to the most recent release, we also host historical and
-development versions of the documentation.  We have between 700k-1M
-unique visitors a month to the documentation.
-
-We have a blog (\url{https://matplotlib.org/matplotblog/})
-which hosts user-submitted content highlighting work they have done
-using Matplotlib.
-
-We have project accounts on several social media platform including
-twitter and Instagram.
+We have a blog (\url{https://matplotlib.org/matplotblog/}) which hosts
+user-submitted content highlighting work they have done using
+Matplotlib.  We have project accounts on several social media platform
+including twitter and Instagram.
 
 
 \subsection{current workflow}
 
-Matplotlib is an established community driven in the ``federation''
-model as defined by Nadia Eghbal\cite{eghbal_2020}.  We have a core
-group regular maintainers who take responsibility for reviewing and
-merging proposed changes to the library.  We strive for consensus and
-rely on the judgment of our maintainers.
+Matplotlib is an established community driven project in the
+``federation'' model as defined by Nadia Eghbal\cite{eghbal_2020}.  We
+have a core group regular maintainers who take responsibility for
+reviewing and merging proposed changes to the library.  We strive for
+consensus and rely on the collective judgment of our maintainers to maintain
+the quality and functionality of the library.
 
-Matplotlib manages proposing and reviewing contributions to the
-library and documentation though a variation on the ``git flow''
-process (\url{https://guides.github.com/introduction/flow/})
-on GitHub (
-\url{https://matplotlib.org/devel/coding_guide.html}).  A contributor,
-either one of our core maintainers or a first time contributor, will
-open a ``Pull Request'' from their fork of Matplotlib to propose some
-change.  Once the PR is opened continuous integration (CI) is
-automatically run to preform a variety of regression and style checks.
-In parallel the code is reviewed by the maintainers who either request
-changes, which starts a cycle of iteration with the contributor, or
-approves.  Once consensus is reached the PR is merged and those
-changes will be included in the next release.
+Matplotlib uses a variation on the ``git flow'' process
+(\url{https://guides.github.com/introduction/flow/}) to manage
+proposing and reviewing contributions to the library and documentation
+though on GitHub
+(\url{https://matplotlib.org/devel/coding_guide.html}).  A
+contributor, a core maintainer, a regular contributor, or a first time
+contributor, proposes a change by opening a ``Pull Request'' from
+their fork of Matplotlib.  The proposed changes are reviewed by
+maintainers who either request changes, which starts a cycle of
+iteration with the contributor, or approve.  In addition to human
+review we have an extensive test suite that is automatically run via
+cloud services and the results are reported to the PR.  Once consensus
+is reached and the test pass the PR is merged and the changes will be
+released as part of the next release.
 
 The threshold for merging a PR depends on the reviewer judgment of the
-risk of the changes.  PRs that only change documentation, which can
-not introduce regressions or introduce new features, may be merged by
-the first reviewer where as all code changes need to be reviewed and
-approved by at least two maintainers.  However in either case a
-maintainer may wish to leave a positive review but not merge the PR.
-If a maintainer objects and requests changes then the PR will not be
-merged until those issues have been addressed.  If consensus can not
-be reached the default is the status quo (not merging) and the
-decision may fall back to the Deputy Project Lead or Project Lead to
-break the log jam.
+risk of the changes.  PRs that only change documentation, which cannot
+introduce regressions or introduce new features, may be merged by the
+first reviewer where as code changes need to be reviewed and approved
+by at least two maintainers.  However in either case a maintainer may
+wish to leave a positive review but not merge the PR to request
+additional feed back from other maintainers.  If a maintainer objects
+to a PR, the PR will not be merged until their concerns have been
+addressed.  If consensus cannot, the final decision falls back to a
+Deputy Project Lead or the Project Lead.
 
 Matplotlib is cautious about making backwards-incompatible change that
 intentionally break users existing code.  While in an ideal world,
-future versions of the library would always be 100\% backwards
-compatible, sometimes we do need to make incompatible changes.  As
-part of the review process we check that there if there are any API
-changes and if so that they are well justified and documented.  When
-technically possible we try to provide user-visible warnings the
-version before we actually implement the breaking change.  This gives
-us a window of time for users to either adapt to the change or to
-communicate to us that they can not adapt so we can reconsider the
-change.  Given this high barrier to changing or removing behavior we
-are careful to make sure that any new API we add to the library is
-well thought out and complete because once we have released a version
-of the library with that code it is hard to take it back.  These
-considerations together are important enough that we have a Deputy
-Project Lead responsible for API consistency.
+future versions of the library would be 100\% backwards compatible
+with previous versions, sometimes we do need to make incompatible
+changes.  As part of the review process we check that any API changes
+are well documented and justified.  When technically possible we
+provide user-visible warnings the version before we actually implement
+a breaking change.  This provides a window for users to either adapt
+to the change or to communicate to us that they cannot adapt so we
+can reconsider the change.  Given this high barrier to changing or
+removing behavior we are careful to make sure that any new API we add
+to the library is well thought out and complete because once we have
+released a version of the library with that code it is hard to take it
+back.  These considerations together are important enough that we have
+a Deputy Project Lead responsible for API consistency.
 
 This process works well for incremental contributions and bug fixes,
 new features or bigger changes are typically discussed before
@@ -818,7 +826,7 @@ to be in the core library we encourage contributors to create a new
 stand-alone project.  This has several advantages including the giving
 the author more control, allows them to iterate faster than our
 relatively slow 6 month release schedule, and gives them greater
-flexibility to change their API after initial
+flexibility to change their APIs.
 
 
 \newpage
