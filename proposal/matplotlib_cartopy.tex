@@ -43,7 +43,7 @@
 % I don't remember why threeparttable and setspace is here. Inertia.
 \usepackage{threeparttable}
 \usepackage{setspace}
-% \doublespacing
+\doublespacing
 %%%
 %% Some packages to handle the figures and captions
 %%%
@@ -200,21 +200,21 @@ Billions of dollars of SMD funding, across all 4 SMD divisions,
 critically relies on the scientific Python ecosystem (SPE) for data
 analysis, scientific computation and visualization.  This includes
 flagship missions like the Hubble Space Telescope, the James Web Space
-Telescope, and the Curiosity rover
-Mastcam\cite{https://doi.org/10.1002/2016EA000219}.  The Scientific
+Telescope~\cite{jwst_pipeline}, and the Curiosity rover
+Mastcam~\cite{https://doi.org/10.1002/2016EA000219}.  The Scientific
 Python Ecosystem is a loosely defined community of projects and
 programmers with the common goal of advancing science through the use
 of the Python programming language.  This development is largely
 volunteer work or work that is sponsored implicitly by specific
 science projects.  SPE, shown with a rough schematic in Figure
 \ref{fig:ecosystem}, has a core of general purpose domain-agnostic
-tools, like NumPy\cite{Harris2020} and SciPy\cite{Virtanen2020}. In
+tools, like NumPy~\cite{Harris2020} and SciPy~\cite{Virtanen2020}. In
 the next ring is specialized, but still domain agnostic tools like
-Matplotlib\cite{Hunter:2007}, the fundamental data visualization
+Matplotlib~\cite{Hunter:2007}, the fundamental data visualization
 library for the SPE, and advanced data structures like Pandas and
 XArray.  The outer rings are increasingly domain specific tools, like
-AstroPy\cite{robitaille2013astropy} and
-SunPy\cite{sunpy_community2020}.  This layered approach gives
+AstroPy~\cite{robitaille2013astropy} and
+SunPy~\cite{sunpy_community2020}.  This layered approach gives
 scientists and engineers convenient and powerful high level tools
 while enabling direct access to the underlying libraries when needed.
 
@@ -233,7 +233,7 @@ while enabling direct access to the underlying libraries when needed.
 
 
 
-Matplotlib \cite{Hunter:2007} is an established open source plotting
+Matplotlib~\cite{Hunter:2007} is an established open source plotting
 library with a BSD-derived license that is currently used throughout
 both the SMD science community and the wider scientific community.
 The initial work on Matplotlib was done in 2001-2002 and the first
@@ -279,7 +279,7 @@ download statistics are hard to gather for widely used open source
 packages.  Even though citation counts are likely to vastly
 under-represent the scientific use of these packages, a canonical
 reference for Matplotlib~\cite{Hunter:2007} has over 12,750 citations
-while a common reference of NumPy\cite{walt2011numpy} has over 6,800
+while a common reference of NumPy~\cite{walt2011numpy} has over 6,800
 citations. These counts already illustrate a problem in measuring
 usage via citations, as every user of Matplotlib also uses NumPy, but
 Matplotlib has almost twice as many citations.  Domain specific tools,
@@ -336,66 +336,101 @@ correctly convert data to consistent units prior to any computation.
 Failing to do so leads to the most insidious of bugs: everything
 ``works'' but silently gives incorrect results!  There are several
 libraries which provide unit-aware data structures in Python and
-Matplotlib, if passed these data structures, can use them for
-unit-aware plotting.  This capability it is currently used to support
-spaceflight operations by Monte, JPL's mission design and navigation
-software system and the initial development was supported by NASA.
+Matplotlib, if configured properly, can be passed them for unit-aware
+plotting.  This capability it is currently used to support spaceflight
+operations by Monte, JPL's mission design and navigation software
+system and the initial development was supported by NASA.
+
+%to what extent mpl currently supports unts]
+The current support of unit-aware data in Matplotib is base on type
+inference and dispatch of the input.  Before plotting the unit-aware
+types must be registered and when the unit-full data is passed to
+plotting methods the we look up the converters and Axis configuration
+that should be used.  Matplotlib registers converters for datetime and
+string-categorical types by default and exposes an API for third-party
+libraries, like \texttt{unyt} and \texttt{pint}, to register
+themselves.  Additionally a default axis label, limits, and functions
+for locating and formatting the ticks can be set based on the units.
+Using this machinery users can control what units the data is plotting
+in, which may be different than the units it was passed in as, and
+specify the limits in physical units.
+
+%what is wrong
 
 However, this support is under documented making it difficult for
 users to understand and use the capability and for developers to
-extend it.  Further, because we do not have 100\% test coverage to
-verify that all the plotting methods correctly handle units we have
-had a number of regressions, some still unresolved, in unit-aware
-plotting.  We propose to write thorough user and developer guides to
-working with unit-aware data in Matplotlib, add 100\% test coverage of
-unit support in our plotting routines, and fix any issues and
-inconsistencies discovered in this process.  Once we have documented
-and fixed the existing functionality we will look into improving and
-extending the user interface and API.
+extend it.  Further, because we do not test coverage that all the
+plotting methods correctly handle units we have had a number of
+regressions, some still unresolved, in unit-aware plotting.  These
+regressions range from unit-full data simply not working with some
+methods, to subtle inconsistencies between plotting methods.
 
-[TODO delete this paragraph?]  If Matplotlib detects units on user
-input, we look up a conversion function to map from the unit-aware
-data to unit-naive values we use internally.  Additionally we
-configure the Axis to place ticks and format the tick labels.  By
-default Matplotlib registers a converters for time and
-string-categorical data and users and third-party libraries can
-register their data structures and converters at run time to extend
-this dispatch mechanism.
+To address this we propose a three phase approach: first to document
+the internal details of how the unit machinery is implemented, second
+to document how users interact with the unit system, and finally to make
+the handling of units consistent and tested across all of the plotting
+methods in the library.  The proposed work will focus on making sure
+the functionality that currently exists works correctly, but we will
+also look at extensions to improve the user and developer experience of
+working with unit-full data.
+
+%how we will fix it!
+\begin{enumerate}
+\item document internal
+\item document external
+\item add tests + fix
+\item extend
+\end{enumerate}
 
 The first task is to document, both at the conceptual and API level,
-how the unit dispatch system works in theory and how it works in
-practice.  This documentation will be aimed at Matplotlib and
-third-party library developers who want to use or extend the unit
-system.  For unit-aware plotting to be effective, it must be available
-on every plotting method so almost all Matplotlib maintainers will
-need to be familiar with the mechanism.  Unfortunately, the original
-authors of the unit-handling code are no longer active with the
-project so we may have to reverse engineer some aspects of the code
-and motivation.  Understanding and documenting how the unit-mechanism
-was intended to work and the current state of the library and how it
-will be the foundation of the rest of the work.
+how the unit dispatch system works in theory and practice.  This
+documentation will be aimed at Matplotlib developers and third-party
+library authors and focus on the low-level details.  Unfortunately,
+the original authors of the unit-handling code are no longer active
+with the project so we may have to reverse engineer some aspects of
+the code and motivation.  Internally we need to convert unit-full data
+to unit-naive values to pass to the next layer down.  A common problem
+we have seen is issue with when and where we do that conversion.  This
+documentation will clarify which layer of the API the conversions
+should be done in and how both the converted and unconverted data
+should be tracked and managed.  For unit-aware plotting to be fully
+useful, it must work in every plotting method, thus we need clear
+documentation so that every Matplotlib developer is familiar with how
+unit works.  Understanding and documenting how the unit-mechanism was
+intended to work and the current state of the library will be the
+foundation of the rest of the work.
 
-The second task is to write several user-facing tutorials making use
-of the unit-full types we support by default and commonly used
-down-stream unit libraries such as \texttt{unyt}
-(\url{https://unyt.readthedocs.io/en/stable/}) and \texttt{pint}
-(\url{https://pint.readthedocs.io/en/stable/}).  We will reach out to
-current users, such as the Monte developers at JPL, and the AstroPy,
-yt, and pandas developers, who depend on the unit machinery to ensure
-that the examples are representative of how they use the functionality
-in practice.  As with the developer documentation this will serve as
-foundation for the rest of the work, however this documentation may be
-prescriptive of the behavior we want to have rather than strictly
-documenting the currently implemented behavior.
+
+The second task is to write user-facing documentation showing how to
+work with unit-full data and Matplotlib.  For this we will work
+closely with maintainers of unit libraries, such as \texttt{unyt}
+(\url{https://unyt.readthedocs.io/}) and \texttt{pint}
+(\url{https://pint.readthedocs.io/}), and user within the SMD
+community, such as the Monte developers at JPL and the Astropy
+developers, to ensure that we are fully meeting their needs.  The user
+documentation will also focus on how things should be and will serve
+as a guide for what the ``correct'' behavior is when we are resolving
+inconsistencies.  This work will tie into our ongoing effort to make
+our large API surface more self-consistent and easier to use.
+
+
+- make API more consistent and easier to use
+- there are inconsistencies
+- document the ``Right'' one when we have to break a tie
 
 The third task is to ensure that all of the plotting methods support
 unit-full data in a uniform way.  The documentation developed as part
 of the first two tasks will guide how we resolve any inconsistencies.
 We will address known bugs and inconsistencies and expect to find
 additional bugs in the course of the work.  Fixing all of these issues
-may require significant refactoring of the internal representation of
-user data and will compliment the ongoing work to refactor the Artist
-and data storage layers.
+will require significant refactoring of the internal representation of
+user data, building on the ongoing work to refactor the Artist and
+data storage layers [funded by CZI, make bigger point of synergy].
+
+- notes about how much of the code we will have to touch
+- makes future mpl development easier by documenting and simplifying
+  the internal handling of units
+
 
 A final task is to extend the unit machinery to improve the user
 experience.  Currently much of the mechanism of unit-handling is
@@ -404,6 +439,12 @@ the interface to allow optional direct control of the unit machinery
 by users and third-party library developers.  We will rely on the
 documentation and testing from the previous work to ensure that we do
 not introduce any new regressions or inconsistencies.
+
+- work with down-stream to make sure they are using it ``right''
+- work with down-stream to make sure we have enough API to enable what they need
+- make sure it fits with new numpy dtype scheme (NEP 40-44)
+- make sure it works with pandas dtypes?
+
 
 
 
@@ -427,74 +468,82 @@ tasks that are never ``done''; users find new ways to use the library
 which require new features or expose previously un-detected bugs and
 the world continues to changes around us.
 
-For 10 months in 2020 we had a full time RSE working on Matplotlib who
-had a measurable impact on both the rate of PR review, the rate of
-issue resolution, and fixed a number of long standing bugs.  In 2020
-Matplotlib resolved 125-200 PRs and 75-125 Issues a month, however
-even with this dedicated effort we only reduced the PR backlog by 70
-open PRs and made no progress on reducing the Issue backlog.  The
-additional resources requested will help to significantly reduce, but
-not eliminate, this backlog.
+For 10 months in 2020 (funded via CZI and range) we had a full time
+RSE working on Matplotlib who had a measurable impact on both the rate
+of PR review, the rate of issue resolution, and fixed a number of long
+standing bugs.  In 2020 Matplotlib resolved 125-200 PRs and 75-125
+Issues a month, however even with this dedicated effort we only
+reduced the PR backlog by 70 open PRs and made no progress on reducing
+the Issue backlog.  The additional resources requested here will help
+to significantly reduce, but not eliminate, this backlog. [make point that
+  this is steps down the right path].
 
 \subsection{Perceived impact of work}
 \begin{enumerate}
 \item increased reliability of unit-aware plotting
 \item improvement in general reliability of software
 \item improved responsively to issues
+\item making point about building on current funding
 \end{enumerate}
+
+- improving the maturity and sustainability of the project (WC)
+- direct user impact?
+- what new science?!
+- need to be ``outward looking'' (which should anyone else care?)
+- make stronger point that yt, astropy, monte all use units -> will make their life better
+- helps make the point the mpl is tool for other projects, not end in its self
+- supporting long term goal to make API more consistent and easier to use
+
+
 \subsection{Relevance to program element}
 
 As mentioned above, it is hard to estimate the prevalence of open
 source software due to it being freely distribute and not
 systematically cited.  Matplotlib is in the top 100 most-downloaded
-packages from PyPI\cite{pypi_stats} and is packaged by every major
+packages from PyPI~\cite{pypi_stats} and is packaged by every major
 Linux and scientific Python distribution.  One path is static analysis
 of publicly available code.  According to github over 299K
-repositories and over 12k packages hosted on Github depend on
-Matplotlib\cite{gh_deps:2021} and a recent study of the almost 10M
+repositories and over 12k packages hosted on GitHub depend on
+Matplotlib~\cite{gh_deps:2021} and a recent study of the almost 10M
 Jupyternotebooks on github found that over 3M of them have a
-Matplotlib import\cite{datalore:2020}.
+Matplotlib import~\cite{datalore:2020}.
+
 
 All of these measures show broad impact but cover many uses outside of
-the SMD community.  Restricting static analysis to
-\url{https://github.com/nasa} shows usage of Matplotlib, however this
-does not capture the wider user base.  Soliciting for examples of
+the SMD community.  [something about how to restrict static analysis,
+  many scientist do not make code public].  Soliciting for examples of
 Matplotlib in SMD research on social media yielded a (non-exhaustive)
 list of examples of using Matplotlib
 \begin{itemize}
 \item
   to study
-  thunderstorms\cite{https://doi.org/10.1002/2016JD025299,https://doi.org/10.1029/2019JD030874},
-  seasonal ocean winds \cite{https://doi.org/10.1002/2017JD027516} and
-  tropical storms \cite{Lang_2020};
+  thunderstorms~\cite{https://doi.org/10.1002/2016JD025299,https://doi.org/10.1029/2019JD030874},
+  seasonal ocean winds~\cite{https://doi.org/10.1002/2017JD027516} and
+  tropical storms~\cite{Lang_2020};
 \item in the first science paper from the Parker Solar
-  probe\cite{Bale2019};
-\item in the Martian science program in both orbiter
-  \cite{https://doi.org/10.1029/2019JE006188} and
-  rover\cite{https://doi.org/10.1002/2016EA000219} contexts;
+  probe~\cite{Bale2019};
+\item in the Martian science program in both
+  orbiter~\cite{https://doi.org/10.1029/2019JE006188} and
+  rover~\cite{https://doi.org/10.1002/2016EA000219} contexts;
 \item as part of ground operations from the Phoenix Lander;
 \item with data from Kepler and K2 missions to study Trojan
-  asteroids\cite{Nixon_2019} and Titan
-  \cite{Ryan_2017,2019PASP..131h4505P};
-\item on the New Horizons Kuiper belt extended mission
-  \cite{Porter_2018};
+  asteroids~\cite{Nixon_2019} and
+  Titan~\cite{Ryan_2017,2019PASP..131h4505P};
+\item on the New Horizons Kuiper belt extended
+  mission~\cite{Porter_2018};
 \item for visualization of scheduling, safety and constraint checks,
-  and telemetry by the Swift science operations team
-  \cite{swift_ops,2020ApJ...900...35T};
+  and telemetry by the Swift science operations
+  team~\cite{swift_ops,2020ApJ...900...35T};
 \item as port of the Hubble Space Telescope and James Web Space
   Telescope data processing pipelines;
 \item in Monte, JPL's mission design
   and navigation software system to support spaceflight operations;
-\item in fundamental research on graphene \cite{PhysRevLett.120.236802};
-\item and for work on nuclear rockets \cite{leu_cerment}.
+\item in fundamental research on graphene~\cite{PhysRevLett.120.236802};
+\item and for work on nuclear rockets~\cite{leu_cerment}.
 \end{itemize}
 This list shows the breadth of the use of Matplotlib across the
 four SMD divisions.  Small investments in Matplotlib will have returns
 across the entire SMD portfolio.
-
-\subsection{Technical approach and methodology}
-
-our standard practice!
 
 \subsection{sources of uncertainty/mitigation to risk}
 
@@ -769,9 +818,12 @@ including twitter and Instagram.
 
 
 \subsection{current workflow}
+%check that this is not a required title
+%\subsection{Technical approach and methodology}
+
 
 Matplotlib is an established community driven project in the
-``federation'' model as defined by Nadia Eghbal\cite{eghbal_2020}.  We
+``federation'' model as defined by Nadia Eghbal~\cite{eghbal_2020}.  We
 have a core group regular maintainers who take responsibility for
 reviewing and merging proposed changes to the library.  We strive for
 consensus and rely on the collective judgment of our maintainers to maintain
@@ -1009,6 +1061,7 @@ registration fee.
 
 Total requested for travel: \$12,798
 
+[TODO add travel to visit collaborators / downstream users]
 
 \newpage
 \section{Facilities and Equipment}
