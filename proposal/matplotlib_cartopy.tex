@@ -413,24 +413,30 @@ as a guide for what the ``correct'' behavior is when we are resolving
 inconsistencies.  This work will tie into our ongoing effort to make
 our large API surface more self-consistent and easier to use.
 
-
-- make API more consistent and easier to use
-- there are inconsistencies
-- document the ``Right'' one when we have to break a tie
-
 The third task is to ensure that all of the plotting methods support
 unit-full data in a uniform way.  The documentation developed as part
 of the first two tasks will guide how we resolve any inconsistencies.
-We will address known bugs and inconsistencies and expect to find
-additional bugs in the course of the work.  Fixing all of these issues
-will require significant refactoring of the internal representation of
-user data, building on the ongoing work to refactor the Artist and
-data storage layers [funded by CZI, make bigger point of synergy].
+This work will build on ongoing work supported work, funded by Chan
+Zuckerberg Initiative, to re-design how we store data internally.
+Currently each \texttt{Artist} is responsible for storing its data and
+each does it in its own different way.  This variation and duplication
+in the implementation is also the source of many of the unit-related
+regressions.  The proposed redesign will factor the data storage out
+of the \texttt{Artist}s into a reusable class.  Among the benefits of
+this design, we will be able to centralize the unit processing and
+dispatch to one place in the code.  We expect the design and
+proof-of-concept work of this re-design to be complete by the end of
+2021 which aligns with the period of work of this proposal.  Building
+on the data source work, we propose implementing this new design in
+all \texttt{Artist} subclasses, any required changes to the plotting
+methods, and adding full test coverage of unit handling in every
+plotting method.  This work will require touching and testing a large
+fraction of the library.
 
-- notes about how much of the code we will have to touch
-- makes future mpl development easier by documenting and simplifying
+- [TODO] makes future mpl development easier by documenting and simplifying
   the internal handling of units
-
+- make sure it fits with new numpy dtype scheme (NEP 40-44)
+- make sure it works with pandas dtypes?
 
 A final task is to extend the unit machinery to improve the user
 experience.  Currently much of the mechanism of unit-handling is
@@ -439,13 +445,6 @@ the interface to allow optional direct control of the unit machinery
 by users and third-party library developers.  We will rely on the
 documentation and testing from the previous work to ensure that we do
 not introduce any new regressions or inconsistencies.
-
-- work with down-stream to make sure they are using it ``right''
-- work with down-stream to make sure we have enough API to enable what they need
-- make sure it fits with new numpy dtype scheme (NEP 40-44)
-- make sure it works with pandas dtypes?
-
-
 
 
 \subsubsection{General maintenance}
