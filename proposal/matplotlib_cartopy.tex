@@ -334,17 +334,20 @@ Matplotlib plotting functions.
 
 We have on-going theoretical and design work\footnote{Supported by
 CZI} to re-architect Matplotlib to better separate the data
-representation from the rest of the library.  We are developing a data
-access API such that each \texttt{Artist} will have a single
-\texttt{DataSource} object responsible for holding the data. This
-design will allow us to over come the issues with the current design
-and open the door to a variety of new functionality. The current work
-is expected to produce design documents and a proof of concept
-implementation by the end of 2021.  Based on this preliminary work
-\textbf{we propose refactoring Matplotlib to use the new data model in
-  all \texttt{Artist}s}.  One of immediate benefit of this work will
-be to drastically improve our handling of data with physical units
-attached.
+representation from the rest of the library. Currently each
+\texttt{Artist} subclass holds its data as several arrays as
+properties.  Each \texttt{Artist} uses different names and nothing
+ensures that the data, if updated at run time, is self-consistent
+until we try to draw the figure.  We are developing a data access API
+such that each \texttt{Artist} will have a single \texttt{DataSource}
+object responsible for holding the data. This design will allow us to
+over come the issues with the current design and open the door to a
+variety of new functionality.  The current work is expected to produce
+design documents and a proof of concept implementation by the end of
+2021.  Based on this preliminary work \textbf{we propose refactoring
+  Matplotlib to use the new data model in all \texttt{Artist}s}.  One
+of immediate benefit of this work will be to drastically improve our
+handling of data with physical units attached.
 
 Units are fundamental to science and engineering, however most
 numerical software is unit-naive.  It is the user's responsibility to
@@ -386,7 +389,7 @@ methods.  To address this we propose to use unit-handling as a
 motivating feature while doing the \texttt{DataSource} refactoring.
 By implementing all of the unit logic against the \texttt{DataSource}
 we will be able to share the code across all \texttt{Artist}s and
-unify how we treat units across the entire library.
+unify how we treat units across the library.
 
 
 \subsubsection{General maintenance}
@@ -444,6 +447,41 @@ demonstrated supporting maintenance work has a positive effect and
 
 \subsection{Perceived impact of work}
 
+% TODO add cite for
+% \url{https://www.aosabook.org/en/matplotlib.html}
+
+Originally developed over 17 years ago the architecture of Matplotlib
+it has served us well, but it does not reflect recent developments in
+software design, data structures, and visualization.  Refactoring the
+data access layer, effectively splitting the \texttt{Artist} classes
+in half, towards continuing to support and enable science for the next
+20 years.  By separating the data storage and access logic form the
+logic that maps the data to visual elements we unlock
+\begin{itemize}[noitemsep]
+  \item uniform handling of physical units,
+  \item smart down-sampling of plotted data based on view limits,
+  \item native consumption of structured data,
+  \item seamless updating of the underlying data, either interactively or via streams,
+  \item and use of alternative data sources such as database queries or analytic functions.
+\end{itemize}
+
+
+We aim to take advantage of these developments to improve the
+consistency, composability, and discoverabilty of the API.  The
+ultimate goal is facilitating rich interactive domain-specific
+visualizations.
+
+
+For units to be as useful, we need all the components of the analysis
+and visualization need to be unit aware.  There is on-going work by
+the NumPy project to overhaul how the array dtypes are implemented (NEP
+40, NEP 41, NEP 42, NEP 43).  One of the motivations of this work is
+the ability to enable user defined parametric dtypes to support
+tracking physical units and categorical data as a full-supported
+feature of NumPy.  This work on the unit machinery in Matplotlib will
+ensure that Matplotlib are ready to support the new numpy dtypes as
+soon as they are available.
+
 
 \begin{enumerate}
 \item increased reliability of unit-aware plotting
@@ -454,13 +492,6 @@ demonstrated supporting maintenance work has a positive effect and
 
 
 
-\begin{itemize}[noitemsep]
-  \item uniform handling of physical units,
-  \item smart down-sampling of plotted data based on view limits,
-  \item native consumption of structured data,
-  \item seamless updating of the underlying data, either interactively or via streams,
-  \item and use of alternative data sources such as database queries or analytic functions.
-\end{itemize}
 
 - improving the maturity and sustainability of the project (WC)
 - direct user impact?
@@ -469,27 +500,16 @@ demonstrated supporting maintenance work has a positive effect and
 - make stronger point that yt, astropy, monte all use units -> will make their life better
 - helps make the point the mpl is tool for other projects, not end in its self
 - supporting long term goal to make API more consistent and easier to use
-- tie to numpy's dtype work strongly
+- tie to numpy/panda/xarray dtype work strongly
 
 This proposal is another step towards Matplotlib sustainability.
-The requested support for developers is intended to complement and
-facilitate, not replace, crucial volunteer work.  We aim to better
-co-ordinate and nurture their efforts, with the goal of growing and
-sustaining a diverse community of volunteer and paid expert
-contributors.
+Given the usage and the scale of the library it is not sustainable to
+continue to maintain Matplotlib on majority volunteer effort, which
+requested support for developers is intended to complement and
+facilitate, not replace.  We aim to better co-ordinate and nurture
+volunteer efforts, with the goal of growing and sustaining a diverse
+community of volunteer and paid expert contributors.
 
-
-For units to be as useful, we need all the components of the analysis
-and visualization need to be unit aware.  There is on-going work by
-the NumPy project to overhaul how the array dtypes are imlemented (NEP
-40, NEP 41, NEP 42, NEP 43).  One of the motivations of this work is
-the ability to enable user defined parametric dtypes to support
-tracking physical units and categorical data as a full-supported
-feature of NumPy.  This work on the unit machinery in Matplotlib will
-ensure that Matplotlib are ready to support the new numpy dtypes as
-soon as they are available.
-
-Matplotlib is a foundational library, while
 
 \subsection{Relevance to program element}
 
