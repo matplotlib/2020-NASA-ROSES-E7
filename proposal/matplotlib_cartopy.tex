@@ -43,7 +43,7 @@
 % I don't remember why threeparttable and setspace is here. Inertia.
 \usepackage{threeparttable}
 \usepackage{setspace}
-\doublespacing
+%\doublespacing
 %%%
 %% Some packages to handle the figures and captions
 %%%
@@ -116,6 +116,11 @@
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{array}
+
+%%%
+%%% Package to create Gantt schedules
+%%%
+\usepackage{pgfgantt}
 
 
 %%%
@@ -291,9 +296,102 @@ packages like NumPy, SciPy and Matplotlib that they are built upon.
 \subsection{Objectives and Significance}
 
 
-Matplotlib is a primarily community-driven project, but we have grown to the
-point where we need supported developers with the time to organize, plan, and
-make decisions.  To maintain Matplotlib's health we need to:
+
+% - need to re-engineer Matplotlib's data model
+% - have on-going work to do design and prototypes
+% - need significant SEW effort to implement across whole library
+% - one nice thing is units, focus on documenting / planning / testing
+% - another nice thing is resampling and out-of-core data access
+% - we have to do this while keeping the patient writing papers
+
+
+Matplotlib is a primarily community-driven project, but we have grown
+to the point where we need supported developers with the time to
+organize, plan, and make decisions.  Supported developers will allows
+us to take on bigger projects than can be implemented by volunteers
+and to ensure that the critical day-to-day tasks required to keep the
+project healthy are done.  We propose to split the effort on this
+grant between a major development effort, overhauling our internal
+data representation, and general library maintenance.
+
+
+\subsubsection{Data Model Implementation}
+
+
+
+Matplotlib needs a consistent way for \texttt{Artist}s to access their
+underlying data. Currently, each plotting method and \texttt{Artist}
+handles sanitizing and storing data independently. Hence, some common
+functionality, such as handling data with attached units (e.g.,
+degrees Celsius, dates), is repeated throughout the code base. This
+leads to inconsistencies across the library and makes it difficult for
+users to write code that updates interactive explorations and
+animations. Matplotlib also cannot exploit ``Structured
+data''--combining multiple pieces of (possibly heterogeneous) data
+with labels and metadata into single data structure; instead, users
+must extract data elements and reassemble them as arguments to
+Matplotlib plotting functions.
+
+We have on-going theoretical and design work\footnote{Supported by
+CZI} to re-architect Matplotlib to better separate the data
+representation from the rest of the library.  We are developing a data
+access API such that each \texttt{Artist} will have a single
+\texttt{DataSource} object responsible for holding the data. This
+design will allow us to over come the issues with the current design
+and open the door to a variety of new functionality. The current work
+is expected to produce design documents and a proof of concept
+implementation by the end of 2021.  Based on this preliminary work
+\textbf{we propose refactoring Matplotlib to use the new data model in
+  all \texttt{Artist}s}.  One of immediate benefit of this work will
+be to drastically improve our handling of data with physical units
+attached.
+
+Units are fundamental to science and engineering, however most
+numerical software is unit-naive.  It is the user's responsibility to
+keep track of and correctly convert data to consistent units prior to
+any computation.  Failing to do so leads to the most insidious of
+bugs: everything ``works'' but silently gives incorrect results!
+There are several libraries which provide unit-aware data structures
+in Python and Matplotlib, if configured properly, can be passed them
+for unit-aware plotting.  \textbf{This capability it is currently used to
+support spaceflight operations by Monte, JPL's mission design and
+navigation software system} and the initial development was supported
+by NASA.
+
+% to what extent mpl currently supports units
+
+The current support of unit-aware data in Matplotib is base on type
+inference and dispatch of the input.  When the unit-full data is
+passed by the user the we look up the converter and Axis
+configuration, default axis label, limits, and functions for locating
+and formatting the ticks, to use.  Matplotlib registers converters for
+datetime and string-categorical types by default and third-party
+libraries, like \texttt{unyt} and \texttt{pint}, to register
+themselves.  Using this machinery users can control what units the
+data is plotting in, which may be different than the units it was
+passed in as, and specify the limits in physical units.
+
+
+% what is wrong
+
+However, there are several problems with the current unit support. It
+is under documented making it difficult for users to understand and
+use the capability and for developers to extend.  Further, each
+plotting method is independently responsible for handling the units.
+Coupled with a lack of full test coverage of plotting data with units,
+this has allowed, over time, inconsistencies and regressions to
+collect in the code base.  These range from unit-full data simply not
+working with some methods to subtle inconsistencies between plotting
+methods.  To address this we propose to use unit-handling as a
+motivating feature while doing the \texttt{DataSource} refactoring.
+By implementing all of the unit logic against the \texttt{DataSource}
+we will be able to share the code across all \texttt{Artist}s and
+unify how we treat units across the entire library.
+
+
+\subsubsection{General maintenance}
+
+To maintain Matplotlib's health we need to:
 \begin{itemize}[noitemsep]
 \item fix critical bugs and regressions;
 \item triage the backlog of Issues and PRs in terms of topic,
@@ -308,156 +406,12 @@ make decisions.  To maintain Matplotlib's health we need to:
 \item and manage discussions about proposed enhancements, features,
   and API changes.
 \end{itemize}
-The requested support for developers is intended to complement and
-facilitate, not replace, crucial volunteer work.  We aim to better
-co-ordinate and nurture their efforts, with the goal of growing and
-sustaining a diverse community of volunteer and paid expert
-contributors.
-
-[TODO remove or reword this?] Maintenance is inherently reactive, we
-do not know about new bugs, user issues, or breaking changes in
-upstream packages until they are reported gobto us.  While this critical
-work can be done by volunteers, if we want to commit to a service
-level we need paid developer time.
-
-With supported developers we also be able to tackle larger scale
-problems with the library that are too big to be done with volunteer
-effort.  One such task is fully documenting, testing, and fixing (as
-needed) the existing unit handling code in Matplotlib, which we
-estimate to be 1.5FTE worth of effort by a single person and will
-require long stretches of uninterpreted work time.
-
-
-\subsubsection{Unit work}
-
-Units are fundamental to science, however most numerical software is
-unit-naive.  It the user's responsibility to keep track of and
-correctly convert data to consistent units prior to any computation.
-Failing to do so leads to the most insidious of bugs: everything
-``works'' but silently gives incorrect results!  There are several
-libraries which provide unit-aware data structures in Python and
-Matplotlib, if configured properly, can be passed them for unit-aware
-plotting.  This capability it is currently used to support spaceflight
-operations by Monte, JPL's mission design and navigation software
-system and the initial development was supported by NASA.
-
-%to what extent mpl currently supports unts]
-The current support of unit-aware data in Matplotib is base on type
-inference and dispatch of the input.  Before plotting the unit-aware
-types must be registered and when the unit-full data is passed to
-plotting methods the we look up the converters and Axis configuration
-that should be used.  Matplotlib registers converters for datetime and
-string-categorical types by default and exposes an API for third-party
-libraries, like \texttt{unyt} and \texttt{pint}, to register
-themselves.  Additionally a default axis label, limits, and functions
-for locating and formatting the ticks can be set based on the units.
-Using this machinery users can control what units the data is plotting
-in, which may be different than the units it was passed in as, and
-specify the limits in physical units.
-
-%what is wrong
-
-However, this support is under documented making it difficult for
-users to understand and use the capability and for developers to
-extend it.  Further, because we do not test coverage that all the
-plotting methods correctly handle units we have had a number of
-regressions, some still unresolved, in unit-aware plotting.  These
-regressions range from unit-full data simply not working with some
-methods, to subtle inconsistencies between plotting methods.
-
-To address this we propose a three phase approach: first to document
-the internal details of how the unit machinery is implemented, second
-to document how users interact with the unit system, and finally to make
-the handling of units consistent and tested across all of the plotting
-methods in the library.  The proposed work will focus on making sure
-the functionality that currently exists works correctly, but we will
-also look at extensions to improve the user and developer experience of
-working with unit-full data.
-
-%how we will fix it!
-\begin{enumerate}
-\item document internal
-\item document external
-\item add tests + fix
-\item extend
-\end{enumerate}
-
-The first task is to document, both at the conceptual and API level,
-how the unit dispatch system works in theory and practice.  This
-documentation will be aimed at Matplotlib developers and third-party
-library authors and focus on the low-level details.  Unfortunately,
-the original authors of the unit-handling code are no longer active
-with the project so we may have to reverse engineer some aspects of
-the code and motivation.  Internally we need to convert unit-full data
-to unit-naive values to pass to the next layer down.  A common problem
-we have seen is issue with when and where we do that conversion.  This
-documentation will clarify which layer of the API the conversions
-should be done in and how both the converted and unconverted data
-should be tracked and managed.  For unit-aware plotting to be fully
-useful, it must work in every plotting method, thus we need clear
-documentation so that every Matplotlib developer is familiar with how
-unit works.  Understanding and documenting how the unit-mechanism was
-intended to work and the current state of the library will be the
-foundation of the rest of the work.
-
-
-The second task is to write user-facing documentation showing how to
-work with unit-full data and Matplotlib.  For this we will work
-closely with maintainers of unit libraries, such as \texttt{unyt}
-(\url{https://unyt.readthedocs.io/}) and \texttt{pint}
-(\url{https://pint.readthedocs.io/}), and user within the SMD
-community, such as the Monte developers at JPL and the Astropy
-developers, to ensure that we are fully meeting their needs.  The user
-documentation will also focus on how things should be and will serve
-as a guide for what the ``correct'' behavior is when we are resolving
-inconsistencies.  This work will tie into our ongoing effort to make
-our large API surface more self-consistent and easier to use.
-
-The third task is to ensure that all of the plotting methods support
-unit-full data in a uniform way.  The documentation developed as part
-of the first two tasks will guide how we resolve any inconsistencies.
-This work will build on ongoing work supported work, funded by Chan
-Zuckerberg Initiative, to re-design how we store data internally.
-Currently each \texttt{Artist} is responsible for storing its data and
-each does it in its own different way.  This variation and duplication
-in the implementation is also the source of many of the unit-related
-regressions.  The proposed redesign will factor the data storage out
-of the \texttt{Artist}s into a reusable class.  Among the benefits of
-this design, we will be able to centralize the unit processing and
-dispatch to one place in the code.  We expect the design and
-proof-of-concept work of this re-design to be complete by the end of
-2021 which aligns with the period of work of this proposal.  Building
-on the data source work, we propose implementing this new design in
-all \texttt{Artist} subclasses, any required changes to the plotting
-methods, and adding full test coverage of unit handling in every
-plotting method.  This work will require touching and testing a large
-fraction of the library.
-
-- [TODO] makes future mpl development easier by documenting and simplifying
-  the internal handling of units
-- make sure it fits with new numpy dtype scheme (NEP 40-44)
-- make sure it works with pandas dtypes?
-
-A final task is to extend the unit machinery to improve the user
-experience.  Currently much of the mechanism of unit-handling is
-implicit and automatic based on type inference.  We propose to extend
-the interface to allow optional direct control of the unit machinery
-by users and third-party library developers.  We will rely on the
-documentation and testing from the previous work to ensure that we do
-not introduce any new regressions or inconsistencies.
-
-
-\subsubsection{General maintenance}
-
-
-Historically, Pull Requests (PRs) and Issues are submitted faster than
-they can be reviewed; Matplotlib has accumulated about 300 open PRs
-1300 open Issues due to this imbalance, There may be critical bug
-reports or insightful feature requests among the issue backlog, while
-among the PR backlog are useful contributions or bug fixes that would
-improve the libraries for direct users and downstream packages.  The
-large backlog is discouraging for new and occasional contributors and
-distracting for core developers.
+%one of the next three paragraphs needs to go!
+Maintenance is inherently reactive, we do not know about new bugs,
+user issues, or breaking changes in upstream packages until they are
+reported gobto us.  While this critical work can be done by
+volunteers, however supported developers help ensure that things
+happen in a timely manner.
 
 There are a number of tasks that are required to ``keep the lights
 on'' on a Python package include maintaining the continuous
@@ -467,23 +421,46 @@ tasks that are never ``done''; users find new ways to use the library
 which require new features or expose previously un-detected bugs and
 the world continues to changes around us.
 
-For 10 months in 2020 (funded via CZI and range) we had a full time
-RSE working on Matplotlib who had a measurable impact on both the rate
-of PR review, the rate of issue resolution, and fixed a number of long
+Historically, Pull Requests (PRs) and Issues have been submitted
+faster than they can be reviewed; Matplotlib has accumulated about 300
+open PRs 1300 open Issues due to this imbalance, There may be critical
+bug reports or insightful feature requests among the issue backlog,
+while among the PR backlog are useful contributions or bug fixes that
+would improve the libraries for direct users and downstream packages.
+The large backlog is discouraging for new and occasional contributors
+and distracting for core developers.
+
+
+For 10 months in 2020\footnote{funded via CZI} we had a full time RSE
+working on Matplotlib who had a measurable impact on the rate of PR
+review and the rate of issue resolution, and fixed a number of long
 standing bugs.  In 2020 Matplotlib resolved 125-200 PRs and 75-125
-Issues a month, however even with this dedicated effort we only
-reduced the PR backlog by 70 open PRs and made no progress on reducing
-the Issue backlog.  The additional resources requested here will help
-to significantly reduce, but not eliminate, this backlog. [make point that
-  this is steps down the right path].
+Issues a month, however even at this rate we only reduced the PR
+backlog by 70 open PRs and held even on the Issue backlog.  We have
+demonstrated supporting maintenance work has a positive effect and
+\textbf{the additional resources requested here will help to reduce,
+  but not eliminate, the maintenance backlog further}.
+
 
 \subsection{Perceived impact of work}
+
+
 \begin{enumerate}
 \item increased reliability of unit-aware plotting
 \item improvement in general reliability of software
 \item improved responsively to issues
 \item making point about building on current funding
 \end{enumerate}
+
+
+
+\begin{itemize}[noitemsep]
+  \item uniform handling of physical units,
+  \item smart down-sampling of plotted data based on view limits,
+  \item native consumption of structured data,
+  \item seamless updating of the underlying data, either interactively or via streams,
+  \item and use of alternative data sources such as database queries or analytic functions.
+\end{itemize}
 
 - improving the maturity and sustainability of the project (WC)
 - direct user impact?
@@ -492,7 +469,27 @@ to significantly reduce, but not eliminate, this backlog. [make point that
 - make stronger point that yt, astropy, monte all use units -> will make their life better
 - helps make the point the mpl is tool for other projects, not end in its self
 - supporting long term goal to make API more consistent and easier to use
+- tie to numpy's dtype work strongly
 
+This proposal is another step towards Matplotlib sustainability.
+The requested support for developers is intended to complement and
+facilitate, not replace, crucial volunteer work.  We aim to better
+co-ordinate and nurture their efforts, with the goal of growing and
+sustaining a diverse community of volunteer and paid expert
+contributors.
+
+
+For units to be as useful, we need all the components of the analysis
+and visualization need to be unit aware.  There is on-going work by
+the NumPy project to overhaul how the array dtypes are imlemented (NEP
+40, NEP 41, NEP 42, NEP 43).  One of the motivations of this work is
+the ability to enable user defined parametric dtypes to support
+tracking physical units and categorical data as a full-supported
+feature of NumPy.  This work on the unit machinery in Matplotlib will
+ensure that Matplotlib are ready to support the new numpy dtypes as
+soon as they are available.
+
+Matplotlib is a foundational library, while
 
 \subsection{Relevance to program element}
 
@@ -546,6 +543,7 @@ across the entire SMD portfolio.
 
 \subsection{sources of uncertainty/mitigation to risk}
 
+- need to be very careful about not breaking back-compatibility
 
 The biggest risk with the proposed work is that we are underestimating
 the amount of work that will be required for the unit work.  There is
@@ -574,8 +572,8 @@ can reduce, or at least hold even, the backlogs.
 
 \subsection{roles of team members}
 \begin{enumerate}
-\item Caswell: PI + maintenance + supervise RSE (0.25FTE)
-\item RSE: maintenance + lead unit unit testing (1FTE)
+\item Caswell: PI + maintenance + implementation + supervise RSE (0.25FTE)
+\item RSE: maintenance + implementation  (1FTE)
 \end{enumerate}
 
 \subsection{workplan with milestones}
@@ -584,6 +582,83 @@ Starting from July 2021 onward Dr. Caswell will devote 25\% FTE to
 this work.  This time will be split between supervision of the RSE and
 maintenance work, both of these are on-going tasks.  The first task
 will be the recruitment and hiring of the RSE.
+
+The first task is to document, both at the conceptual and API level,
+how the unit dispatch system currently works in theory and practice.
+This documentation will be aimed at Matplotlib developers and
+third-party library authors and focus on the low-level details.
+Unfortunately, the original authors of the unit-handling code are no
+longer active with the project so we may have to reverse engineer some
+aspects of the code and motivation.
+Internally we need to convert
+unit-full data to unit-naive values to pass to the next layer down.
+A
+common problem we have seen is issue with when and where we do that
+conversion.
+This documentation will clarify which layer of the API
+the conversions should be done in and how both the converted and
+unconverted data should be tracked and managed.
+For unit-aware
+plotting to be fully useful, it must work in every plotting method,
+thus we need clear documentation so that every Matplotlib developer is
+familiar with how unit works.
+Understanding and documenting how the
+unit-mechanism was intended to work and the current state of the
+library will be the foundation of the rest of the work.
+
+
+
+
+The second task is to write user-facing documentation showing how to
+work with unit-full data and Matplotlib.  For this we will work
+closely with maintainers of unit libraries, such as \texttt{unyt}
+(\url{https://unyt.readthedocs.io/}), \texttt{pint}
+(\url{https://pint.readthedocs.io/}) and
+\texttt{astropy.units} (\url{https://docs.astropy.org/en/stable/units/}),
+and user within the SMD community, such as the Monte developers at JPL
+and the Astropy developers, to ensure that we are fully meeting their
+needs.  The user documentation will also focus on how things should be
+and will serve as a guide for what the ``correct'' behavior is when we
+are resolving inconsistencies.  This work will tie into our ongoing
+effort to make our large API surface more self-consistent and easier
+to use.
+
+\textbf{Implementation}
+
+The third task is to ensure that all of the plotting methods support
+unit-full data in a uniform way.  The documentation developed as part
+of the first two tasks will guide how we resolve any inconsistencies.
+This work will build on ongoing work supported work, funded by Chan
+Zuckerberg Initiative, to re-design how we store data internally.
+Currently each \texttt{Artist} is responsible for storing its data and
+each does it in its own different way.  This variation and duplication
+in the implementation is also the source of many of the unit-related
+regressions.  The proposed redesign will factor the data storage out
+of the \texttt{Artist}s into a reusable class.  Among the benefits of
+this design, we will be able to centralize the unit processing and
+dispatch to one place in the code.  We expect the design and
+proof-of-concept work of this re-design to be complete by the end of
+2021 which aligns with the period of work of this proposal.  Building
+on the data source work, we propose implementing this new design in
+all \texttt{Artist} subclasses, any required changes to the plotting
+methods, and adding full test coverage of unit handling in every
+plotting method.  This work will require touching and testing a large
+fraction of the library.
+
+- [TODO] makes future mpl development easier by documenting and simplifying
+  the internal handling of units
+- make sure it fits with new numpy dtype scheme (NEP 40-43)
+- make sure it works with pandas dtypes?
+
+A final task is to extend the unit machinery to improve the user
+experience.  Currently much of the mechanism of unit-handling is
+implicit and automatic based on type inference.  We propose to extend
+the interface to allow optional direct control of the unit machinery
+by users and third-party library developers.  We will rely on the
+documentation and testing from the previous work to ensure that we do
+not introduce any new regressions or inconsistencies.
+
+
 
 The Research Software Engineer (RSE), whom needs to be identified,
 will devote 100\% FTE to this project.  This will be split evenly with
@@ -606,29 +681,44 @@ release cycle throughout the performance period.  The RSE will present
 the status of the work at two conferences, expected to be SciPy in
 July and one of PyData conferences in the winter, yearly.
 
-
-\begin{description}
-
-\item[Y1Q1] Begin first units task (documenting current behavior)
-\item[Y1Q2] Finish first task. Have developer documentation merged to
-  Matplotlib docs.
-\item[Y1Q3] Begin second task.
-\item[Y1Q4] Finish second task. Have user-facing documentation merged
-  to Matplotlib docs. Present at SciPy and/or pydata.
-
-\item[Y2Q1] Begin third task.  Develop detailed development plan.
-\item[Y2Q2] Continue third task.
-\item[Y2Q3] Continue third task.
-\item[Y2Q4] Present at SciPy and/or pydata.
-
-
-\item[Y3Q1] Continue third task. Evaluate progress on development
-  plan, adjust if needed.
-\item[Y3Q2] Continue third task.
-\item[Y3Q3] Continue third task.
-\item[Y3Q4] Completed third task. Present at SciPy and/or pydata.
-
-\end{description}
+\begin{ganttchart}[
+    vgrid,
+    title height=1,
+    milestone inline label node/.append style={left=5mm},
+    x unit=.75cm,
+    %inline,
+    %expand chart=\textwidth,
+    %milestone/.append style={xscale=12*.75cm/\textwidth},
+    milestone/.append style={xscale=1},
+    bar height=.75,
+    bar top shift=.125,
+    y unit chart=.75cm,
+    y unit title=.75cm]{1}{12}
+  \gantttitle{2020}{2}
+  \gantttitle{2021}{4}
+  \gantttitle{2022}{4}
+  \gantttitle{2023}{2}\\
+  \gantttitle{Y1}{4}
+  \gantttitle{Y2}{4}
+  \gantttitle{Y3}{4} \\
+  \gantttitlelist[title list options=%
+  {var=\y, evaluate=\y as \x%
+    using " Q\y "}]{1,...,4}{1} \
+\gantttitlelist[title list options=%
+  {var=\y, evaluate=\y as \x%
+    using " Q\y "}]{1,...,4}{1}
+\gantttitlelist[title list options=%
+  {var=\y, evaluate=\y as \x%
+    using " Q\y "}]{1,...,4}{1} \\
+\ganttbar{Document Units (internal)}{1}{2} \ganttnewline
+\ganttbar{Document Units (external)}{2}{3} \ganttnewline
+\ganttbar{Planning and Design}{2}{4} \ganttnewline
+\ganttmilestone{\texttt{DataSource} API stable}{3} \ganttnewline
+\ganttbar{Implementation}{4}{12} \ganttnewline
+\ganttmilestone{SciPy Talk}{4} \ganttmilestone{}{8} \ganttmilestone{}{12} \ganttnewline
+\ganttbar[inline]{General Maintenance (ongoing)}{1}{12} \ganttnewline
+\ganttmilestone{Matplotlib Release}{2} \ganttmilestone{}{4} \ganttmilestone{}{6} \ganttmilestone{}{8} \ganttmilestone{}{10} \ganttmilestone{}{12}
+\end{ganttchart}
 
 
 
@@ -798,13 +888,15 @@ is technically persistent, we treat it as transient.  For more in
 depth discussions or anything we want a record of, we move the
 conversation to github, the mailing list, or discourse.
 
-For user support and general discussion we maintain two mailing lists
-(\url{https://mail.python.org/mailman/listinfo/matplotlib-users},
-\url{https://mail.python.org/mailman/listinfo/matplotlib-devel}) and a
-discourse (\url{https://discourse.matplotlib.org}) instance.  While
-users have to subscribe and register respectively to post, these
-forums are open to all.  We also maintain a read-only mailing list for
-announcements
+For user support and general discussion we maintain two mailing lists,
+matplotlib-users
+(\url{https://mail.python.org/mailman/listinfo/matplotlib-users}) for
+user support and matplotlib-devel
+(\url{https://mail.python.org/mailman/listinfo/matplotlib-devel}) for
+developer discussion and announcements, and a discourse
+(\url{https://discourse.matplotlib.org}) instance.  While users have
+to subscribe and register respectively to post, these forums are open
+to all.  We also maintain a read-only mailing list for announcements
 (\url{https://mail.python.org/mailman/listinfo/matplotlib-announce}).
 
 When we could travel Matplotlib developers would frequently attend
