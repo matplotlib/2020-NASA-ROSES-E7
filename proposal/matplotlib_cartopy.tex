@@ -344,37 +344,36 @@ documents and a proof-of-principal implementation by the end of 2021.
 Based on this preliminary work \textbf{we propose refactoring
   all of Matplotlib to use the new data model}
 
-One of immediate benefit of this work will be to drastically improve
-Matplotlib's handling of data with physical units attached.  Units are
-fundamental to science and engineering, however most numerical
-software is unit-naive.  It is the user's responsibility to keep track
-of and correctly convert data to consistent units prior to any
-computation.  Failing to do so leads to the most insidious of bugs:
-everything ``works'' but silently gives incorrect results!  There are
-several libraries which provide unit-aware data structures in Python
-and Matplotlib, if configured properly, can be passed them for
-unit-aware plotting.  \textbf{This capability it is currently used to
-  support spaceflight operations by Monte, JPL's mission design and
-  navigation software system} and the initial development was
-supported by NASA.
+One of immediate benefit of the refactoring will be to drastically
+improve Matplotlib's handling of data with physical units attached.
+Units are fundamental to science and engineering, however most
+numerical software is unit-naive.  It is the user's responsibility to
+keep track of and correctly convert data to consistent units prior to
+any computation.  Failing to do so leads to the most insidious of
+bugs: everything ``works'' but silently gives incorrect results!
+There are several libraries which provide unit-aware data structures
+in Python.  When registered, Matplotlib can use object from these
+libraries for unit-aware plotting.  \textbf{This capability it is
+  currently used to support spaceflight operations by Monte, JPL's
+  mission design and navigation software system} and the initial
+development was supported by NASA.
 
 % to what extent mpl currently supports units
 
 The current support physical units in Matplotib is base on type
 inference and dispatch of the input.  When the unit-full data is
-passed by the user the we look up the converter and Axis
-configuration, default axis label, limits, and functions for locating
-and formatting the ticks, to use.  Matplotlib registers converters for
-datetime and string-categorical types by default and third-party
-libraries to register themselves.  Using this machinery users can
-control what units the data is plotting in, which may be different
-than the units it was passed in as, and specify the limits in physical
-units.
+passed by the user the we look up the converter, default axis label,
+limits, and functions for locating and formatting the ticks, to use.
+Matplotlib registers converters for datetime and string-categorical
+types by default and third-party libraries to register themselves.
+Using this machinery users can control what units the data is plotting
+in, which may be different than the units it was passed in as, and
+specify the limits in physical units.
 
 
 % what is wrong
-However, there are several problems with the current unit support.
-The unit support is under documented making it difficult for users to
+However, there are several problems with the current unit support in
+Matplotlib.  It is under documented making it difficult for users to
 understand and use the capability and for developers to extend.
 Coupled with a lack of full test coverage of using physical units,
 over time the inconsistencies mentioned above have accumulated in the
@@ -382,9 +381,9 @@ code base.  These range from subtle inconsistencies between plotting
 methods to unit-full data simply not working with some methods.
 \textbf{To address this we propose to use unit-handling as a
   motivating feature while doing the \texttt{DataSource} refactoring}.
-By implementing all of the unit logic in the \texttt{DataSource}
-we will be able to share the code across all \texttt{Artist}s and
-unify how we treat units across the library.
+By implementing all of the unit logic in the \texttt{DataSource} we
+will be able to share the code across all \texttt{Artist}s and unify
+how we treat units across the library.
 
 
 \subsubsection{General maintenance}
@@ -404,40 +403,44 @@ To maintain Matplotlib's health we need to:
 \item and manage discussions about proposed enhancements, features,
   and API changes.
 \end{itemize}
-%one of the next three paragraphs needs to go!
-Maintenance is inherently reactive, we do not know about new bugs,
-user issues, or breaking changes in upstream packages until they are
-reported gobto us.  While this critical work can be done by
-volunteers, however supported developers help ensure that things
-happen in a timely manner.
+These are tasks that are never ``done''; users find new ways to use
+the library expose previously un-detected bugs, request or propose new
+features and the world continues to changes around us.  \textbf{While
+  this critical work can be done by volunteers, however supported
+  developers help ensure that things happen in a timely manner}.
 
-There are a number of tasks that are required to ``keep the lights
-on'' on a Python package include maintaining the continuous
-integration systems, managing releases, tracking down
-platform-specific bugs, and tracking upstream changes.  These are
-tasks that are never ``done''; users find new ways to use the library
-which require new features or expose previously un-detected bugs and
-the world continues to changes around us.
+%% sentences that I still like, but don't fit into the flow at all
+
+% Maintenance is inherently reactive, we do not know about new bugs,
+% user issues, or breaking changes in upstream packages until they are
+% reported gobto us.
+
+% There are a number of tasks that are required to ``keep the lights
+% on'' on a Python package include maintaining the continuous
+% integration systems, managing releases, tracking down
+% platform-specific bugs, and tracking upstream changes.
+
+
+%plot?
 
 Historically, Pull Requests (PRs) and Issues have been submitted
 faster than they can be reviewed; Matplotlib has accumulated about 300
-open PRs 1300 open Issues due to this imbalance, There may be critical
-bug reports or insightful feature requests among the issue backlog,
-while among the PR backlog are useful contributions or bug fixes that
-would improve the libraries for direct users and downstream packages.
-The large backlog is discouraging for new and occasional contributors
-and distracting for core developers.
+open PRs 1300 open Issues due to this imbalance, There almost
+certainly are critical bug reports or insightful feature requests among
+the issue backlog, while among the PR backlog there are useful contributions
+or bug fixes that would improve the libraries for direct users and
+downstream packages.  The large backlog is discouraging for new and
+occasional contributors and distracting for core developers.
 
-
-For 10 months in 2020\footnote{funded via CZI} we had a full time RSE
-working on Matplotlib who had a measurable impact on the rate of PR
-review and the rate of issue resolution, and fixed a number of long
-standing bugs.  In 2020 Matplotlib resolved 125-200 PRs and 75-125
-Issues a month, however even at this rate we only reduced the PR
-backlog by 70 open PRs and held even on the Issue backlog.  We have
-demonstrated supporting maintenance work has a positive effect and
-\textbf{the additional resources requested here will help to reduce,
-  but not eliminate, the maintenance backlog further}.
+In 2020 Matplotlib resolved 125-200 PRs and 75-125 Issues a month,
+however even at this rate we only reduced the PR backlog by 70 open
+PRs and held even on the Issue backlog.  We were able to achieve this
+because for 10 months in 2020 we had supported RSE working on
+Matplotlib.  As part of reducing the backlog, we were able to fix a
+several long standing bugs.  We have demonstrated that supporting
+maintenance work has a positive effect on the health of the project
+and \textbf{the additional resources requested here will further
+  reduce, but not eliminate, the maintenance backlog}.
 
 
 \subsection{Perceived impact of work}
@@ -446,56 +449,75 @@ demonstrated supporting maintenance work has a positive effect and
 % \url{https://www.aosabook.org/en/matplotlib.html}
 
 Originally developed over 17 years ago the architecture of Matplotlib
-it has served us well, but it does not reflect recent developments in
-software design, data structures, and visualization.  Refactoring the
-data access layer, effectively splitting the \texttt{Artist} classes
-in half, towards continuing to support and enable science for the next
-20 years.  By separating the data storage and access logic form the
-logic that maps the data to visual elements we unlock
+it has served us extremely well, however it does not reflect recent
+developments in software design, data structures, and visualization.
+Refactoring the data layer will be a major step towards continuing to
+support and enable science for the next 20 years.  In addition to fixing
+the support of physical units, this refactor will lay the ground work for
 \begin{itemize}[noitemsep]
-  \item uniform handling of physical units,
   \item smart down-sampling of plotted data based on view limits,
   \item native consumption of structured data,
-  \item seamless updating of the underlying data, either interactively or via streams,
-  \item and use of alternative data sources such as database queries or analytic functions.
+  \item seamless updating of the underlying data, either interactively
+    or via streams,
+  \item and use of alternative data sources such as database queries
+    or analytic functions.
 \end{itemize}
+These features will be increasingly relevant as the scale and complexity
+of data continues to increase.
 
 
-We aim to take advantage of these developments to improve the
-consistency, composability, and discoverabilty of the API.  The
-ultimate goal is facilitating rich interactive domain-specific
-visualizations.
+There is a broad recognition across the SPE of the importance of
+supporting physical units as an intrinsic component of computation.
+There is on going work in NumPy (NEP40-43), pandas, and xarray to add
+support for physical units to the foundational data structures.  The
+proposed work in Matplotlib will ensure that Matplotlib is ready to
+plotting unit-full data to provide users with a complete solution to
+working with unit-aware data.
+
+From major projects, like \texttt{yt}, \texttt{CartoPy} or
+\texttt{astropy}, to a grad student's experiment-specific plotting
+tools users compose the core Matplotilb APIs to fit their unique data
+structures and visualization needs.  This extensibility is one of the
+key features of Matplotlib and source of its longevity and ubiquity.
+Refactoring the data access will open up new paths for users and
+down-stream to extend Matplotlib to built highly-tuned domain specific
+plotting tools.
+
+Supporting Matplotlib is a highly leveraged investment.  Improvements
+to Matplotlib will be seen both directly by our users and by the
+developers of tools that depend on Matplotlib and transitively by
+their users.  For example, \texttt{Monte} and
+\texttt{astropy} are libraries developed and used by SMD researchers
+that make use of the unit machinery in Matplotlib.   Improving the
+unit handling in Matplotlib will directly improve those libraries.
+
+The library has grown organically over time through the contributions
+of over 1,300 individuals, accumulating many small inconsistencies in
+the API.  For example, similar methods have different argument order,
+e.g., \texttt{ax.text(x, y, s)} vs \texttt{ax.annotation(s, (x, y))},
+and some keyword (named) arguments can be singular or plural, e.g.,
+\texttt{color} vs \texttt{colors}.  These subtle issues add friction
+for users, but are hard to fix without breaking existing code for
+someone in our large user base.  While not sufficient to address these
+issue, unifying the data representation is a necessary first step.
 
 
-For units to be as useful, we need all the components of the analysis
-and visualization need to be unit aware.  There is on-going work by
-the NumPy project to overhaul how the array dtypes are implemented (NEP
-40, NEP 41, NEP 42, NEP 43).  One of the motivations of this work is
-the ability to enable user defined parametric dtypes to support
-tracking physical units and categorical data as a full-supported
-feature of NumPy.  This work on the unit machinery in Matplotlib will
-ensure that Matplotlib are ready to support the new numpy dtypes as
-soon as they are available.
+% \begin{enumerate}
+% \item increased reliability of unit-aware plotting
+% \item improvement in general reliability of software
+% \item improved responsively to issues
+% \item making point about building on current funding
+% \end{enumerate}
+%
+% - [x] improving the maturity and sustainability of the project (WC)
+% - [x] direct user impact?
+% - [ ] what new science?!
+% - [x] need to be ``outward looking'' (which should anyone else care?)
+% - [x] make stronger point that yt, astropy, monte all use units -> will make their life better
+% - [x] helps make the point the mpl is tool for other projects, not end in its self
+% - [x] supporting long term goal to make API more consistent and easier to use
+% - [x] tie to numpy/panda/xarray dtype work strongly
 
-
-\begin{enumerate}
-\item increased reliability of unit-aware plotting
-\item improvement in general reliability of software
-\item improved responsively to issues
-\item making point about building on current funding
-\end{enumerate}
-
-
-
-
-- improving the maturity and sustainability of the project (WC)
-- direct user impact?
-- what new science?!
-- need to be ``outward looking'' (which should anyone else care?)
-- make stronger point that yt, astropy, monte all use units -> will make their life better
-- helps make the point the mpl is tool for other projects, not end in its self
-- supporting long term goal to make API more consistent and easier to use
-- tie to numpy/panda/xarray dtype work strongly
 
 This proposal is another step towards Matplotlib sustainability.
 Given the usage and the scale of the library it is not sustainable to
@@ -558,31 +580,41 @@ across the entire SMD portfolio.
 
 \subsection{sources of uncertainty/mitigation to risk}
 
-- need to be very careful about not breaking back-compatibility
+As show above, Matplotlib is widely used, both directly and
+transitively.  Given the large user base it is imperative that changes
+are as backwards compatible as possible.  While this large user base
+is on one hand a lever that magnifies any improvements, it also makes
+changes more expensive.  We can not simply change our public to track
+the internal refactoring, instead we must write also write code to
+translate the old API to the new implementation.  This engineering work
+makes the refactor more challenging and time consuming than starting
+from scratch.
+
+% - need to be very careful about not breaking back-compatibility
 
 The biggest risk with the proposed work is that we are underestimating
-the amount of work that will be required for the unit work.  There is
-always a risk while refactoring that the scope of work rapidly snow
-ball due to unexpected internal dependencies or edge cases must be
-accounted for.  In a worst case where we have to abandon the work we
-will maintain the status quo, but with significantly better
-documentation.
+the amount of work that will be required for data refactor and unit
+work.  There is always a risk while refactoring that the scope of work
+rapidly snow ball due to unexpected internal dependencies or edge
+cases must be accounted for.  In a worst case where we have to abandon
+the work we will maintain the status quo, but with significantly
+better documentation.
 
 We anticipate that all of the work can be done incrementally and will
 be merged to the default branch of Matplotlib throughout the
-performance period.  This is inline with our standard development
-process, work done under this proposal will not be exempt from review,
-and many small PRs are easier to review and merge than a single large
-PR.  This process inherently reduces the risk as we will be frequently
-merging improvements to the default branch.  These These improvements,
-both to the code and documentation, will in turn be released to users
-as part of our standard bi-yearly release cadence.
+performance period.  Frequently merging incremental work both reduces
+the risk it is also consistent with our standard development process.
+Work done under this proposal will not be exempt from review, and many
+small PRs are easier to review and merge than a single large PR.
+These improvements, both to the code and documentation, will be
+released to users as part of our standard bi-yearly release cadence.
 
-There is very little risk in the maintenance work.  There is large
-volume of individually small tasks that need to be addressed: the
-issue and PR backlogs.  Any dedicated effort devoted to clearing the
-backlog is positive and we have demonstrated that supported developers
-can reduce, or at least hold even, the backlogs.
+There is minimal risk in the maintenance work.  There is large volume
+of individually small tasks that need to be addressed: the issue and
+PR backlogs.  Any dedicated effort devoted to clearing the backlog
+will have a positive impact on the project.  We have demonstrated that
+supporting developers for maintenance work is an effective and
+efficient use of resources.
 
 
 \subsection{roles of team members}
@@ -593,10 +625,13 @@ can reduce, or at least hold even, the backlogs.
 
 \subsection{workplan with milestones}
 
-Starting from July 2021 onward Dr. Caswell will devote 25\% FTE to
-this work.  This time will be split between supervision of the RSE and
-maintenance work, both of these are on-going tasks.  The first task
-will be the recruitment and hiring of the RSE.
+Starting from July 2021 onward through July 2024 Dr. Caswell will
+devote 25\% FTE to this work.  This time will be split between
+supervision of the RSE and maintenance work, both of these are
+on-going tasks.  The first task will be the recruitment and hiring of
+the RSE.
+
+
 
 The first task is to document, both at the conceptual and API level,
 how the unit dispatch system currently works in theory and practice.
