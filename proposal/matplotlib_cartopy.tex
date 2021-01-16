@@ -178,7 +178,7 @@
 %% Finally, we get to the document.
 \begin{document}
 \title{Improving the Foundations and Maintenance of Matplotlib}
-\author{Dr. Thomas A Caswell}
+\author{Thomas A Caswell}
 \date{}
 \maketitle
 
@@ -202,26 +202,28 @@
 % some of them?
 \subsection{Description of software and relevance to SMD}
 
-Billions of dollars of SMD funding, across all 4 SMD divisions,
-critically relies on the scientific Python ecosystem (SPE) for data
-analysis, scientific computation and visualization.  This includes
+Matplotlib~\cite{Hunter:2007} provides the visualization for missions and
+projects across all four SMD divisions,
+including
 flagship missions like the Hubble Space Telescope, the James Web Space
-Telescope~\cite{jwst_pipeline}, and the Curiosity rover
-Mastcam~\cite{https://doi.org/10.1002/2016EA000219}.  The Scientific
-Python Ecosystem is a loosely defined community of projects and
+Telescope~\cite{jwst_pipeline}, and the Curiosity Rover
+Mastcam~\cite{https://doi.org/10.1002/2016EA000219}.  Matplotlib is part of the
+Scientific
+Python Ecosystem (SPE), a loosely defined community of projects and
 programmers with the common goal of advancing science through the use
 of the Python programming language.  This development is largely
 volunteer work or work that is sponsored implicitly by specific
 science projects.  SPE, shown with a rough schematic in Figure
 \ref{fig:ecosystem}, has a core of general purpose domain-agnostic
-tools, like NumPy~\cite{Harris2020} and SciPy~\cite{Virtanen2020}. In
-the next ring is specialized, but still domain agnostic tools like
-Matplotlib~\cite{Hunter:2007}, the fundamental data visualization
-library for the SPE, and advanced data structures like Pandas and
-XArray.  The outer rings are increasingly domain specific tools, like
+tools, like NumPy~\cite{Harris2020} and SciPy~\cite{Virtanen2020}. Matplotlib
+is in the next ring of specialized, but still domain agnostic tools, and is the
+most prevalent data visualization
+library for the SPE.  The outer rings are increasingly domain-specific tools,
+like
 AstroPy~\cite{robitaille2013astropy} and
-SunPy~\cite{sunpy_community2020}.  This layered approach gives
-scientists and engineers convenient and powerful high level tools
+SunPy~\cite{sunpy_community2020}, both of which use Matplotlib for specialized
+plotting.  This layered approach gives
+scientists and engineers convenient and powerful high-level tools
 while enabling direct access to the underlying libraries when needed.
 
 
@@ -246,7 +248,7 @@ The initial work on Matplotlib was done in 2001-2002 and the first
 commits in the Matplotlib history date to early 2003.  Over the last
 17 years Matplotlib has been actively developed and maintained by a
 vibrant, primarily volunteer, community.  Matplotlib has over 1,250
-individual contributors to the code base with countless more
+individual contributors to the code base, with many more
 individuals having contributed in ways not easily track, such as
 answering user questions on the mailing list or reporting issues.
 
@@ -258,40 +260,23 @@ for output to a variety of vector and raster
 formats including \texttt{svg}, \texttt{eps},
 \texttt{pdf}, and \texttt{png}
 
-Matplotlib APIs as readily extendable.  The most common visualizations
-in a domain need to be fluid for the end-practitioners, with the
-``obvious'' customization options exposed. Much of the domain-specific
-specialization is carried in the structure, semantics and assumptions
-of the data, and in the standard visualizations of the domain. These
-specializations can vary widely, in contradictory ways, between
-domains. Because no high-level API can simultaneously satisfy all of
-the visualization needs, there has developed a rich ecosystem of
-domain specific plotting tools including yt, astropy, ArviZ,
-seaborn, xarray, astropy, fast\_histogram extending the core
-Matplotlib APIs.
+Matplotlib's generality and flexibility means that it is readily extendable to
+many data visualization domains.  A rich ecosystem of downstream packages use
+Matplotlib as their base, providing domain-specific streamlining of
+Matplotlib's API: including yt, astropy, ArviZ, seaborn, xarray, astropy, and
+fast\_histogram. 
 
-
-While large parts of the scientific computing community rely on the
-SPE, the open nature of these infrastructure tools makes measuring
-their influence hard.  Conservative estimates, based on downloads and
-web traffic on the documentation, are that Matplotlib has over a
+Matplotlib is ubiquitous in scientific computing.  Conservative estimates based on downloads and web traffic on the documentation, indicate that Matplotlib has over a
 million users.  We expect that a large fraction of NASA SMD-sponsored
 projects rely on this shared infrastructure to some degree, but this
-is hard to prove in practice.  In particular, scientific work does not
-usually cite the software that was used for computation and plotting,
-and usage and download statistics are hard to gather for widely used
-open source packages.  Even though citation counts are likely to
-vastly under-represent the scientific use of these packages, a
+is hard to prove in practice.  It is not usual to cite tool chains in scientific literature, so citation counts are likely to
+vastly under-represent the scientific use of Matplotlib.  However, a
 canonical reference for Matplotlib~\cite{Hunter:2007} has over 12,750
-citations while a common reference of NumPy~\cite{walt2011numpy} has
-over 6,800 citations. These counts already illustrate a problem in
-measuring usage via citations, as every user of Matplotlib also uses
-NumPy, but Matplotlib has almost twice as many citations.  Domain
-specific tools, like AstroPy~\cite{robitaille2013astropy} for
-astronomy (about 4,500 citations), often have high citation counts
-compared to the core packages like NumPy, SciPy and Matplotlib that
-they are built upon.
-
+citations, while a common reference of NumPy~\cite{walt2011numpy} has
+over 6,800 citations (these counts illustrate the problem in
+measuring usage via citations: Matplotlib depends on
+NumPy, yet Matplotlib has almost twice as many citations).  
+AstroPy~\cite{robitaille2013astropy} has about 4,500 citations.  
 
 \subsection{Objectives and Significance}
 
@@ -529,7 +514,7 @@ issue, unifying the data representation is a necessary first step.
 % - [ ] what new science?!
 % - [x] need to be ``outward looking'' (which should anyone else care?)
 % - [x] make stronger point that yt, astropy, monte all use units -> will make their life better
-% - [x] helps make the point the mpl is tool for other projects, not end in its self
+% - [x] helps make the point the mpl is tool for other projects, not end in itsself
 % - [x] supporting long term goal to make API more consistent and easier to use
 % - [x] tie to numpy/panda/xarray dtype work strongly
 
@@ -916,8 +901,8 @@ into consideration when evaluating our proposal.
 
 Matplotlib strives to be an inclusive and open project and have
 adopted a Code of Conduct
-\url{https://github.com/matplotlib/matplotlib/blob/master/CODE_OF_CONDUCT.md}. Anyone
-who is willing and able to contribute to the project should feel
+\url{https://github.com/matplotlib/matplotlib/blob/master/CODE_OF_CONDUCT.md}.
+Anyone who is willing and able to contribute to the project should feel
 welcome to do so.  It is important for everyone working on the project
 to feel safe to make mistakes.
 
