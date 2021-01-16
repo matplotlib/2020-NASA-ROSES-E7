@@ -625,49 +625,103 @@ efficient use of resources.
 
 \subsection{workplan with milestones}
 
+\begin{ganttchart}[
+    vgrid,
+    title height=1,
+    milestone inline label node/.append style={left=5mm},
+    x unit=.75cm,
+    %inline,
+    %expand chart=\textwidth,
+    %milestone/.append style={xscale=12*.75cm/\textwidth},
+    milestone/.append style={xscale=1},
+    bar height=.75,
+    bar top shift=.125,
+    y unit chart=.75cm,
+    y unit title=.75cm]{1}{12}
+  \gantttitle{2020}{2}
+  \gantttitle{2021}{4}
+  \gantttitle{2022}{4}
+  \gantttitle{2023}{2}\\
+  \gantttitle{Y1}{4}
+  \gantttitle{Y2}{4}
+  \gantttitle{Y3}{4} \\
+  \gantttitlelist[title list options=%
+  {var=\y, evaluate=\y as \x%
+    using " Q\y "}]{1,...,4}{1} \
+\gantttitlelist[title list options=%
+  {var=\y, evaluate=\y as \x%
+    using " Q\y "}]{1,...,4}{1}
+\gantttitlelist[title list options=%
+  {var=\y, evaluate=\y as \x%
+    using " Q\y "}]{1,...,4}{1} \\
+\ganttmilestone{Hire RSE}{1} \ganttnewline
+\ganttbar{Document Units (internal)}{1}{2} \ganttnewline
+% \ganttbar{Document Units (external)}{2}{3} \ganttnewline
+\ganttbar{Planning and Design}{2}{4} \ganttnewline
+\ganttmilestone{\texttt{DataSource} API stable}{3} \ganttnewline
+\ganttbar{Implementation}{4}{12} \ganttnewline
+\ganttmilestone{SciPy Talk}{4} \ganttmilestone{}{8} \ganttmilestone{}{12} \ganttnewline
+\ganttbar[inline]{General Maintenance (ongoing)}{1}{12} \ganttnewline
+\ganttmilestone{Matplotlib Release}{2} \ganttmilestone{}{4} \ganttmilestone{}{6} \ganttmilestone{}{8} \ganttmilestone{}{10} \ganttmilestone{}{12}
+\end{ganttchart}
+
+
 Starting from July 2021 onward through July 2024 Dr. Caswell will
-devote 25\% FTE to this work.  This time will be split between
-supervision of the RSE and maintenance work, both of these are
-on-going tasks.  The first task will be the recruitment and hiring of
-the RSE.
+devote 25\% FTE to this work.  This time will be split between the
+data layer refactor, project management, and general maintenance work,
+the later two being on-going tasks.  The first task will be the
+recruitment and hiring of the RSE.
+
+% 4 part plan
+%  1. document how units work now, document how it should work, id problems
+%  2. work to adapt the theoretical and prototype datasource work to API stable
+%  3. plan!
+%  4. re-write every Artist sub-class
 
 
 
 The first task is to document, both at the conceptual and API level,
 how the unit dispatch system currently works in theory and practice.
-This documentation will be aimed at Matplotlib developers and
-third-party library authors and focus on the low-level details.
-Unfortunately, the original authors of the unit-handling code are no
-longer active with the project so we may have to reverse engineer some
-aspects of the code and motivation.
-Internally we need to convert
-unit-full data to unit-naive values to pass to the next layer down.
-A
-common problem we have seen is issue with when and where we do that
-conversion.
-This documentation will clarify which layer of the API
-the conversions should be done in and how both the converted and
-unconverted data should be tracked and managed.
-For unit-aware
-plotting to be fully useful, it must work in every plotting method,
-thus we need clear documentation so that every Matplotlib developer is
-familiar with how unit works.
-Understanding and documenting how the
-unit-mechanism was intended to work and the current state of the
-library will be the foundation of the rest of the work.
+Given the importance of backwards compatibility it is critical to
+understand what we are refactoring before beginning.  This
+documentation will be aimed at Matplotlib developers and third-party
+library authors and focus on the low-level details.  Unfortunately,
+the original authors of the unit-handling code are no longer active
+with the project so we may have to reverse engineer some aspects of
+the code and motivation.
+
+% Internally we need to convert
+% unit-full data to unit-naive values to pass to the next layer down.
+% A
+% common problem we have seen is issue with when and where we do that
+% conversion.
+% This documentation will clarify which layer of the API
+% the conversions should be done in and how both the converted and
+% unconverted data should be tracked and managed.
+% For unit-aware
+% plotting to be fully useful, it must work in every plotting method,
+% thus we need clear documentation so that every Matplotlib developer is
+% familiar with how unit works.
+% Understanding and documenting how the
+% unit-mechanism was intended to work and the current state of the
+% library will be the foundation of the rest of the work.
 
 
+The second task is to write user-facing documentation and tutorials
+showing how to work with unit-full data and Matplotlib.  We will document
+the expected behavior and API
 
 
-The second task is to write user-facing documentation showing how to
-work with unit-full data and Matplotlib.  For this we will work
+For this we will work
 closely with maintainers of unit libraries, such as \texttt{unyt}
 (\url{https://unyt.readthedocs.io/}), \texttt{pint}
 (\url{https://pint.readthedocs.io/}) and
 \texttt{astropy.units} (\url{https://docs.astropy.org/en/stable/units/}),
 and user within the SMD community, such as the Monte developers at JPL
 and the Astropy developers, to ensure that we are fully meeting their
-needs.  The user documentation will also focus on how things should be
+needs.
+
+The user documentation will also focus on how things should be
 and will serve as a guide for what the ``correct'' behavior is when we
 are resolving inconsistencies.  This work will tie into our ongoing
 effort to make our large API surface more self-consistent and easier
@@ -731,44 +785,6 @@ release cycle throughout the performance period.  The RSE will present
 the status of the work at two conferences, expected to be SciPy in
 July and one of PyData conferences in the winter, yearly.
 
-\begin{ganttchart}[
-    vgrid,
-    title height=1,
-    milestone inline label node/.append style={left=5mm},
-    x unit=.75cm,
-    %inline,
-    %expand chart=\textwidth,
-    %milestone/.append style={xscale=12*.75cm/\textwidth},
-    milestone/.append style={xscale=1},
-    bar height=.75,
-    bar top shift=.125,
-    y unit chart=.75cm,
-    y unit title=.75cm]{1}{12}
-  \gantttitle{2020}{2}
-  \gantttitle{2021}{4}
-  \gantttitle{2022}{4}
-  \gantttitle{2023}{2}\\
-  \gantttitle{Y1}{4}
-  \gantttitle{Y2}{4}
-  \gantttitle{Y3}{4} \\
-  \gantttitlelist[title list options=%
-  {var=\y, evaluate=\y as \x%
-    using " Q\y "}]{1,...,4}{1} \
-\gantttitlelist[title list options=%
-  {var=\y, evaluate=\y as \x%
-    using " Q\y "}]{1,...,4}{1}
-\gantttitlelist[title list options=%
-  {var=\y, evaluate=\y as \x%
-    using " Q\y "}]{1,...,4}{1} \\
-\ganttbar{Document Units (internal)}{1}{2} \ganttnewline
-\ganttbar{Document Units (external)}{2}{3} \ganttnewline
-\ganttbar{Planning and Design}{2}{4} \ganttnewline
-\ganttmilestone{\texttt{DataSource} API stable}{3} \ganttnewline
-\ganttbar{Implementation}{4}{12} \ganttnewline
-\ganttmilestone{SciPy Talk}{4} \ganttmilestone{}{8} \ganttmilestone{}{12} \ganttnewline
-\ganttbar[inline]{General Maintenance (ongoing)}{1}{12} \ganttnewline
-\ganttmilestone{Matplotlib Release}{2} \ganttmilestone{}{4} \ganttmilestone{}{6} \ganttmilestone{}{8} \ganttmilestone{}{10} \ganttmilestone{}{12}
-\end{ganttchart}
 
 
 
@@ -826,8 +842,9 @@ channels, such as project issue trackers, mailing lists or discussions
 forums, and submitting PRs.  The strongest relationships, both
 historical and current, are with projects where we have shared
 developers.  For example Ryan May and Elliot sales de Andre are both
-core contributors to Matplotlib and Cartopy.  Micheal Droettboom, the
-previous Matplotlib Project lead, was a core developer on Astropy.
+core contributors to Matplotlib and Cartopy and David Stansby is a
+maintainer on both Matplotlib and \texttt{SunPy}.  Micheal Droettboom,
+the previous Matplotlib Project lead, was a core developer on Astropy.
 Additionally, through NumFOCUS and domain-specific conferences there
 are regular in-person meetings.
 
@@ -836,7 +853,7 @@ contributors, are domain experts in their primary domain and use
 Matplotlib for their research.
 
 
-% wording all NF projects are putting in
+% wording all NF projects are putting in, please avoid wordsmithing it.
 As a NumFOCUS project, we recognize the importance of every project
 that is part of our open source scientific computing community. Though
 we would like for our work to be funded we are committed to supporting
