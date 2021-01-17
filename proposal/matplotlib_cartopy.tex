@@ -177,8 +177,8 @@
 
 %% Finally, we get to the document.
 \begin{document}
-\title{Improving the Foundations and Maintenance of Matplotlib}
-\author{Thomas A Caswell}
+\title{Revamping Matplotlib for Modern Big-data Computing}
+\author{Thomas A.\ Caswell}
 \date{}
 \maketitle
 
@@ -264,7 +264,7 @@ Matplotlib's generality and flexibility means that it is readily extendable to
 many data visualization domains.  A rich ecosystem of downstream packages use
 Matplotlib as their base, providing domain-specific streamlining of
 Matplotlib's API: including yt, astropy, ArviZ, seaborn, xarray, astropy, and
-fast\_histogram. 
+fast\_histogram.
 
 Matplotlib is ubiquitous in scientific computing.  Conservative estimates based on downloads and web traffic on the documentation, indicate that Matplotlib has over a
 million users.  We expect that a large fraction of NASA SMD-sponsored
@@ -275,8 +275,8 @@ canonical reference for Matplotlib~\cite{Hunter:2007} has over 12,750
 citations, while a common reference of NumPy~\cite{walt2011numpy} has
 over 6,800 citations (these counts illustrate the problem in
 measuring usage via citations: Matplotlib depends on
-NumPy, yet Matplotlib has almost twice as many citations).  
-AstroPy~\cite{robitaille2013astropy} has about 4,500 citations.  
+NumPy, yet Matplotlib has almost twice as many citations).
+AstroPy~\cite{robitaille2013astropy} has about 4,500 citations.
 
 \subsection{Objectives and Significance}
 
@@ -292,16 +292,26 @@ AstroPy~\cite{robitaille2013astropy} has about 4,500 citations.
 
 Matplotlib is a primarily community-driven project, but we have grown
 to the point where we need supported developers with the time to
-organize, plan, and make decisions.  Supported developers will allows
-us to take on bigger projects than can be implemented by volunteer
-effort alone and to ensure that the critical day-to-day maintenance
+organize, plan, and make decisions.  Supported developers will allow
+us to take on complex projects than cannot be implemented by part-time volunteer
+effort alone while still ensuring that critical day-to-day maintenance
 tasks required to keep the project healthy are done.  We propose to
-split the effort on this grant equally between a major development
-effort, overhauling our internal data representation, and general
-library maintenance.
+split the effort on this grant equally between overhauling our internal data representation, and library maintenance.
 
 
 \subsubsection{Refactor Internal Data Model}
+
+Matplotlib is based on visualizing data stored in (Numpy) arrays,
+which is a simple yet flexible data model that has been the
+underpinning of data visualization for the last few decades.  However,
+new data types are being developed and standardized that carry
+structure and metadata beyond just the numerical values of the data.
+Physical units are a key example of metadata that is being added, and
+that a plotting package should handle gracefully.  Modern data
+structures can also describe massive data sets and allow performing
+operations on the data without loading the whole data set into memory
+(i.e. dask, xarray); Matplotlib should leverage and be able to work
+out of memory in concert with these packages.
 
 While this eliding many implementation details an \texttt{Artist} can
 be understood as the objects in Matplotlib that produce something
@@ -343,7 +353,7 @@ implementation by the end of 2021.  Based on this preliminary work
 \textbf{we propose refactoring all of Matplotlib to use the new data
   model}
 
-One of immediate benefit of the refactoring will be to drastically
+An immediate motivation for this this refactor is to
 improve Matplotlib's handling of data with physical units attached.
 Units are fundamental to science and engineering, however most
 numerical software is unit-naive.  It is the user's responsibility to
@@ -351,28 +361,25 @@ keep track of and correctly convert data to consistent units prior to
 any computation.  Failing to do so leads to the most insidious of
 bugs: everything ``works'' but silently gives incorrect results!
 There are several libraries which provide unit-aware data structures
-in Python.  When registered, Matplotlib can use object from these
+in Python.  When registered, Matplotlib can use objects from these
 libraries for unit-aware plotting.  \textbf{This capability it is
   currently used to support spaceflight operations by Monte, JPL's
   mission design and navigation software system} and the initial
-development was supported by NASA.
+development in Matplotlib was supported by NASA.
 
 % to what extent mpl currently supports units
 
-The current support physical units in Matplotib is base on type
-inference and dispatch of the input.  When the unit-full data is
-passed by the user the we look up the converter, default axis label,
-limits, and functions for locating and formatting the ticks, to use.
-Matplotlib registers converters for datetime and string-categorical
-types by default and third-party libraries to register themselves.
+The current support for physical units in Matplotib is based on inspecting the data type passed by the user.  When the unit-full data is
+passed by the user Matplotlib looks up a converter that sets default axis label,
+limits, and functions for locating and formatting the ticks.
+Internally, Matplotlib uses the unit machinery to handle datetime and string-categorical types, but third-party libraries are able to register their own converters.  [TODO: Examples here?; astropy, yt?, what NASA group does this?]
 Using this machinery users can control what units the data is plotting
 in, which may be different than the units it was passed in as, and
 specify the limits in physical units.
 
-
 % what is wrong
 However, there are several problems with the current unit support in
-Matplotlib.  It is under documented making it difficult for users to
+Matplotlib.  It is under-documented making it difficult for users to
 understand and use the capability and for developers to extend.
 Coupled with a lack of full test coverage of using physical units,
 over time the inconsistencies mentioned above have accumulated in the
@@ -387,26 +394,25 @@ how we treat units across the library.
 
 \subsubsection{General maintenance}
 
+At the same time as rewiring Matplotlib's data model, we need to ``keep the lights on,'' and provide support for the thousands of users and hundreds of downstream packages.
 To maintain Matplotlib's health we need to:
 \begin{itemize}[noitemsep]
 \item fix critical bugs and regressions;
-\item triage the backlog of Issues and PRs in terms of topic,
-  difficulty, and urgency and promptly triage newly opened Issues and
-  PRs;
+\item triage Issues and PRs in terms of topic,
+  difficulty, and urgency;
 \item maintain backward compatibility and extensively document
   intentional changes;
-\item on-board new contributors to sustain and diversify developer
+\item on-board new contributors to sustain and diversify the community developer
   team;
-\item maintain the CI infrastructure;
+\item maintain the continuous-integration infrastructure;
 \item manage the release process;
 \item and manage discussions about proposed enhancements, features,
   and API changes.
 \end{itemize}
 These are tasks that are never ``done''; users find new ways to use
-the library expose previously un-detected bugs, request or propose new
-features and the world continues to changes around us.  \textbf{While
-  this critical work can be done by volunteers, however supported
-  developers help ensure that things happen in a timely manner}.
+the library expose previously un-detected bugs, request, or propose new
+features and the world continues to changes around us.   \textbf{Dedicated
+full-time developers help ensure that things happen in a consistent and timely manner, and provide the crucial roadmaps that will steer the future of the library}.
 
 %% sentences that I still like, but don't fit into the flow at all
 
@@ -422,25 +428,24 @@ features and the world continues to changes around us.  \textbf{While
 
 %plot?
 
-Historically, Pull Requests (PRs) and Issues have been submitted
+Historically, pull requests (PRs) and issues have been submitted
 faster than they can be reviewed; Matplotlib has accumulated about 300
-open PRs 1300 open Issues due to this imbalance, There almost
-certainly are critical bug reports or insightful feature requests among
+open PRs 1300 open issues due to this imbalance. There are critical bug reports and insightful feature requests among
 the issue backlog, while among the PR backlog there are useful contributions
 or bug fixes that would improve the libraries for direct users and
 downstream packages.  The large backlog is discouraging for new and
 occasional contributors and distracting for core developers.
 
-In 2020 Matplotlib resolved 125-200 PRs and 75-125 Issues a month,
-however even at this rate we only reduced the PR backlog by 70 open
-PRs and held even on the Issue backlog.  We were able to achieve this
-because for 10 months in 2020 we had supported Research Software
-Engineer (RSE) working on Matplotlib.  As part of reducing the
-backlog, we were able to fix a several long standing bugs.  We have
-demonstrated that supporting maintenance work has a positive effect on
-the health of the project and \textbf{the additional resources
-  requested here will further reduce, but not eliminate, the
-  maintenance backlog}.
+In 2020 Matplotlib had supported a Research Software Engineer (RSE)
+working on Matplotlib, during which time we resolved 125-200 PRs and
+75-125 issues a month.  However even at this rate we only reduced the
+PR backlog by 70 open PRs and only held even on the issue backlog.  As
+part of reducing the backlog, we were able to fix several long
+standing bugs.  We have demonstrated that supporting maintenance work
+has a positive effect on the health of the project and \textbf{the
+  additional resources requested here will further reduce, but not
+  eliminate, the maintenance backlog}.
+
 
 
 \subsection{Perceived impact of work}
