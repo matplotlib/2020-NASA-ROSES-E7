@@ -318,30 +318,29 @@ library maintenance.
 
 \subsubsection{Refactor Internal Data Model}
 
-While this elides many implementation details, for the purposes of
-this proposal it is sufficient to understand \texttt{Artist}s as the
-objects in Matplotlib that, given user data, produce something visible
-in the output.  Internally Matplotlib represents a \texttt{Figure} as
-a tree of \texttt{Artist}s~\cite{AOSA_mpl}.  Each individual
-\texttt{Artist} is responsible for holding the user data and style
-information for a part of the final visualization.For example,
-\texttt{matplotlib.text.Text} is the class responsible for drawing
-text.  It holds, among other things, the location of the text, the
-string, and the font, size and color to use.  The plotting methods in
-Matplotlib create these objects and add them to the tree.  To render
-the final output Matplotlib walks the \texttt{Artist} tree depth-first
-and each each \texttt{Artist} is responsible for rendering itself to
-output.
+While this eliding many implementation details an \texttt{Artist} can
+be understood as the objects in Matplotlib that produce something
+visible in the output.  Internally Matplotlib represents a
+\texttt{Figure} as a tree of \texttt{Artist}s~\cite{AOSA_mpl}.  Each
+individual \texttt{Artist} is responsible for holding the user data
+and style information for part of the final visualization.  For
+example, \texttt{matplotlib.text.Text} is the class responsible for
+drawing text.  It holds, among other things, the location of the text,
+the string, and the font, size and color to use.  The exact data held
+varies between \texttt{Artist}.  The plotting methods in Matplotlib
+create these objects and add them to the tree.  To render the final
+output Matplotlib walks the \texttt{Artist} tree depth-first and each
+each \texttt{Artist} is responsible for rendering itself to output.
 
-Currently, each plotting method and \texttt{Artist} handles sanitizing
-and storing data independently.  Hence, some common functionality,
-such as handling data with attached units (e.g., degrees Celsius,
-dates), is repeated throughout the code base and each \texttt{Artist}
-subclass holds its data in a different way.  This leads to
-inconsistencies across the library and makes it difficult for users to
-write code that updates interactive explorations and animations.
-Another consequence is that Matplotlib also cannot exploit
-``Structured data''--combining multiple pieces of (possibly
+Currently, each plotting method and \texttt{Artist} independently
+handles sanitizing and storing data.  Hence, each \texttt{Artist}
+subclass holds its data in a different way and some common
+functionality, such as handling data with attached units (e.g.,
+degrees Celsius, dates), is repeated throughout the code base.  This
+leads to inconsistencies across the library and makes it difficult for
+users to write code that updates interactive explorations and
+animations.  Another consequence is that Matplotlib also cannot
+exploit ``Structured data''--combining multiple pieces of (possibly
 heterogeneous) data with labels and metadata into single data
 structure; instead, users must extract data elements and reassemble
 them as arguments to Matplotlib plotting functions.
@@ -460,7 +459,7 @@ the health of the project and \textbf{the additional resources
 
 
 \subsection{Perceived impact of work}
-
+\label{sec:piw}
 % TODO add cite for
 % \url{https://www.aosabook.org/en/matplotlib.html}
 
@@ -533,6 +532,13 @@ issue, unifying the data representation is a necessary first step.
 % - [x] helps make the point the mpl is tool for other projects, not end in its self
 % - [x] supporting long term goal to make API more consistent and easier to use
 % - [x] tie to numpy/panda/xarray dtype work strongly
+
+
+Unify how data is handled across the library will give users an easier
+and more consistent experience and will eliminate the variation and
+duplication in the implementation is the source of many of the
+unit-related regressions.  The \texttt{DataSource} we will be a
+centralize the unit processing and dispatch code.
 
 
 This proposal is another step towards Matplotlib sustainability.
@@ -635,16 +641,17 @@ efficient use of resources.
 
 \subsection{Contributions of Principle Investigator and Key Personnel}
 
-Dr. Thomas Caswell has the sole individual responsibility for the
-direction of this work.  He has extensive experience developing and
-maintaining Python libraries for use by scientists.  He has been
-involved with Matplotlib from 2012 and had a leadership role in the
-project from 2014.  At Brookhaven National Laboratory he is the Lead
-architect and developer of the Bluesky Suite, an ecosystem of
-co-developed libraries and applications for data acquisition and
-management, which is being adopted for beamline operations at
-synchrotrons in the US and across the world.
-
+Dr. Thomas A Caswell has the sole individual responsibility for the
+direction and supervising the execution of this work.  He has
+extensive experience developing and maintaining Python libraries for
+scientists.  He has been involved with Matplotlib from 2012 and had a
+leadership role in the project from 2014.  He is also a core developer
+of h5py and has contributed to many of the other core projects of the
+SPE.  At Brookhaven National Laboratory he is the Lead architect and
+developer of the Bluesky Suite, an ecosystem of co-developed libraries
+and applications for data acquisition and management, which is being
+adopted for beamline operations at synchrotrons in the US and across
+the world.
 
 
 \subsection{Work Plan}
@@ -738,45 +745,41 @@ fraction of the library we will develop a comprehensive plan.  As part
 of developing this plan we will reach out to up-stream data-structure
 libraries, such as pandas, numpy, xarray and the Consortium for Python
 Data API Standards~\footnote{https://data-apis.org/}, to down stream
-libraries, such as astropy, yt, and sunpy, and heavy users of physical
-units, such as \texttt{unyt} (\url{https://unyt.readthedocs.io/}),
-\texttt{pint} (\url{https://pint.readthedocs.io/}),
-\texttt{astropy.units}
+libraries, such as astropy, yt, and sunpy, and to users of the unit
+machinery, such as \texttt{unyt}
+(\url{https://unyt.readthedocs.io/}), \texttt{pint}
+(\url{https://pint.readthedocs.io/}), \texttt{astropy.units}
 (\url{https://docs.astropy.org/en/stable/units/}), and the Monte
 developers at JPL.  This will be a unique chance to change the
-internal architecture of Matplotlib and we need to make ensure that we
+internal architecture of Matplotlib and we need to ensure that we
 engage with all stack holders.
 
-The core of the refactor will be the newly developed
-\texttt{DataSource} which will serve as a consistent interface for the
-\texttt{Artists} to their data.  The theoretical and proof-of-concept
-work will be finished by the end of 2021 and active work on both
-projects will overlap by 6 months.  Building on the theoretical work
-we will fully specify the \texttt{DataSource} interface and a write
-production-quality reference implementation.  We will have this
-completed by Y1Q3.  Concurrently we will developed a detailed plan of
-how we will go about refactoring the approximately 100 \texttt{Artist}
-classes in Matplotlib.
+The core of the refactor will be a newly developed \texttt{DataSource}
+interface.  This will provide a consistent interface for the
+\texttt{Artists} to their data.  This interface, and the ability to
+provide alternate implementation of data storage an access, is what
+will allow the features discussed in section \ref{sec:piw}.  The
+theoretical and proof-of-concept work will be finished by the end of
+2021.  Active work on both projects will overlap by 6 months and we
+will actively engage to ensure that the theoretical work is
+effectively translated.  We will fully specify the \texttt{DataSource}
+interface and a write a reference implementation by the end of Y1Q3.
+Concurrently we will developed a detailed schedule to refactor the
+approximately 100 \texttt{Artist} classes in Matplotlib to use the new
+data model.
 
-As mentioned above, it is critical that we do this refactoring with a
-little backward incompatible API changes as possible.  The variation
-between \texttt{Artist}s because each \texttt{Artist} is responsible
-for storing its data is both what we are trying to fix and the biggest
-complicating factor.  Each class well need to be carefully inspected
-and we may need to write a significant number of new tests to ensure
-that we do not accidentally break any behavior.  As we preform this
-refactor we will add tests that each \texttt{Artist} and plotting
-method touched handles unit-full data in a uniform way.  \textbf{This
-  work will require touching and testing a large fraction of the
-  library} and is the largest proposed change to the library in the
-last decade.
-
-Unify how data is handled across the library will give users an easier
-and more consistent experience and will eliminate the variation and
-duplication in the implementation is the source of many of the
-unit-related regressions.  The \texttt{DataSource} we will be a
-centralize the unit processing and dispatch code.q
-
+As mentioned above, it is critical that we minimize the backward
+incompatible API changes caused by the refactoring.  The variation
+between \texttt{Artist}s is both what we are trying to address and the
+biggest complicating factor.  Each class well need to be handled on a
+case-by-case basis.  We anticipate that there will be significant
+collateral work, such as writing additional tests to ensure that we do
+not accidentally break current behavior, and implementing
+back-compatibility shims, during the course of this work.  As we
+preform this refactor we will also add tests that each \texttt{Artist}
+and plotting method touched handles unit-full data correctly
+\textbf{This work will impact a majority of the library} and is the
+largest proposed change to the library in over a decade.
 
 This whole process will be extensively documented, both inward facing,
 so that future Matplotlib developers understand why decisions were
@@ -833,21 +836,32 @@ and is the final authority for this task.
 
 \subsection{Project Management}
 \subsubsection{Governance}
-Matplotlib is a NumFOCUS Fiscally Sponsored Project.  The governance
-is specified at
-\url{https://github.com/matplotlib/governance/blob/master/governance.md}.
-The project has a Project Lead (Caswell) who is the final authority in
-all decisions, however when possible all decisions are made by
-community consensus.  In addition to the Project Lead, there is a
-formalized Steering Council which is responsible for the overall
-direction of the project, and several Deputy Project Leads who have
-day-to-day technical responsibilities.
 
-TODO need to cover history of project lead changing
+Matplotlib is a NumFOCUS Fiscally Sponsored Project and
+the project governance is specified at
+\url{https://github.com/matplotlib/governance/blob/master/governance.md}.
+
+The project as a steering council, a Project Lead (PL), and several
+Deputy Project Leads (DPL).  We are a community project and try to
+make all decisions by consensus.  However, if consensus can not be
+reached, the responsibility falls back to the DPLs and ultimately to
+the PL.  The current PL is Dr. Caswell.
+
+As Matplotlib has matured we have moved from a single person,
+originally Dr. John Hunter, to a ``BDFL'' governance model.  The
+leadership of the project passed to Dr. Micheal Droettboom in 2012.
+In 2014 Dr. Caswell and Dr. Droettboom were co-leads and in 2016
+Dr. Caswell took over as the sole project lead.  In 2020 we formally
+adopted the current governance model.
 
 \subsubsection{License}
 
-BSD-derived
+Matplotlib is licensed under the Matplotlib License
+(\url{https://matplotlib.org/users/license.html}) which is a
+derivative of the PSF license
+(\url{https://docs.python.org/3/license.html}) which is compatible
+with the BSD license.
+
 
 \subsubsection{sustainability metrics}
 \begin{enumerate}
@@ -1351,7 +1365,7 @@ of time that is required by this proposal.\\
   & \multicolumn{1}{>{\centering\arraybackslash}p{2.54cm}|}{\small\cellcolor{gray!30}\textbf{Period of Performance}}
   & \multicolumn{1}{>{\centering\arraybackslash}p{2.54cm}|}{\small\cellcolor{gray!30}\textbf{Commitment (Person-Month per Year)}}
    \\\hline
-     {\small Thomas Caswell} &
+     {\small Thomas A Caswell} &
      {\small Matplotlib - Foundation of Scientific Visualization (EOSS3)} &
      {\small\raggedright Essential Open Source Software for Science (Cycle 3)\\ Chan Zuckerberg Initiative \\ Dario Taraborelli \\ XXX-YYYY \\ dario@...com}  &
      {\small 01/21 - 01/22} &
@@ -1371,7 +1385,7 @@ this reason significant portions of the budget will need to be
 subcontracted to the primary institutions of key individuals who are
 uniquely qualified for this work.
 
-Salary support is requested for PI Thomas Caswell (0.25 FTE in years
+Salary support is requested for PI Thomas A Caswell (0.25 FTE in years
 1-3).  He will oversee the Matplotlib aspects of the proposed work and
 co-supervise the RSE.
 
@@ -1440,7 +1454,7 @@ No direct labor
 \subsubsection{Other Direct Costs}
 \textit{Subcontract/Subawards}
 \begin{itemize}
-\item Dr. Thomas Caswell is the PI and will oversee all aspects of the
+\item Dr. Thomas A Caswell is the PI and will oversee all aspects of the
   proposed work.  The time commitment is 0.25FTE.  His primary
   appointment is at Brookhaven National Laboratory which will be
   subcontracted for his effort.
@@ -1470,7 +1484,7 @@ There is no direct labor.
 \subsubsection{Other Direct Costs}
 \textit{Subcontract/Subawards}
 \begin{itemize}
-\item Dr. Thomas Caswell is the PI and will oversee all aspects of the
+\item Dr. Thomas A Caswell is the PI and will oversee all aspects of the
   proposed work.  The time commitment is 0.25FTE.  His primary
   appointment is at Brookhaven National Laboratory which will be
   subcontracted for his effort.
@@ -1500,7 +1514,7 @@ There is no direct labor.
 \subsubsection{Other Direct Costs}
 \textit{Subcontract/Subawards}
 \begin{itemize}
-\item Dr. Thomas Caswell is the PI and will oversee all aspects of the
+\item Dr. Thomas A Caswell is the PI and will oversee all aspects of the
   proposed work.  The time commitment is 0.25FTE.  His primary
   appointment is at Brookhaven National Laboratory which will be
   subcontracted for his effort.
