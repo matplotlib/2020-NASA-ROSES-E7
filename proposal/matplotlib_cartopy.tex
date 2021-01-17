@@ -648,13 +648,9 @@ the world.
 \ganttmilestone{Matplotlib Releases}{2} \ganttmilestone{}{4} \ganttmilestone{}{6} \ganttmilestone{}{8} \ganttmilestone{}{10} \ganttmilestone{}{12}
 \end{ganttchart}
 
+\subsubsection{General Maintenance}
 
-Starting from July 2021 onward through July 2024 Dr. Caswell will
-devote 25\% FTE to this work.  His time will be split between the data
-layer refactor, community management, and general maintenance work,
-the later two being on-going tasks.  The first critical task will be
-the recruitment and hiring of the RSE which should be accomplished by
-the end of the first quarter of the work period.
+Throughout the project both Dr.\ Caswell and the RSE will work on Matplotlib general maintenance, community engagement.  Dr.\ Caswell will particularly focus on project roadmapping, and community governance.
 
 % 4 part plan
 %  1. document how units work now, document how it should work, id problems
@@ -662,9 +658,9 @@ the end of the first quarter of the work period.
 %  3. plan!
 %  4. re-write every Artist sub-class
 
+\subsubsection{Data Model Refactor}
 
-
-We will document, both at the conceptual and API level, how the unit
+\paragraph{Document Existing State of Data Pipeline} We will document, both at the conceptual and API level, how the unit
 dispatch system currently works in theory and practice.  Given the
 importance of backwards compatibility it is critical to understand
 what we are refactoring before beginning.  This documentation will be
@@ -692,7 +688,7 @@ behavior when resolving inconsistencies.
 % library will be the foundation of the rest of the work.
 
 
-We are proposing to refactor a critical aspect and significant
+\paragraph{Refactor Planning and Design} We are proposing to refactor a critical aspect and significant
 fraction of the library we will develop a comprehensive plan.  As part
 of developing this plan we will reach out to up-stream data-structure
 libraries, such as pandas, numpy, xarray and the Consortium for Python
@@ -706,7 +702,7 @@ developers at JPL.  This will be a unique chance to change the
 internal architecture of Matplotlib and we need to ensure that we
 engage with all stack holders.
 
-The core of the refactor will be a newly developed \texttt{DataSource}
+\paragraph{API Design} The core of the refactor will be a newly developed \texttt{DataSource}
 interface.  This will provide a consistent interface for the
 \texttt{Artists} to their data.  This interface, and the ability to
 provide alternate implementation of data storage an access, is what
@@ -720,7 +716,7 @@ Concurrently we will developed a detailed schedule to refactor the
 approximately 100 \texttt{Artist} classes in Matplotlib to use the new
 data model.
 
-As mentioned above, it is critical that we minimize the backward
+\paragraph{Refactor Data Layer} As mentioned above, it is critical that we minimize the backward
 incompatible API changes caused by the refactoring.  The variation
 between \texttt{Artist}s is both what we are trying to address and the
 biggest complicating factor.  Each class well need to be handled on a
@@ -742,12 +738,13 @@ and improved functionality.
 % - [ ] make sure it fits with new numpy dtype scheme (NEP 40-43)
 % - [ ] make sure it works with pandas dtypes?
 
-A reach goal is to extend the unit machinery to improve the user
+A secondary goal is to extend the unit machinery to improve the user
 experience.  Currently much of the mechanism of unit-handling is
 implicit and automatic based on type inference.  We propose to extend
 the interface to allow optional direct control of the unit machinery
 by users and third-party library developers.
 
+\subsubsection{Work Process}
 
 The Research Software Engineer (RSE), whom needs to be identified,
 will devote 100\% FTE to this project.  This will be split evenly with
@@ -779,7 +776,8 @@ the winter.
 
 \subsubsection{Grant Management}
 
-Dr. Caswell of BNL is the PI of the proposed development and is the
+[TODO: does this need to go in next section?]
+Dr.\ Caswell of BNL is the PI of the proposed development and is the
 Matplotlib Lead Developer.  He is solely responsible for the quality
 and direction of the proposed work and the proper use of all awarded
 funds.  He is also responsible for all management, and budget issues
