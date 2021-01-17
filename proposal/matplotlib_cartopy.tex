@@ -341,13 +341,14 @@ libraries for unit-aware plotting.  \textbf{This capability it is
   mission design and navigation software system} and the initial
 development in Matplotlib was supported by NASA.
 
+
+
 % to what extent mpl currently supports units
 
 The current support for physical units in Matplotib is based on inspecting the data type passed by the user.  When the unit-full data is
 passed by the user Matplotlib looks up a converter that sets default axis label,
 limits, and functions for locating and formatting the ticks.
-Internally, Matplotlib uses the unit machinery to handle datetime and string-categorical types, but third-party libraries are able to register their own converters.  [TODO: Examples here?; astropy, yt?, what NASA group does this?]
-Using this machinery users can control what units the data is plotting
+Internally, Matplotlib uses the unit machinery to handle datetime and string-categorical types, but third-party libraries are able to register their own converters. Using this machinery users can control what units the data is plotting
 in, which may be different than the units it was passed in as, and
 specify the limits in physical units.
 
@@ -365,6 +366,25 @@ By implementing all of the unit logic in the \texttt{DataSource} we
 will be able to share the code across all \texttt{Artist}s and unify
 how we treat units across the library.
 
+
+There is a broad recognition across the SPE of the importance of
+supporting physical units as an intrinsic component of computation.
+There is on going work in NumPy (NEP40-43), pandas, and xarray to add
+support for physical units to the foundational data structures.  The
+proposed work in Matplotlib will ensure that Matplotlib is ready to
+plotting unit-full data to provide users with a complete solution to
+working with unit-aware data.
+
+In addition to fixing
+the support of physical units, this refactor will lay the ground work for
+\begin{itemize}[noitemsep]
+  \item smart down-sampling of plotted data based on view limits,
+  \item native consumption of structured data,
+  \item seamless updating of the underlying data, either interactively
+    or via streams,
+  \item and use of alternative data sources such as database queries
+    or analytic functions.
+\end{itemize}
 
 \subsubsection{General maintenance}
 
@@ -420,106 +440,35 @@ and \textbf{the additional resources requested here will further
 
 \subsection{Perceived impact of work}
 
+
 % TODO add cite for
 % \url{https://www.aosabook.org/en/matplotlib.html}
 
-Originally developed over 17 years ago the architecture of Matplotlib
-it has served us extremely well, however it does not reflect recent
-developments in software design, data structures, and visualization.
-Refactoring the data layer will be a major step towards continuing to
-support and enable science for the next 20 years.  In addition to fixing
-the support of physical units, this refactor will lay the ground work for
-\begin{itemize}[noitemsep]
-  \item smart down-sampling of plotted data based on view limits,
-  \item native consumption of structured data,
-  \item seamless updating of the underlying data, either interactively
-    or via streams,
-  \item and use of alternative data sources such as database queries
-    or analytic functions.
-\end{itemize}
-These features will be increasingly relevant as the scale and complexity
-of data continues to increase.
+Maintaining Matplotlib's health and engineering for its future will have wide-ranging impacts for the scientific community, and NASA in particular.   As pointed out above, Matplotlib is the plotting layer for much of the python ecostsyem.  It has been used in thousands of academic papers, plotting for news and sporting media, technical dash-boarding, and most modern data science applications. [TODO: sepcific high-profile examples: LIGO, nobel prize?] Support for Matplotlib will improve outcomes across disciplines, but in particular Matplotlib is heavily used across SMD divisions, and by scientists in academia who work with NASA in engineering, space science, astronomy, remote sensing and earth observing [TODO: others?].  
 
-
-There is a broad recognition across the SPE of the importance of
-supporting physical units as an intrinsic component of computation.
-There is on going work in NumPy (NEP40-43), pandas, and xarray to add
-support for physical units to the foundational data structures.  The
-proposed work in Matplotlib will ensure that Matplotlib is ready to
-plotting unit-full data to provide users with a complete solution to
-working with unit-aware data.
-
-From major projects, like \texttt{yt}, \texttt{CartoPy} or
-\texttt{astropy}, to a grad student's experiment-specific plotting
-tools users compose the core Matplotilb APIs to fit their unique data
-structures and visualization needs.  This extensibility is one of the
-key features of Matplotlib and source of its longevity and ubiquity.
-Refactoring the data access will open up new paths for users and
-down-stream to extend Matplotlib to built highly-tuned domain specific
-plotting tools.
-
-Supporting Matplotlib is a highly leveraged investment.  Improvements
-to Matplotlib will be seen both directly by our users and by the
-developers of tools that depend on Matplotlib and transitively by
-their users.  For example, \texttt{Monte} and
-\texttt{astropy} are libraries developed and used by SMD researchers
-that make use of the unit machinery in Matplotlib.   Improving the
-unit handling in Matplotlib will directly improve those libraries.
-
-The library has grown organically over time through the contributions
-of over 1,300 individuals, accumulating many small inconsistencies in
-the API.  For example, similar methods have different argument order,
-e.g., \texttt{ax.text(x, y, s)} vs \texttt{ax.annotation(s, (x, y))},
-and some keyword (named) arguments can be singular or plural, e.g.,
-\texttt{color} vs \texttt{colors}.  These subtle issues add friction
-for users, but are hard to fix without breaking existing code for
-someone in our large user base.  While not sufficient to address these
-issue, unifying the data representation is a necessary first step.
-
-
-% \begin{enumerate}
-% \item increased reliability of unit-aware plotting
-% \item improvement in general reliability of software
-% \item improved responsively to issues
-% \item making point about building on current funding
-% \end{enumerate}
-%
-% - [x] improving the maturity and sustainability of the project (WC)
-% - [x] direct user impact?
-% - [ ] what new science?!
-% - [x] need to be ``outward looking'' (which should anyone else care?)
-% - [x] make stronger point that yt, astropy, monte all use units -> will make their life better
-% - [x] helps make the point the mpl is tool for other projects, not end in itsself
-% - [x] supporting long term goal to make API more consistent and easier to use
-% - [x] tie to numpy/panda/xarray dtype work strongly
-
-
-This proposal is another step towards Matplotlib sustainability.
-Given the usage and the scale of the library it is not sustainable to
-continue to maintain Matplotlib on majority volunteer effort, which
-requested support for developers is intended to complement and
-facilitate, not replace.  We aim to better co-ordinate and nurture
+This proposal is another step towards Matplotlib's sustainability, and ability to move forward. Given the usage and the scale of the library it is not sustainable to
+continue to maintain Matplotlib as a  volunteer-only effort.  A core team of full-time developers and managers will better co-ordinate and nurture
 volunteer efforts, with the goal of growing and sustaining a diverse
-community of volunteer and paid expert contributors.
+community of volunteer expert contributors.  
 
+Finally, by professionalizing Matplotlib's core developers, Matplotlib will better be able to plan its future and develop its future roadmap.  This requires vision, co-ordination with the rest of the scientific Python community, including downstream libraries, and getting out in the community to get feedback.  It is very hard to provide that leadership and vision while  working a ``day job''.  
 
 \subsection{Relevance to program element}
 
 As mentioned above, it is hard to estimate the prevalence of open
-source software due to it being freely distribute and not
+source software due to it being freely distributed and not
 systematically cited.  Matplotlib is in the top 100 most-downloaded
 packages from PyPI~\cite{pypi_stats} and is packaged by every major
 Linux and scientific Python distribution.  One path is static analysis
 of publicly available code.  According to github over 299K
 repositories and over 12k packages hosted on GitHub depend on
 Matplotlib~\cite{gh_deps:2021} and a recent study of the almost 10M
-Jupyternotebooks on github found that over 3M of them have a
+Jupyter notebooks on github found that over 3M of them have a direct
 Matplotlib import~\cite{datalore:2020}.
 
 
 All of these measures show broad impact but cover many uses outside of
-the SMD community.  [something about how to restrict static analysis,
-  many scientist do not make code public].  Soliciting for examples of
+the SMD community.  Soliciting for examples of
 Matplotlib in SMD research on social media yielded a (non-exhaustive)
 list of examples of using Matplotlib
 \begin{itemize}
@@ -542,7 +491,7 @@ list of examples of using Matplotlib
 \item for visualization of scheduling, safety and constraint checks,
   and telemetry by the Swift science operations
   team~\cite{swift_ops,2020ApJ...900...35T};
-\item as port of the Hubble Space Telescope and James Web Space
+\item as part of the Hubble Space Telescope and James Web Space
   Telescope data processing pipelines;
 \item in Monte, JPL's mission design
   and navigation software system to support spaceflight operations;
@@ -559,30 +508,11 @@ As show above, Matplotlib is widely used, both directly and
 transitively.  Given the large user base it is imperative that changes
 are as backwards compatible as possible.  While this large user base
 is on one hand a lever that magnifies any improvements, it also makes
-changes more expensive.  We can not simply change our public to track
+changes more expensive.  We cannot simply change our public to track
 the internal refactoring, instead we must write also write code to
 translate the old API to the new implementation.  This engineering work
 makes the refactor more challenging and time consuming than starting
 from scratch.
-
-% - need to be very careful about not breaking back-compatibility
-
-The biggest risk with the proposed work is that we are underestimating
-the amount of work that will be required for data refactor and unit
-work.  There is always a risk while refactoring that the scope of work
-rapidly snow ball due to unexpected internal dependencies or edge
-cases must be accounted for.  In a worst case where we have to abandon
-the work we will maintain the status quo, but with significantly
-better documentation.
-
-We anticipate that all of the work can be done incrementally and will
-be merged to the default branch of Matplotlib throughout the
-performance period.  Frequently merging incremental work both reduces
-the risk it is also consistent with our standard development process.
-Work done under this proposal will not be exempt from review, and many
-small PRs are easier to review and merge than a single large PR.
-These improvements, both to the code and documentation, will be
-released to users as part of our standard bi-yearly release cadence.
 
 There is minimal risk in the maintenance work.  There is large volume
 of individually small tasks that need to be addressed: the issue and
@@ -590,6 +520,21 @@ PR backlogs.  Any dedicated effort devoted to clearing the backlog
 will have a positive impact on the project.  We have demonstrated that
 supporting developers for maintenance work is an effective and
 efficient use of resources.
+
+% - need to be very careful about not breaking back-compatibility
+The data pipeline refactor carries more risk, particularly if we are underestimating
+the amount of work that will be required.  There is always a risk while refactoring that the scope of work
+rapidly snowball due to unexpected internal dependencies or edge
+cases that must be accounted for.  Backwards compatibility is also an important concern.  However, even in the case that we cannot fully deliver a new data pipeline model, throughout the process we will be working towards improving library internals and significantly improve our documentation.  
+
+We anticipate that all of the work can be done incrementally and will
+be merged to the default branch of Matplotlib throughout the
+performance period.  Frequently merging incremental work reduces
+the risk, and is consistent with our standard development process.
+Work done under this proposal will not be exempt from review, and many
+small PRs are easier to review and merge than a single large PR.  Large PRs also quickly drift out of sync with the master branch, and develop insurmountable rebase  requirements.
+The improvements, both to the code and documentation, will be
+released to users as part of our standard bi-yearly release cadence.
 
 
 \subsection{roles of team members}
