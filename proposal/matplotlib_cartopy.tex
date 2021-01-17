@@ -208,11 +208,11 @@
 % some of them?
 \subsection{Description of software and relevance to SMD}
 
-Matplotlib~\cite{Hunter:2007} provides the visualization for missions and
+Matplotlib~\cite{Hunter:2007} provides the visualization for  missions and
 projects across all four SMD divisions,
 including
-flagship missions like the Hubble Space Telescope, the James Web Space
-Telescope~\cite{jwst_pipeline}, and the Curiosity Rover
+flagship missions like the Hubble Space Telescope (HST), the James Webb Space
+Telescope~\cite{jwst_pipeline} (JWST), and the Curiosity Rover
 Mastcam~\cite{https://doi.org/10.1002/2016EA000219}.  Matplotlib is part of the
 Scientific
 Python Ecosystem (SPE), a loosely defined community of projects and
@@ -248,15 +248,15 @@ while enabling direct access to the underlying libraries when needed.
 
 
 Matplotlib~\cite{Hunter:2007} is an established open source plotting
-library with a BSD-derived license that is currently used throughout
-both the SMD science community and the wider scientific community.
-The initial work on Matplotlib was done in 2001-2002 and the first
-commits in the Matplotlib history date to early 2003.  Over the last
-17 years Matplotlib has been actively developed and maintained by a
-vibrant, primarily volunteer, community.  Matplotlib has over 1,250
-individual contributors to the code base, with many more
-individuals having contributed in ways not easily track, such as
-answering user questions on the mailing list or reporting issues.
+library with a BSD-compatible license that is currently used
+throughout both the SMD science community and the wider scientific
+community.  The initial work on Matplotlib was done in 2002 and the
+first commits in the Matplotlib history date to early 2003.  Over the
+last 17 years Matplotlib has been actively developed and maintained by
+a vibrant, primarily volunteer, community.  Matplotlib has over 1,250
+individual contributors to the code base, with many more individuals
+having contributed in ways not easily track, such as answering user
+questions on the mailing list or reporting issues.
 
 Matplotlib has a high-level API for quick plotting, such as in
 exploratory data analysis, plus a low-level API that gives full control for
@@ -319,19 +319,21 @@ operations on the data without loading the whole data set into memory
 (i.e. dask, xarray); Matplotlib should leverage and be able to work
 out of memory in concert with these packages.
 
-While this eliding many implementation details an \texttt{Artist} can
-be understood as the objects in Matplotlib that produce something
-visible in the output.  Internally Matplotlib represents a
-\texttt{Figure} as a tree of \texttt{Artist}s~\cite{AOSA_mpl}.  Each
-individual \texttt{Artist} is responsible for holding the user data
-and style information for part of the final visualization.  For
-example, \texttt{matplotlib.text.Text} is the class responsible for
-drawing text.  It holds, among other things, the location of the text,
-the string, and the font, size and color to use.  The exact data held
-varies between \texttt{Artist}.  The plotting methods in Matplotlib
-create these objects and add them to the tree.  To render the final
-output Matplotlib walks the \texttt{Artist} tree depth-first and each
-each \texttt{Artist} is responsible for rendering itself to output.
+While eliding many implementation details in the jargon of Matplotlib
+an \texttt{Artist} can be understood as an object that produce
+something visible in the output.  Internally Matplotlib represents a
+\texttt{Figure} as a tree of \texttt{Artist}s~\cite{AOSA_mpl}.
+
+Each individual \texttt{Artist} is responsible for holding the user
+data and style information for part of the final visualization, but
+the exact data held varies between \texttt{Artist} classes.  For
+example, \texttt{matplotlib.text.Text} is responsible for drawing text
+and holds, among other things, the location of the text, the font,
+size, color, and the actual string.  The plotting methods in
+Matplotlib create these objects and add them to the tree.  To render
+the final output Matplotlib walks the \texttt{Artist} tree depth-first
+and each each \texttt{Artist} is responsible for rendering itself to
+output.
 
 Currently, each plotting method and \texttt{Artist} independently
 handles sanitizing and storing data.  Hence, each \texttt{Artist}
@@ -359,30 +361,34 @@ implementation by the end of 2021.  Based on this preliminary work
 \textbf{we propose refactoring all of Matplotlib to use the new data
   model}
 
-An immediate motivation for this this refactor is to
-improve Matplotlib's handling of data with physical units attached.
-Units are fundamental to science and engineering, however most
-numerical software is unit-naive.  It is the user's responsibility to
-keep track of and correctly convert data to consistent units prior to
-any computation.  Failing to do so leads to the most insidious of
-bugs: everything ``works'' but silently gives incorrect results!
-There are several libraries which provide unit-aware data structures
-in Python.  When registered, Matplotlib can use objects from these
-libraries for unit-aware plotting.  \textbf{This capability it is
-  currently used to support spaceflight operations by Monte, JPL's
-  mission design and navigation software system} and the initial
-development in Matplotlib was supported by NASA.
+An immediate motivation for this this refactor is to improve
+Matplotlib's handling of data with physical units attached.  Units are
+fundamental to science and engineering, however most numerical
+software is unit-naive.  It is the user's responsibility to keep track
+of and correctly convert data to consistent units prior to any
+computation.  Failing to do so leads to the most insidious of bugs:
+everything ``works'' but silently gives incorrect results!  There are
+several libraries which provide unit-aware data structures in Python
+that can be used with Matplotlib for for unit-aware plotting.
+\textbf{This capability is currently used to support spaceflight
+  operations by Monte, JPL's mission design and navigation software
+  system} and the initial development in Matplotlib was supported by
+NASA.
 
 
 
 % to what extent mpl currently supports units
 
-The current support for physical units in Matplotib is based on inspecting the data type passed by the user.  When the unit-full data is
-passed by the user Matplotlib looks up a converter that sets default axis label,
-limits, and functions for locating and formatting the ticks.
-Internally, Matplotlib uses the unit machinery to handle datetime and string-categorical types, but third-party libraries are able to register their own converters. Using this machinery users can control what units the data is plotting
-in, which may be different than the units it was passed in as, and
-specify the limits in physical units.
+The current support for physical units in Matplotib is based on
+inspecting the data type passed by the user.  When the unit-full data
+is passed by the user Matplotlib looks up a converter that sets
+default axis label, limits, and functions for locating and formatting
+the ticks.  Internally, Matplotlib uses the unit machinery to handle
+datetime and string-categorical types and third-party libraries are
+able to register their own converters.  Using this machinery users can
+control what units the data is plotting in, which may be different
+than the units it was passed in as, and specify the limits in physical
+units.
 
 % what is wrong
 However, there are several problems with the current unit support in
@@ -420,8 +426,10 @@ the support of physical units, this refactor will lay the ground work for
 
 \subsubsection{General maintenance}
 
-At the same time as rewiring Matplotlib's data model, we need to ``keep the lights on,'' and provide support for the thousands of users and hundreds of downstream packages.
-To maintain Matplotlib's health we need to:
+At the same time as rewiring Matplotlib's data model, we need to
+``keep the lights on,'' and provide support for the hundred of
+thousands of users and hundreds of downstream packages.  To maintain
+Matplotlib's health we need to:
 \begin{itemize}[noitemsep]
 \item fix critical bugs and regressions;
 \item triage Issues and PRs in terms of topic,
@@ -456,21 +464,22 @@ full-time developers help ensure that things happen in a consistent and timely m
 
 Historically, pull requests (PRs) and issues have been submitted
 faster than they can be reviewed; Matplotlib has accumulated about 300
-open PRs 1300 open issues due to this imbalance. There are critical bug reports and insightful feature requests among
-the issue backlog, while among the PR backlog there are useful contributions
-or bug fixes that would improve the libraries for direct users and
+open PRs and 1300 open issues due to this imbalance. There are
+critical bug reports and insightful feature requests among the issue
+backlog, while among the PR backlog there are useful contributions or
+bug fixes that would improve the libraries for direct users and
 downstream packages.  The large backlog is discouraging for new and
 occasional contributors and distracting for core developers.
 
-In 2020 Matplotlib had supported a Research Software Engineer (RSE)
+In 2020 Matplotlib supported a Research Software Engineer (RSE)
 working on Matplotlib, during which time we resolved 125-200 PRs and
-75-125 issues a month.  However even at this rate we only reduced the
-PR backlog by 70 open PRs and only held even on the issue backlog.  As
-part of reducing the backlog, we were able to fix several long
-standing bugs.  We have demonstrated that supporting maintenance work
-has a positive effect on the health of the project and \textbf{the
-  additional resources requested here will further reduce, but not
-  eliminate, the maintenance backlog}.
+75-125 issues a month.  However even at this rate on net we only
+reduced the PR backlog by 70 open PRs and held even on the issue
+backlog.  As part of reducing the backlog, we were able to fix several
+long standing bugs.  We have demonstrated that supporting maintenance
+work has a positive effect on the health of the project and
+\textbf{the additional resources requested here will further reduce,
+  but not eliminate, the maintenance backlog}.
 
 
 
@@ -544,8 +553,8 @@ list of examples of using Matplotlib
 \item for visualization of scheduling, safety and constraint checks,
   and telemetry by the Swift science operations
   team~\cite{swift_ops,2020ApJ...900...35T};
-\item as part of the Hubble Space Telescope and James Web Space
-  Telescope data processing pipelines;
+\item as part of the HST and JWST~\cite{jwst_pipeline} data processing
+  pipelines;
 \item in Monte, JPL's mission design
   and navigation software system to support spaceflight operations;
 \item in fundamental research on graphene~\cite{PhysRevLett.120.236802};
@@ -1312,7 +1321,7 @@ Google Open Source Peer Bonus \hfill 2017
 \subsection{Current Awards}
 Dr. Caswell is fully supported by NSLS-II operations.  He has an
 agreement to reduce time allocated to NSLS-II operations by the amount
-of time that is required by this proposal.\\
+of time that is required by this proposal and the award below.\\
 \begin{tabular}{|>{\raggedright\arraybackslash}p{3.1cm}|>{\raggedright\arraybackslash}p{3.1cm}|>{\raggedright\arraybackslash}p{3.1cm}|>{\centering\arraybackslash}p{2.54cm}|>{\centering\arraybackslash}p{2.54cm}|}
   \hline
    \multicolumn{1}{|>{\centering\arraybackslash}p{3.1cm}|}{\small\cellcolor{gray!30}\textbf{Name of Principal Investigator on Award}}
@@ -1325,10 +1334,10 @@ of time that is required by this proposal.\\
      {\small Matplotlib - Foundation of Scientific Visualization (EOSS3)} &
      {\small\raggedright Essential Open Source Software for Science (Cycle 3)\\ Chan Zuckerberg Initiative \\ Dario Taraborelli \\ XXX-YYYY \\ dario@...com}  &
      {\small 01/21 - 01/22} &
-     {\small 4}\\
+     {\small 3.6}\\
    \hline
 \end{tabular}
-\subsection{Current Awards}
+\subsection{Pending Awards}
 None
 
 \newpage
