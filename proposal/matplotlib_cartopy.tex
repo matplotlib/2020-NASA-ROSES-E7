@@ -114,8 +114,9 @@
 %% Commands for making the tables.
 %%%
 \usepackage{booktabs}
-\usepackage{multirow}
+\usepackage{multirow, hhline}
 \usepackage{array}
+\usepackage[table]{xcolor}% http://ctan.org/pkg/xcolor
 
 %%%
 %%% Package to create Gantt schedules
@@ -1161,6 +1162,33 @@ development of process of those projects.
 \newpage
 \section{Table of Personnel and Work Effort}
 \setcounter{page}{1}
+
+\begin{tabular}{|l|l|c|c|c|c|}
+  \hline
+  \multicolumn{6}{|c|}{\cellcolor{gray!30}\textbf{Work Efforts to be Funded by this Proposal}}\\
+  \hline
+  \cellcolor{gray!30} &  \cellcolor{gray!30}&\multicolumn{4}{c|}{\cellcolor{gray!30}\textbf{Commitment (FTE)}} \\
+  \hhline{|*2{>{\arrayrulecolor{gray!30}}-}*4{>{\arrayrulecolor{black}}-}|}
+  \cellcolor{gray!30}\textbf{Name }& \cellcolor{gray!30}\textbf{Role} & \cellcolor{gray!30}\textbf{Y1} & \cellcolor{gray!30}\textbf{Y2} & \cellcolor{gray!30}\textbf{Y3} & \cellcolor{gray!30}\textbf{Total}     \\  \hline
+  Dr. Thomas A Caswell & Principle Investigator & 0.25 & 0.25 & 0.25 & 0.75 \\  \hline
+  -- & Research Software Engineer & 1.00 & 1.00 & 1.00 & 3.00 \\  \hline
+  \multicolumn{2}{|l|}{\textbf{Total Funded Work Effort}} & \textbf{1.25} & \textbf{1.25} & \textbf{1.25}& \textbf{3.75}\\    \hline
+  \multicolumn{6}{|c|}{\cellcolor{gray!30}\textbf{Work Efforts Proposed, but NOT to be Funded by this Proposal}}\\  \hline
+  \cellcolor{gray!30} &  \cellcolor{gray!30}&\multicolumn{4}{c|}{\cellcolor{gray!30}\textbf{Commitment (FTE)}} \\
+  \hhline{|*2{>{\arrayrulecolor{gray!30}}-}*4{>{\arrayrulecolor{black}}-}|}
+  \cellcolor{gray!30}\textbf{Name }& \cellcolor{gray!30}\textbf{Role} & \cellcolor{gray!30}\textbf{Y1} & \cellcolor{gray!30}\textbf{Y2} & \cellcolor{gray!30}\textbf{Y3} & \cellcolor{gray!30}\textbf{Total}     \\  \hline
+  Dr. Thomas A Caswell & Principle Investigator & 0.00 & 0.00 & 0.00 & 0.00 \\  \hline
+  - & Research Software Engineer & 0.00 & 0.00 & 0.00 & 0.00 \\  \hline
+  \multicolumn{2}{|l|}{\textbf{Total Unfunded Work Effort}} & \textbf{0.00} & \textbf{0.00} & \textbf{0.00}& \textbf{0.00}\\\hline
+  \multicolumn{6}{|c|}{\cellcolor{gray!30}\textbf{TOTAL Work Efforts Proposed (Funded + Unfunded)}}\\  \hline
+  \cellcolor{gray!30} &  \cellcolor{gray!30}&\multicolumn{4}{c|}{\cellcolor{gray!30}\textbf{Commitment (FTE)}} \\\hhline{|*2{>{\arrayrulecolor{gray!30}}-}*4{>{\arrayrulecolor{black}}-}|}
+  \cellcolor{gray!30}\textbf{Name }& \cellcolor{gray!30}\textbf{Role} & \cellcolor{gray!30}\textbf{Y1} & \cellcolor{gray!30}\textbf{Y2} & \cellcolor{gray!30}\textbf{Y3} & \cellcolor{gray!30}\textbf{Total}     \\      \hline
+  Dr. Thomas A Caswell & Principle Investigator & 0.25 & 0.25 & 0.25 & 0.75 \\  \hline
+  -- & Research Software Engineer & 1.00 & 1.00 & 1.00 & 3.00 \\  \hline
+  \multicolumn{2}{|l|}{\textbf{Grand Total of Work Efforts}} & \textbf{1.25} & \textbf{1.25} & \textbf{1.25}& \textbf{3.75}\\  \hline
+\end{tabular}
+
+
 
 \newpage
 \section{Current and Pending Support}
