@@ -318,32 +318,46 @@ library maintenance.
 
 \subsubsection{Refactor Internal Data Model}
 
+While this elides many implementation details, for the purposes of
+this proposal it is sufficient to understand \texttt{Artist}s as the
+objects in Matplotlib that, given user data, produce something visible
+in the output.  Internally Matplotlib represents a \texttt{Figure} as
+a tree of \texttt{Artist}s~\cite{AOSA_mpl}.  Each individual
+\texttt{Artist} is responsible for holding the user data and style
+information for a part of the final visualization.For example,
+\texttt{matplotlib.text.Text} is the class responsible for drawing
+text.  It holds, among other things, the location of the text, the
+string, and the font, size and color to use.  The plotting methods in
+Matplotlib create these objects and add them to the tree.  To render
+the final output Matplotlib walks the \texttt{Artist} tree depth-first
+and each each \texttt{Artist} is responsible for rendering itself to
+output.
+
+Currently, each plotting method and \texttt{Artist} handles sanitizing
+and storing data independently.  Hence, some common functionality,
+such as handling data with attached units (e.g., degrees Celsius,
+dates), is repeated throughout the code base and each \texttt{Artist}
+subclass holds its data in a different way.  This leads to
+inconsistencies across the library and makes it difficult for users to
+write code that updates interactive explorations and animations.
+Another consequence is that Matplotlib also cannot exploit
+``Structured data''--combining multiple pieces of (possibly
+heterogeneous) data with labels and metadata into single data
+structure; instead, users must extract data elements and reassemble
+them as arguments to Matplotlib plotting functions.
 
 We have on-going theoretical and design work\footnote{Supported by
 CZI} to re-architect Matplotlib to better separate the data
-representation from the rest of the library.  Currently, each plotting
-method and \texttt{Artist} handles sanitizing and storing data
-independently.  Hence, some common functionality, such as handling
-data with attached units (e.g., degrees Celsius, dates), is repeated
-throughout the code base and each \texttt{Artist} subclass holds its
-data in a different way.  This leads to inconsistencies across the
-library and makes it difficult for users to write code that updates
-interactive explorations and animations.  Another consequence is that
-Matplotlib also cannot exploit ``Structured data''--combining multiple
-pieces of (possibly heterogeneous) data with labels and metadata into
-single data structure; instead, users must extract data elements and
-reassemble them as arguments to Matplotlib plotting functions.
-
-
-We are developing a consistent data access API such that each
-\texttt{Artist} will have a single \texttt{DataSource} object
-responsible for providing access to all of the data that the
-\texttt{Artist} needs.  This design will allow us to over come many of
-the issues with the current design and open the door to a variety of
-new functionality.  The current work is expected to produce design
-documents and a proof-of-principal implementation by the end of 2021.
-Based on this preliminary work \textbf{we propose refactoring
-  all of Matplotlib to use the new data model}
+representation from the rest of the library.  We are developing a
+consistent data access API such that each \texttt{Artist} will have a
+single \texttt{DataSource} object responsible for providing access to
+all of the data that the \texttt{Artist} needs.  This design will
+allow us to over come many of the issues with the current design and
+open the door to a variety of new functionality.  The current work is
+expected to produce design documents and a proof-of-principal
+implementation by the end of 2021.  Based on this preliminary work
+\textbf{we propose refactoring all of Matplotlib to use the new data
+  model}
 
 One of immediate benefit of the refactoring will be to drastically
 improve Matplotlib's handling of data with physical units attached.
