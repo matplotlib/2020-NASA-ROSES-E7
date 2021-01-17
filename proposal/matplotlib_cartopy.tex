@@ -705,15 +705,16 @@ the end of the first quarter of the work period.
 
 
 
-The first task is to document, both at the conceptual and API level,
-how the unit dispatch system currently works in theory and practice.
-Given the importance of backwards compatibility it is critical to
-understand what we are refactoring before beginning.  This
-documentation will be aimed at Matplotlib developers and third-party
-library authors and focus on the low-level details.  Unfortunately,
-the original authors of the unit-handling code are no longer active
-with the project so we may have to reverse engineer some aspects of
-the code and motivation.
+We will document, both at the conceptual and API level, how the unit
+dispatch system currently works in theory and practice.  Given the
+importance of backwards compatibility it is critical to understand
+what we are refactoring before beginning.  This documentation will be
+aimed at Matplotlib developers and focus on the low-level details.
+Unfortunately, the original authors of the unit-handling code are no
+longer active with the project so we may have to reverse engineer some
+aspects of the code and motivation.  This documentation will be used
+in further planning and as a reference for what is ``correct''
+behavior when resolving inconsistencies.
 
 % Internally we need to convert
 % unit-full data to unit-naive values to pass to the next layer down.
@@ -732,83 +733,91 @@ the code and motivation.
 % library will be the foundation of the rest of the work.
 
 
-The second task is to write user-facing documentation and tutorials
-showing how to work with unit-full data and Matplotlib.  We will document
-the expected behavior and API
+We are proposing to refactor a critical aspect and significant
+fraction of the library we will develop a comprehensive plan.  As part
+of developing this plan we will reach out to up-stream data-structure
+libraries, such as pandas, numpy, xarray and the Consortium for Python
+Data API Standards~\footnote{https://data-apis.org/}, to down stream
+libraries, such as astropy, yt, and sunpy, and heavy users of physical
+units, such as \texttt{unyt} (\url{https://unyt.readthedocs.io/}),
+\texttt{pint} (\url{https://pint.readthedocs.io/}),
+\texttt{astropy.units}
+(\url{https://docs.astropy.org/en/stable/units/}), and the Monte
+developers at JPL.  This will be a unique chance to change the
+internal architecture of Matplotlib and we need to make ensure that we
+engage with all stack holders.
+
+The core of the refactor will be the newly developed
+\texttt{DataSource} which will serve as a consistent interface for the
+\texttt{Artists} to their data.  The theoretical and proof-of-concept
+work will be finished by the end of 2021 and active work on both
+projects will overlap by 6 months.  Building on the theoretical work
+we will fully specify the \texttt{DataSource} interface and a write
+production-quality reference implementation.  We will have this
+completed by Y1Q3.  Concurrently we will developed a detailed plan of
+how we will go about refactoring the approximately 100 \texttt{Artist}
+classes in Matplotlib.
+
+As mentioned above, it is critical that we do this refactoring with a
+little backward incompatible API changes as possible.  The variation
+between \texttt{Artist}s because each \texttt{Artist} is responsible
+for storing its data is both what we are trying to fix and the biggest
+complicating factor.  Each class well need to be carefully inspected
+and we may need to write a significant number of new tests to ensure
+that we do not accidentally break any behavior.  As we preform this
+refactor we will add tests that each \texttt{Artist} and plotting
+method touched handles unit-full data in a uniform way.  \textbf{This
+  work will require touching and testing a large fraction of the
+  library} and is the largest proposed change to the library in the
+last decade.
+
+Unify how data is handled across the library will give users an easier
+and more consistent experience and will eliminate the variation and
+duplication in the implementation is the source of many of the
+unit-related regressions.  The \texttt{DataSource} we will be a
+centralize the unit processing and dispatch code.q
 
 
-For this we will work
-closely with maintainers of unit libraries, such as \texttt{unyt}
-(\url{https://unyt.readthedocs.io/}), \texttt{pint}
-(\url{https://pint.readthedocs.io/}) and
-\texttt{astropy.units} (\url{https://docs.astropy.org/en/stable/units/}),
-and user within the SMD community, such as the Monte developers at JPL
-and the Astropy developers, to ensure that we are fully meeting their
-needs.
+This whole process will be extensively documented, both inward facing,
+so that future Matplotlib developers understand why decisions were
+made, and outward facing so that users can make the most of the new
+and improved functionality.
 
-The user documentation will also focus on how things should be
-and will serve as a guide for what the ``correct'' behavior is when we
-are resolving inconsistencies.  This work will tie into our ongoing
-effort to make our large API surface more self-consistent and easier
-to use.
 
-\textbf{Implementation}
+% - [ ] make sure it fits with new numpy dtype scheme (NEP 40-43)
+% - [ ] make sure it works with pandas dtypes?
 
-The third task is to ensure that all of the plotting methods support
-unit-full data in a uniform way.  The documentation developed as part
-of the first two tasks will guide how we resolve any inconsistencies.
-This work will build on ongoing work supported work, funded by Chan
-Zuckerberg Initiative, to re-design how we store data internally.
-Currently each \texttt{Artist} is responsible for storing its data and
-each does it in its own different way.  This variation and duplication
-in the implementation is also the source of many of the unit-related
-regressions.  The proposed redesign will factor the data storage out
-of the \texttt{Artist}s into a reusable class.  Among the benefits of
-this design, we will be able to centralize the unit processing and
-dispatch to one place in the code.  We expect the design and
-proof-of-concept work of this re-design to be complete by the end of
-2021 which aligns with the period of work of this proposal.  Building
-on the data source work, we propose implementing this new design in
-all \texttt{Artist} subclasses, any required changes to the plotting
-methods, and adding full test coverage of unit handling in every
-plotting method.  This work will require touching and testing a large
-fraction of the library.
-
-- [TODO] makes future mpl development easier by documenting and simplifying
-  the internal handling of units
-- make sure it fits with new numpy dtype scheme (NEP 40-43)
-- make sure it works with pandas dtypes?
-
-A final task is to extend the unit machinery to improve the user
+A reach goal is to extend the unit machinery to improve the user
 experience.  Currently much of the mechanism of unit-handling is
 implicit and automatic based on type inference.  We propose to extend
 the interface to allow optional direct control of the unit machinery
-by users and third-party library developers.  We will rely on the
-documentation and testing from the previous work to ensure that we do
-not introduce any new regressions or inconsistencies.
-
+by users and third-party library developers.
 
 
 The Research Software Engineer (RSE), whom needs to be identified,
 will devote 100\% FTE to this project.  This will be split evenly with
-50\% FTE being spent on the unit work and 50\% being spent on general
-maintenance until the unit work is complete.  If the unit work is
-completed faster than expected, the RSE will devote 100\% of their
-effort to maintenance.  Because Matplotlib is a community project, the
-work of the RSE will still go through the normal review process.  The
-interaction with community makes it advantageous to spread out the
-unit work.  The first task, producing developer-facing documentation
-about how the unit system works we expect to take 25\% FTE with will
-be spread across the first two quarters of the grant.  Similarly,
-writing the user-facing documentation should take about 25\% FTE which
-will be done is the third and forth quarters of the performance
-period.  The remaining work on units, adding the tests, fixing any
-bugs and inconsistencies, and any required internal refactoring, will
-take 1 FTE spread across final 2 years of the performance period.
-Incremental progress will be merged and released as part of the normal
-release cycle throughout the performance period.  The RSE will present
-the status of the work at two conferences, expected to be SciPy in
-July and one of PyData conferences in the winter, yearly.
+50\% FTE being spent on the refactoring and 50\% being spent on
+general maintenance.  If the refactoring is completed faster than
+expected, the RSE will devote 100\% of their effort to general
+maintenance.
+
+
+All work under this proposal will under go the standard review process
+as any other contribution which has several advantages.  First, the
+review process encourages many small PRs which reduces risk.  Given
+our process, at least one maintainer not supported on this proposal will
+need to sign off on any changes before they are merged.  This will
+ensure that dissemination of understanding of the proposed work and
+community buy-in to the proposed work.  Finally, by merging changes to
+the default branch continuously through out the period of work the
+incremental improvements will be released as part of our normal
+release cadence.
+
+The RSE will present the status of the work at two conferences yearly,
+expected to be SciPy in July and one of PyData regional conferences in
+the winter.
+
+
 
 
 
