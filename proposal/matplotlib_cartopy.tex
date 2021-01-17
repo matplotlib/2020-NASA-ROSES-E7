@@ -306,6 +306,7 @@ split the effort on this grant equally between overhauling our internal data rep
 
 
 \subsubsection{Refactor Internal Data Model}
+\label{sec:ridm}
 
 Matplotlib is based on visualizing data stored in (Numpy) arrays,
 which is a simple yet flexible data model that has been the
@@ -483,38 +484,6 @@ work has a positive effect on the health of the project and
 
 
 
-\subsection{Perceived impact of work}
-\label{sec:piw}
-% TODO add cite for
-% \url{https://www.aosabook.org/en/matplotlib.html}
-
-Maintaining Matplotlib's health and engineering for its future will
-have wide-ranging impacts for the scientific community, and NASA in
-particular.  As pointed out above, Matplotlib is the plotting layer
-for much of the python ecostsyem.  It has been used in thousands of
-academic papers, plotting for news and sporting media, technical
-dash-boarding, and most modern data science applications. [TODO:
-  sepcific high-profile examples: LIGO, nobel prize?] Support for
-Matplotlib will improve outcomes across disciplines, but in particular
-Matplotlib is heavily used across SMD divisions, and by scientists in
-academia who work with NASA in engineering, space science, astronomy,
-remote sensing and earth observing [TODO: others?].
-
-This proposal is another step towards Matplotlib's sustainability, and
-ability to move forward. Given the usage and the scale of the library
-it is not sustainable to continue to maintain Matplotlib as a
-volunteer-only effort.  A core team of full-time developers and
-managers will better co-ordinate and nurture volunteer efforts, with
-the goal of growing and sustaining a diverse community of volunteer
-expert contributors.
-
-Finally, by professionalizing Matplotlib's core developers, Matplotlib
-will better be able to plan its future and develop its future roadmap.
-This requires vision, co-ordination with the rest of the scientific
-Python community, including downstream libraries, and getting out in
-the community to get feedback.  It is very hard to provide that
-leadership and vision while working a ``day job''.
-
 \subsection{Relevance to program element}
 
 As mentioned above, it is hard to estimate the prevalence of open
@@ -563,6 +532,43 @@ list of examples of using Matplotlib
 This list shows the breadth of the use of Matplotlib across the
 four SMD divisions.  Small investments in Matplotlib will have returns
 across the entire SMD portfolio.
+
+\subsection{Perceived impact of work}
+
+Maintaining Matplotlib's health and engineering for its future will
+have wide-ranging impacts for the scientific community, and NASA in
+particular.  As pointed out above, Matplotlib is the plotting layer
+for much of the python ecosystem.  It has been used in thousands of
+academic papers, plotting for news and sporting media, technical
+dash-boarding, and most modern data science applications.  As of
+2018Q2 over a third of papers published to astro-ph on the Arxiv
+contained a figure generated with
+Matplotlib~\footnote{\url{https://dxl.ncsa.illinois.edu/arxiv/index.html}}
+which a clear tread upward.  Matplotlib has also been used in a number
+of high-profile astronomy projects including the Nobel Prizing winning
+observation of black hole merger by the Laser Interferometer
+Gravitational-Wave Observatory (LIGO) and the recent observation of
+Sagittarius A* by the Event Horizon Telescope (EHT).  Support for
+Matplotlib will improve outcomes across disciplines, but in particular
+Matplotlib is heavily used across SMD divisions, and by scientists in
+academia who work with NASA in engineering, planetary science,
+astrophysics, heliophysics, and earth observation.
+
+This proposal is another step towards Matplotlib's sustainability, and
+ability to move forward. Given the usage and the scale of the library
+it is not sustainable to continue to maintain Matplotlib as a
+volunteer-only effort.  A core team of full-time developers and
+managers will better co-ordinate and nurture volunteer efforts, with
+the goal of growing and sustaining a diverse community of volunteer
+expert contributors.
+
+Finally, by professionalizing Matplotlib's core developers, Matplotlib
+will better be able to plan its future and develop its future roadmap.
+This requires vision, co-ordination with the rest of the scientific
+Python community, including downstream libraries, and getting out in
+the community to get feedback.  It is very hard to provide that
+leadership and vision while working a ``day job''.
+
 
 \subsection{sources of uncertainty/mitigation to risk}
 
@@ -721,7 +727,7 @@ engage with all stack holders.
 interface.  This will provide a consistent interface for the
 \texttt{Artists} to their data.  This interface, and the ability to
 provide alternate implementation of data storage an access, is what
-will allow the features discussed in section \ref{sec:piw}.  The
+will allow the features discussed in section \ref{sec:ridm}.  The
 theoretical and proof-of-concept work will be finished by the end of
 2021.  Active work on both projects will overlap by 6 months and we
 will actively engage to ensure that the theoretical work is
@@ -841,7 +847,7 @@ with the BSD license.
 
 \subsubsection{Collaboration with Related Projects}
 
-As noted above, we will be working closely with both upstream and downstream projects on our refactor.  This work is timely as Numpy, Pandas, and xarray are all adding new data types with richer metadata and unit support to the python ecosystem.  Matplotlib must meet the challenge of supporting these new data types.    This will require constant communication with those projects.  Similarly, our changes will need to meet the needs of downstream domain-specific projects.  Many of these projects also have specialized data pipelines where they have prototypes of the changes we propose here.  Matplotlib will aggressively engage with these projects during the data pipeline refactor.  
+As noted above, we will be working closely with both upstream and downstream projects on our refactor.  This work is timely as Numpy, Pandas, and xarray are all adding new data types with richer metadata and unit support to the python ecosystem.  Matplotlib must meet the challenge of supporting these new data types.    This will require constant communication with those projects.  Similarly, our changes will need to meet the needs of downstream domain-specific projects.  Many of these projects also have specialized data pipelines where they have prototypes of the changes we propose here.  Matplotlib will aggressively engage with these projects during the data pipeline refactor.
 
 Much of the communication is through the standard communication
 channels, such as project issue trackers, mailing lists or discussions
