@@ -908,18 +908,87 @@ freeing the core-developers to spend more time reviewing PRs, this
 role will bring more people into the developer community and may
 provide a path way to becoming regular contributors and maintainers.
 
-One challenge of being an open community developed project is that we
-do not have reliable demographics on a vast majority of our
-contributors.  Ongoing work at NumFOCUS to develop metrics will help
-us evaluate the efficacy of these efforts at diversifying our
-contributor base.
+Ongoing work at NumFOCUS to develop metrics will help us evaluate the
+efficacy of these efforts at diversifying our contributor base.
+
+\subsubsection{Contribution Workflow}
+%check that this is not a required title
+%\subsection{Technical approach and methodology}
+
+
+Matplotlib is an established community driven project in the
+``federation'' model as defined by Nadia Eghbal~\cite{eghbal_2020}.
+We have a core group regular maintainers who take responsibility for
+reviewing and merging proposed changes to the library and  welcome Pull
+Requests from anyone who is interesting in contributing.  We strive
+for consensus and rely on the collective judgment of our maintainers
+to maintain the quality and functionality of the library.
+
+Matplotlib uses a variation on the ``git flow'' process~\cite{ghflow}
+to manage proposing and reviewing contributions to the library and
+documentation though on GitHub.  A contributor, a core maintainer, a
+regular contributor, or a first time contributor, proposes a change by
+opening a ``Pull Request'' from their fork of Matplotlib.  The
+proposed changes are reviewed by maintainers who either request
+changes, which starts a cycle of iteration with the contributor, or
+approve.  In addition to human review we have an extensive test suite
+that is automatically run via cloud services and the results are
+reported to the PR.  Once consensus is reached and the test pass the
+PR is merged and the changes will be released as part of the next
+release.
+
+Matplotlib maintains an extensive suite of automated tests that covers
+a large fraction of our code base.  The full test suite, and a build
+of the documentation, is run against several versions of Python on
+OSX, Windows, and Linux hosts on every PR and merge to the default
+branch via continuous integration.  For every new feature or bug fix
+that gets merged we also add tests that codify the expected behavior.
+This gives us the ability to make changes to the library with
+confidence that we will not break existing behavior.
+
+The threshold for merging a PR depends on the reviewer judgment of the
+risk of the changes.  PRs that only change documentation, which cannot
+introduce regressions or introduce new features, may be merged by the
+first reviewer where as code changes need to be reviewed and approved
+by at least two maintainers.  However in either case a maintainer may
+wish to leave a positive review but not merge the PR to request
+additional feed back from other maintainers.  If a maintainer objects
+to a PR, the PR will not be merged until their concerns have been
+addressed.  If consensus cannot, the final decision falls back to a
+Deputy Project Lead or the Project Lead.
+
+Matplotlib is cautious about making backwards-incompatible change that
+intentionally break users existing code.  While in an ideal world,
+future versions of the library would be 100\% backwards compatible
+with previous versions, sometimes we do need to make incompatible
+changes.  As part of the review process we check that any API changes
+are well documented and justified.  When technically possible we
+provide user-visible warnings the version before we actually implement
+a breaking change.  This provides a window for users to either adapt
+to the change or to communicate to us that they cannot adapt so we
+can reconsider the change.  Given this high barrier to changing or
+removing behavior we are careful to make sure that any new API we add
+to the library is well thought out and complete because once we have
+released a version of the library with that code it is hard to take it
+back.  These considerations together are important enough that we have
+a Deputy Project Lead responsible for API consistency.
+
+This process works well for incremental contributions and bug fixes,
+new features or bigger changes are typically discussed before
+significant work is done.  In many cases if the feature does not need
+to be in the core library we encourage contributors to create a new
+stand-alone project.  This has several advantages including the giving
+the author more control, allows them to iterate faster than our
+relatively slow 6 month release schedule, and gives them greater
+flexibility to change their APIs.
+
 
 \subsubsection{Information Dissemination}
 
 As a project Matplotlib maintains a range of communication channels
 aimed at several, overlapping, audiences.  This includes a
 the source, issue tracker and PRs on GitHub,
-the published documentation (inculding historical and ``future'' versions),
+the published documentation (including historical and development versions),
 weekly developer call,
 mailing lists,
 a discourse forum,
@@ -982,68 +1051,6 @@ Matplotlib.  We have project accounts on several social media platform
 including twitter and Instagram.
 
 
-\subsection{Current Workflow}
-%check that this is not a required title
-%\subsection{Technical approach and methodology}
-
-
-Matplotlib is an established community driven project in the
-``federation'' model as defined by Nadia Eghbal~\cite{eghbal_2020}.  We
-have a core group regular maintainers who take responsibility for
-reviewing and merging proposed changes to the library.  We strive for
-consensus and rely on the collective judgment of our maintainers to maintain
-the quality and functionality of the library.
-
-Matplotlib uses a variation on the ``git flow'' process
-(\url{https://guides.github.com/introduction/flow/}) to manage
-proposing and reviewing contributions to the library and documentation
-though on GitHub
-(\url{https://matplotlib.org/devel/coding_guide.html}).  A
-contributor, a core maintainer, a regular contributor, or a first time
-contributor, proposes a change by opening a ``Pull Request'' from
-their fork of Matplotlib.  The proposed changes are reviewed by
-maintainers who either request changes, which starts a cycle of
-iteration with the contributor, or approve.  In addition to human
-review we have an extensive test suite that is automatically run via
-cloud services and the results are reported to the PR.  Once consensus
-is reached and the test pass the PR is merged and the changes will be
-released as part of the next release.
-
-The threshold for merging a PR depends on the reviewer judgment of the
-risk of the changes.  PRs that only change documentation, which cannot
-introduce regressions or introduce new features, may be merged by the
-first reviewer where as code changes need to be reviewed and approved
-by at least two maintainers.  However in either case a maintainer may
-wish to leave a positive review but not merge the PR to request
-additional feed back from other maintainers.  If a maintainer objects
-to a PR, the PR will not be merged until their concerns have been
-addressed.  If consensus cannot, the final decision falls back to a
-Deputy Project Lead or the Project Lead.
-
-Matplotlib is cautious about making backwards-incompatible change that
-intentionally break users existing code.  While in an ideal world,
-future versions of the library would be 100\% backwards compatible
-with previous versions, sometimes we do need to make incompatible
-changes.  As part of the review process we check that any API changes
-are well documented and justified.  When technically possible we
-provide user-visible warnings the version before we actually implement
-a breaking change.  This provides a window for users to either adapt
-to the change or to communicate to us that they cannot adapt so we
-can reconsider the change.  Given this high barrier to changing or
-removing behavior we are careful to make sure that any new API we add
-to the library is well thought out and complete because once we have
-released a version of the library with that code it is hard to take it
-back.  These considerations together are important enough that we have
-a Deputy Project Lead responsible for API consistency.
-
-This process works well for incremental contributions and bug fixes,
-new features or bigger changes are typically discussed before
-significant work is done.  In many cases if the feature does not need
-to be in the core library we encourage contributors to create a new
-stand-alone project.  This has several advantages including the giving
-the author more control, allows them to iterate faster than our
-relatively slow 6 month release schedule, and gives them greater
-flexibility to change their APIs.
 
 
 \newpage
