@@ -322,20 +322,27 @@ operations on the data without loading the whole data set into memory
 out of memory in concert with these packages.
 
 While eliding many implementation details in the jargon of Matplotlib
-an \texttt{Artist} can be understood as an object that produce
-something visible in the output.  Internally Matplotlib represents a
-\texttt{Figure} as a tree of \texttt{Artist}s~\cite{AOSA_mpl}.
+an \texttt{Artist}
 
-Each individual \texttt{Artist} is responsible for holding the user
-data and style information for part of the final visualization, but
-the exact data held varies between \texttt{Artist} classes.  For
-example, \texttt{matplotlib.text.Text} is responsible for drawing text
-and holds, among other things, the location of the text, the font,
-size, color, and the actual string.  The plotting methods in
-Matplotlib create these objects and add them to the tree.  To render
-the final output Matplotlib walks the \texttt{Artist} tree depth-first
-and each each \texttt{Artist} is responsible for rendering itself to
-output.
+Eliding many of the implementation details, Matplotlib can be thought
+of as having three primary layers~\cite{AOSA_mpl}: the user facing
+methods; the \texttt{Artist} layer; and the backends.  The core of the
+architecture is the \texttt{Artist}s which can be understood as
+objects that produce something visible in the output.  Each individual
+\texttt{Artist} is responsible for holding the user data and style
+information for part of the final visualization, but the exact data
+held varies between \texttt{Artist} classes.  For example,
+\texttt{matplotlib.text.Text} is responsible for drawing text and
+holds, among other things, the location of the text, the font, size,
+color, and the actual string.  Internally Matplotlib represents a
+\texttt{Figure} as a tree of \texttt{Artist}s.  The plotting methods
+in Matplotlib create these objects and add them to the tree.  To
+render the final output Matplotlib walks the \texttt{Artist} tree
+depth-first and each each \texttt{Artist} is responsible for rendering
+itself to the backend.  Thus, by changing the backend we can change the
+output format from raster to vector without making any changes to the
+\texttt{Artist} tree.
+
 
 Currently, each plotting method and \texttt{Artist} independently
 handles sanitizing and storing data.  Hence, each \texttt{Artist}
@@ -361,7 +368,10 @@ open the door to a variety of new functionality.  The current work is
 expected to produce design documents and a proof-of-principal
 implementation by the end of 2021.  Based on this preliminary work
 \textbf{we propose refactoring all of Matplotlib to use the new data
-  model}
+  model}.  The proposed design is consistent with the rest of the
+architecture; just as the \texttt{Artist}s are currently agnostic to
+the backend used, the \texttt{Artist}s will be agnostic to exactly how
+their underlying data is stored.
 
 An immediate motivation for this this refactor is to improve
 Matplotlib's handling of data with physical units attached.  Units are
