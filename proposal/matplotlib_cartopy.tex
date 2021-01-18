@@ -727,11 +727,10 @@ behavior when resolving inconsistencies.
 
 \paragraph{Refactor Planning and Design}
 
-We are proposing to refactor a critical aspect and significant
-fraction of the library we will develop a comprehensive plan.  As part
-of developing this plan we will reach out to up-stream data-structure
+The data pipeline refactor is a critical part of the library that touches most artists, so we require a comprehensive plan.  As part
+of developing this plan we will reach out to upstream data-structure
 libraries, such as pandas, numpy, xarray and the Consortium for Python
-Data API Standards~\footnote{https://data-apis.org/}, to down stream
+Data API Standards~\footnote{https://data-apis.org/}, to downstream
 libraries, such as astropy, yt, and sunpy, and to users of the unit
 machinery, such as \texttt{unyt} (\url{https://unyt.readthedocs.io/}),
 \texttt{pint} (\url{https://pint.readthedocs.io/}),
@@ -739,14 +738,14 @@ machinery, such as \texttt{unyt} (\url{https://unyt.readthedocs.io/}),
 (\url{https://docs.astropy.org/en/stable/units/}), and the Monte
 developers at JPL.  This will be a unique chance to change the
 internal architecture of Matplotlib and we need to ensure that we
-engage with all stack holders.
+engage with all stakeholders.
 
 \paragraph{API Design} The core of the refactor will be a newly developed \texttt{DataSource}
 interface.  This will provide a consistent interface for the
 \texttt{Artists} to their data.  This interface, and the ability to
-provide alternate implementation of data storage an access, is what
-will allow the features discussed in section \ref{sec:ridm}.  The
-theoretical and proof-of-concept work will be finished by the end of
+provide alternate implementation of data storage and access, is what
+will allow the features discussed in section \ref{sec:ridm}.  This builds on our
+theoretical and proof-of-concept work that will be finished by the end of
 2021.  Active work on both projects will overlap by 6 months and we
 will actively engage to ensure that the theoretical work is
 effectively translated.  We will fully specify the \texttt{DataSource}
@@ -755,14 +754,14 @@ Concurrently we will developed a detailed schedule to refactor the
 approximately 100 \texttt{Artist} classes in Matplotlib to use the new
 data model.
 
-\paragraph{Refactor Data Layer} As mentioned above, it is critical that we minimize the backward
-incompatible API changes caused by the refactoring.  The variation
+\paragraph{Refactor Data Layer} As mentioned above, it is critical that we maintain as much backwards
+compatible as possible in the API changes needed for the refactoring.  The variation
 between \texttt{Artist}s is both what we are trying to address and the
 biggest complicating factor.  Each class well need to be handled on a
 case-by-case basis.  We anticipate that there will be significant
 collateral work, such as writing additional tests to ensure that we do
 not accidentally break current behavior, and implementing
-back-compatibility shims, during the course of this work.  As we
+back-compatibility shims.  As we
 preform this refactor we will also add tests that each \texttt{Artist}
 and plotting method touched handles unit-full data correctly
 \textbf{This work will impact a majority of the library} and is the
@@ -813,7 +812,7 @@ the winter.
 \subsubsection{Grant Management}
 
 Dr.\ Caswell of BNL and the Matplotlib Lead Developer is the PI of the
-proposed development.  He is solely responsible for the quality and
+proposed development.  He is responsible for the quality and
 direction of the proposed work and the proper use of all awarded
 funds.  He is also responsible for all management, and budget issues
 and is the final authority for this task.
