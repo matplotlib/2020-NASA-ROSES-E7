@@ -560,25 +560,15 @@ managers will better co-ordinate and nurture volunteer efforts, with
 the goal of growing and sustaining a diverse community of volunteer
 expert contributors.
 
-Finally, by professionalizing Matplotlib's core developers, Matplotlib
-will better be able to plan its future and develop its future roadmap.
+Finally, by supporting Matplotlib's core developers, they
+will better be able to plan its future and develop Matplotlib's roadmap.
 This requires vision, co-ordination with the rest of the scientific
 Python community, including downstream libraries, and getting out in
 the community to get feedback.  It is very hard to provide that
 leadership and vision while working a ``day job''.
 
 
-\subsection{sources of uncertainty/mitigation to risk}
-
-As show above, Matplotlib is widely used, both directly and
-transitively.  Given the large user base it is imperative that changes
-are as backwards compatible as possible.  While this large user base
-is on one hand a lever that magnifies any improvements, it also makes
-changes more expensive.  We cannot simply change our public to track
-the internal refactoring, instead we must write also write code to
-translate the old API to the new implementation.  This engineering work
-makes the refactor more challenging and time consuming than starting
-from scratch.
+\subsection{Risk Management}
 
 There is minimal risk in the maintenance work.  There is large volume
 of individually small tasks that need to be addressed: the issue and
@@ -587,14 +577,25 @@ will have a positive impact on the project.  We have demonstrated that
 supporting developers for maintenance work is an effective and
 efficient use of resources.
 
+
+The data pipeline refactor carries more risk.  Given the large user
+base it is imperative that changes are as backwards compatible as
+possible.  While this large user base is on one hand a lever that
+magnifies any improvements, it also makes changes more expensive.  We
+cannot simply change our public interface to track the internal
+refactoring, instead we must write also write code to translate the
+old API to the new implementation.  This engineering work makes the
+refactor more challenging and time consuming than starting from
+scratch.  We rely on our extensive test suite to catch any unintentional
+changes early in the development process.
+
 % - need to be very careful about not breaking back-compatibility
-The data pipeline refactor carries more risk, particularly if we are
-underestimating the amount of work that will be required.  There is
-always a risk while refactoring that the scope of work rapidly
-snowball due to unexpected internal dependencies or edge cases that
-must be accounted for.  Backwards compatibility is also an important
-concern.  However, even in the case that we cannot fully deliver a new
-data pipeline model, throughout the process we will be working towards
+There is also the risk than we are underestimating the amount of work
+that will be required.  There is always a possibility that while
+refactoring that the scope of work rapidly snowball due to unexpected
+internal dependencies or edge cases that must be accounted for.
+However, even in the case that we cannot fully deliver a new data
+pipeline model, throughout the process we will be working towards
 improving library internals and significantly improve our
 documentation.
 
