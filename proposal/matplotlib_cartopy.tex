@@ -838,15 +838,42 @@ BSD license~\cite{jdh_bsd_opinions}.
 
 
 \subsubsection{Sustainability Metrics}
-\begin{enumerate}
-\item Continue Regular releases (mpl minor every 6mo, patch every 2mo
-  or as needed).
-\item Increase number of new regular contributors
-\item Rate of PR / Issue throughput
-  \begin{enumerate}
-  \item caveats on how issues/PRs are very varied in time to resolve
-  \end{enumerate}
-\end{enumerate}
+
+There are many possible ways to measure the sustainability of an
+open source project.  We propose to focus on growing our developer
+community, reducing our Issue and PR backlogs, and maintaining a
+regular release cadence.
+
+Matplotlib is a community driven project with a vast majority of the
+work done by volunteers.  The thing we are shortest on is the time of
+maintainers who are able and willing to review Pull Requests.
+Increasing the number of regular contributors and maintainers improves
+the sustainability of the project in several ways; many hands make
+light work and it makes the project resilient to individuals leaving
+the project.
+
+Quantitatively evaluating maintenance work can be tricky --- some
+Issues or PRs take minutes to review while others can take days to
+weeks of effort --- but we believe that there is value at looking at
+the total number of open Issues and PRs and the rate at which they are
+addressed.  We aim to close Issues and PRs faster than they are opened
+until a reasonable equilibrium is reached.  We will aim to hit the
+following metrics:
+\begin{itemize}[noitemsep]
+\item Initial response to all issues / new PRs within a week
+\item Resolve majority of new issues / PRs within 1 month
+\item Reduce backlog of issues by 25 / quarter
+\item Reduce backlog of PRs by 25 / quarter
+\end{itemize}
+
+Finally, for the user community to benefit from our work we need to do
+regular releases.  We will continue to maintain a bi-yearly release
+cycle for feature releases with 1-3 bug-fix releases as needed.
+Holding to a time-based release schedule is advantageous because it
+provides predictability to our users and reduce the lag between when a
+new feature is merged to the default branch and when it is generally
+available.
+
 
 \subsubsection{Collaboration with Related Projects}
 
