@@ -208,13 +208,14 @@
 % some of them?
 \subsection{Matplotlib's role in scientific computing}
 
-Matplotlib~\cite{Hunter:2007} is a comprehensive open source library
-for creating static, animated, and interactive visualizations in
-Python.  It provides the visualization for missions and projects
-across all SMD divisions, including flagship missions like the Hubble
+Matplotlib~\cite{Hunter:2007} is a comprehensive Python library
+for creating static, animated, and interactive visualizations.
+It provides the visualization for missions and projects
+across all SMD divisions, including flagships like the Hubble
 Space Telescope (HST) and the James Webb Space
 Telescope~\cite{jwst_pipeline} (JWST), and instruments like the
 Curiosity Rover Mastcam~\cite{https://doi.org/10.1002/2016EA000219}.
+
 Matplotlib is part of the Scientific Python Ecosystem (SPE), a loosely
 defined community of projects and programmers with the common goal of
 advancing science through the use of the Python programming language.
@@ -226,9 +227,9 @@ SciPy~\cite{Virtanen2020}. Matplotlib is in the next ring of
 specialized, but still domain agnostic tools, and is the most
 prevalent data visualization library for the SPE.  The outer rings are
 increasingly domain-specific tools, like
-AstroPy~\cite{robitaille2013astropy} which is used for astrophysics,
-SunPy~\cite{sunpy_community2020} which is used for heliophysics, and
-MetPy and CartoPy which are used for Earth Science, all of which use
+AstroPy~\cite{robitaille2013astropy} for astrophysics,
+SunPy~\cite{sunpy_community2020}  for heliophysics, and
+MetPy and Cartopy  for earth sciences; all of these use
 Matplotlib for specialized plotting.  This layered approach gives
 scientists and engineers convenient and powerful high-level tools
 while enabling direct access to the underlying libraries when needed.
@@ -236,7 +237,7 @@ while enabling direct access to the underlying libraries when needed.
 
 \begin{wrapfigure}{r}{0.5\textwidth}
   \includegraphics[width=0.45\textwidth]{scipy-ecosystem}
-  \caption{A schematic of the Scientific Python ecossytem.  At the
+  \caption{A schematic of the Scientific Python ecosytem.  At the
     core we have the Python language itself with concentric rings of
     domain agnostic to domain specific libraries.  Both AstroPy (top
     left) and SunPy (top right), used in the astrophysics and
@@ -247,17 +248,15 @@ while enabling direct access to the underlying libraries when needed.
 \end{wrapfigure}
 
 
-
-Matplotlib is an established open source plotting
-library with a BSD-compatible license that is currently used
-throughout both the SMD science community and the wider scientific
-community.  The initial work on Matplotlib was done in 2002 and the
+Soon after its start by John D. Hunter in 2002, Matplotlib began growing as an
+open source plotting
+library with a BSD-compatible license. The
 first commits in the Matplotlib history date to early 2003.  Over the
 last 17 years Matplotlib has been actively developed and maintained by
 a vibrant, primarily volunteer, community.  Matplotlib has over 1,250
 individual contributors to the code base, with many more individuals
 having contributed in ways not easily tracked, such as answering user
-questions on the mailing list or reporting issues.
+questions on the mailing list and reporting issues.
 
 Matplotlib has a high-level API for quick plotting, such as in
 exploratory data analysis, plus a low-level API that gives full control for
@@ -267,27 +266,27 @@ for output to a variety of vector and raster
 formats including \texttt{svg}, \texttt{eps},
 \texttt{pdf}, and \texttt{png}.
 
-Matplotlib's generality and flexibility means that it is readily extendable to
+Matplotlib's generality and flexibility make it readily extendable to
 many data visualization domains.  A rich ecosystem of downstream packages use
 Matplotlib as their base, providing domain-specific streamlining of
-Matplotlib's API: including yt, astropy, ArviZ, seaborn, xarray, astropy, and
-fast\_histogram.
+Matplotlib's API: including yt, astropy, ArviZ, seaborn, xarray, and astropy.
+% fast\_histogram doesn't have a plot component
 
 Matplotlib is ubiquitous in scientific computing.  Conservative
-estimates based on downloads and web traffic on the documentation,
+estimates based on downloads and on usage of the documentation website
 indicate that Matplotlib has over a million users.  We expect that a
 large fraction of NASA SMD-sponsored projects rely on this shared
-infrastructure to some degree, but this is hard to prove in practice.
+infrastructure to some degree, but this is hard to quantify.
 It is not usual to cite tool chains in scientific literature, so
 citation counts are likely to vastly under-represent the scientific
-use of Matplotlib.  However, a canonical reference for
+use of Matplotlib.  For example, a canonical reference for
 Matplotlib~\cite{Hunter:2007} has over 12,750 citations overall and
 over 4,500 citations in ADS
 \url{https://ui.adsabs.harvard.edu/abs/2007CSE.....9...90H/abstract},
 while a common reference of NumPy~\cite{walt2011numpy} has over 6,800
-citations (these counts illustrate the problem in measuring usage via
+citations. (These counts illustrate the problem in measuring usage via
 citations: Matplotlib depends on NumPy, yet Matplotlib has almost
-twice as many citations).  AstroPy~\cite{robitaille2013astropy} has
+twice as many citations.)  AstroPy~\cite{robitaille2013astropy} has
 about 4,500 citations.
 
 \subsection{Objectives}
@@ -305,37 +304,38 @@ about 4,500 citations.
 Matplotlib is a primarily community-driven project, but we have grown
 to the point where we need supported developers with the time to
 organize, plan, and make decisions.  Supported developers will allow
-us to take on complex projects than cannot be implemented by part-time
-volunteer effort alone while still ensuring that critical day-to-day
-maintenance tasks required to keep the project healthy are done.
+us to take on more complex projects than can be implemented by part-time
+volunteer effort alone, while executing critical day-to-day
+maintenance tasks required to keep the project healthy.
 \textbf{We propose to split the effort on this grant equally between
-  overhauling our internal data representation, and library
+  the two primary activities: overhauling our internal data representation, and library
   maintenance}.
 
 
-\subsubsection{Refactor Internal Data Model}
+\subsubsection{Refactor the Internal Data Model}
 \label{sec:ridm}
 
-Matplotlib is based on visualizing data stored in (Numpy) arrays,
+Matplotlib is based on visualizing data stored in Numpy arrays,
 which is a simple yet flexible data model that has been the
 underpinning of data visualization for the last few decades.  However,
-new data types are being developed and standardized that carry
-structure and metadata beyond just the numerical values of the data.
-Physical units are a key example of metadata that is being added, and
+new data types are being developed and standardized to carry
+structure and metadata along with the numerical values of the data.
+Physical units are a key example of such metadata
 that a plotting package should handle gracefully.  Modern data
 structures can also describe massive data sets and allow performing
-operations on the data without loading the whole data set into memory
-(i.e. dask, xarray); Matplotlib should leverage and be able to work
-out of memory in concert with these packages.
+operations without loading the whole data set into memory
+(i.e. dask, xarray); Matplotlib should leverage these packages
+to work efficiently with Big Data.
 
 Eliding many of the implementation details, Matplotlib can be thought
-of as having three primary layers~\cite{AOSA_mpl}: the user facing
+of as having three primary layers~\cite{AOSA_mpl}: the user-facing plotting
 methods; the \texttt{Artist} layer; and the backends.  The core of the
-architecture is the \texttt{Artist}s which can be understood as
-objects that produce something visible in the output.  Each individual
+architecture is the set of \texttt{Artist}s which can be understood as
+objects that describe something for a backend to render to the output device.
+Each individual
 \texttt{Artist} is responsible for holding the user data and style
 information for part of the final visualization, but the exact data
-held varies between \texttt{Artist} classes.  For example,
+held varies among \texttt{Artist} classes.  For example,
 \texttt{matplotlib.text.Text} is responsible for drawing text and
 holds, among other things, the location of the text, the font family
 and size, the color, and the actual string.  Internally Matplotlib
@@ -343,7 +343,7 @@ represents a \texttt{Figure} as a tree of \texttt{Artist}s.  The
 plotting methods in Matplotlib create these objects and add them to
 the tree.  To render the final output Matplotlib walks the
 \texttt{Artist} tree depth-first and each each \texttt{Artist} is
-responsible for rendering itself to the backend.  Thus, by changing
+responsible for rendering itself via the backend.  Thus, by changing
 the backend we can change the output format from raster to vector
 without making any changes to the \texttt{Artist} tree.
 
@@ -367,8 +367,8 @@ Matplotlib to better separate the data representation from the rest of
 the library.  We are developing a consistent data access API such that
 each \texttt{Artist} will have a single \texttt{DataSource} object
 responsible for providing access to all of the data that the
-\texttt{Artist} needs.  This design will allow us to over come many of
-the issues with the current design and open the door to a variety of
+\texttt{Artist} needs.  This design will allow us to overcome many of
+the issues with the current design, opening the door to
 new functionality.  The current work is expected to produce design
 documents and a proof-of-principal implementation by the end of 2021.
 Based on this preliminary work \textbf{we propose refactoring all of
