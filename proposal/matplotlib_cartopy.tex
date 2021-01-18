@@ -206,31 +206,30 @@
 % not sure that this order is right, but I think we need to hit all of
 % these points.  Maybe want to rename the section headings or merge
 % some of them?
-\subsection{Description of software and relevance to SMD}
+\subsection{Matplotlib's role in scientific computing}
 
-Matplotlib~\cite{Hunter:2007} provides the visualization for  missions and
-projects across all four SMD divisions,
-including
-flagship missions like the Hubble Space Telescope (HST), the James Webb Space
+Matplotlib~\cite{Hunter:2007} provides the visualization for missions
+and projects across all SMD divisions, including flagship
+missions like the Hubble Space Telescope (HST), the James Webb Space
 Telescope~\cite{jwst_pipeline} (JWST), and the Curiosity Rover
-Mastcam~\cite{https://doi.org/10.1002/2016EA000219}.  Matplotlib is part of the
-Scientific
-Python Ecosystem (SPE), a loosely defined community of projects and
-programmers with the common goal of advancing science through the use
-of the Python programming language.  This development is largely
-volunteer work or work that is sponsored implicitly by specific
-science projects.  SPE, shown with a rough schematic in Figure
-\ref{fig:ecosystem}, has a core of general purpose domain-agnostic
-tools, like NumPy~\cite{Harris2020} and SciPy~\cite{Virtanen2020}. Matplotlib
-is in the next ring of specialized, but still domain agnostic tools, and is the
-most prevalent data visualization
-library for the SPE.  The outer rings are increasingly domain-specific tools,
-like
-AstroPy~\cite{robitaille2013astropy} and
-SunPy~\cite{sunpy_community2020}, both of which use Matplotlib for specialized
-plotting.  This layered approach gives
-scientists and engineers convenient and powerful high-level tools
-while enabling direct access to the underlying libraries when needed.
+Mastcam~\cite{https://doi.org/10.1002/2016EA000219}.  Matplotlib is
+part of the Scientific Python Ecosystem (SPE), a loosely defined
+community of projects and programmers with the common goal of
+advancing science through the use of the Python programming language.
+This development is largely volunteer work or work that is sponsored
+implicitly by specific science projects.  SPE, shown with a rough
+schematic in Figure \ref{fig:ecosystem}, has a core of general purpose
+domain-agnostic tools, like NumPy~\cite{Harris2020} and
+SciPy~\cite{Virtanen2020}. Matplotlib is in the next ring of
+specialized, but still domain agnostic tools, and is the most
+prevalent data visualization library for the SPE.  The outer rings are
+increasingly domain-specific tools, like
+AstroPy~\cite{robitaille2013astropy} which is used for astrophysics,
+SunPy~\cite{sunpy_community2020} which is used for heliophysics, and
+MetPy which is used for Earth Science, all of which use Matplotlib for
+specialized plotting.  This layered approach gives scientists and
+engineers convenient and powerful high-level tools while enabling
+direct access to the underlying libraries when needed.
 
 
 \begin{wrapfigure}{r}{0.5\textwidth}
@@ -240,8 +239,8 @@ while enabling direct access to the underlying libraries when needed.
     domain agnostic to domain specific libraries.  Both AstroPy (top
     left) and SunPy (top right), used in the astrophysics and
     heliophysics divisions respectively, rely on Matplotlib.
-    Credit: Jake van der Plas, "The Unexpected Effectiveness of Python
-    in Science", PyCon 2017}
+    Credit: Jake van der Plas, ``The Unexpected Effectiveness of Python
+    in Science'', PyCon 2017}
   \label{fig:ecosystem}
 \end{wrapfigure}
 
@@ -284,7 +283,7 @@ measuring usage via citations: Matplotlib depends on
 NumPy, yet Matplotlib has almost twice as many citations).
 AstroPy~\cite{robitaille2013astropy} has about 4,500 citations.
 
-\subsection{Objectives and Significance}
+\subsection{Objectives}
 
 
 
@@ -299,10 +298,12 @@ AstroPy~\cite{robitaille2013astropy} has about 4,500 citations.
 Matplotlib is a primarily community-driven project, but we have grown
 to the point where we need supported developers with the time to
 organize, plan, and make decisions.  Supported developers will allow
-us to take on complex projects than cannot be implemented by part-time volunteer
-effort alone while still ensuring that critical day-to-day maintenance
-tasks required to keep the project healthy are done.  We propose to
-split the effort on this grant equally between overhauling our internal data representation, and library maintenance.
+us to take on complex projects than cannot be implemented by part-time
+volunteer effort alone while still ensuring that critical day-to-day
+maintenance tasks required to keep the project healthy are done.
+\textbf{We propose to split the effort on this grant equally between
+  overhauling our internal data representation, and library
+  maintenance}.
 
 
 \subsubsection{Refactor Internal Data Model}
