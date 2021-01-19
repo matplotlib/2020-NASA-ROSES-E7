@@ -1,0 +1,191 @@
+* extract PR / issue stats from GH
+
+** ghapi way
+This only sort of works
+#+begin_src python
+  import matplotlib
+  import pandas as pd
+  from pathlib import Path
+  with open(Path('~/.ghoauth').expanduser(), 'r') as fin:
+      token = fin.read()
+  from ghapi.all import GhApi, pages
+  from fastcore.net import HTTP403ForbiddenError
+  from urllib.error import HTTPError
+  import time
+  import datetime
+  api = GhApi(owner='matplotlib', repo='matplotlib', token=token)
+
+  def get_all_the_issues(api_call):
+      api = api_call.client
+      cooloff = 90
+      N = 10
+      for j in range(N):
+          try:
+              # hit the API once to get to the right last page
+              _ = api_call(state='all')
+              print(f"{api.last_page()=}")
+              if api.last_page() == 0:
+                  continue
+              issues = pages(api_call, api.last_page(), state='all').concat()
+          except (HTTP403ForbiddenError, HTTPError) as e:
+              print(e)
+              # for reasons that are unclear this can produces 403
+              # errors sometimes it works if you give it time and hit it
+              # again?!  Assume for very old pages GH does not keep them
+              # up and has to regenerate, that times out which ends up
+              # coming back as a 403?
+              time.sleep(cooloff)
+          else:
+              return issues
+      else:
+          raise TimeoutError(f'failed to get all of {api_call} in {N} tries with {cooloff}')
+
+  # sometimes this takes a while, if at first it fails, try again!
+  all_pulls = get_all_the_issues(api.pulls.list)
+  all_issues_and_pulls = get_all_the_issues(api.issues.list_for_repo)
+
+
+
+#+end_src
+** gidgethub way
+#+begin_src python
+  import aiohttp
+  import gidgethub
+  import gidgethub.aiohttp
+  import re
+  import pymongo
+  import asyncio
+
+  conn = pymongo.MongoClient()
+  db = conn.get_database('mpl_info')
+  col = db.get_collection('log')
+  m_cache = db.get_collection('cache')
+  issues = db.get_collection('issues')
+
+
+  def dump_cache(cache, m_cache):
+      for k, v in cache.items():
+          m_cache.replace_one({'k': k}, {'k': k, 'v': v}, upsert=True)
+
+  def restore_cache(cache, m_cache):
+      for doc in m_cache.find():
+          cache[doc['k']] = doc['v']
+
+
+  try:
+      with open(os.path.expanduser('~/.ghoauth'), 'r') as f:
+          oauth_token = f.read()
+  except FileNotFoundError:
+      oauth_token = None
+
+  try:
+      cache
+  except NameError:
+      cache = {}
+      restore_cache(cache, m_cache)
+
+  async def get_issues(org, repo, oauth_token):
+      async with aiohttp.ClientSession() as session:
+          gh = gidgethub.aiohttp.GitHubAPI(session, 'tacaswell',
+                                           oauth_token=oauth_token, cache=cache)
+          data = []
+          async for d in gh.getiter(f"/repos/{org}/{repo}/issues{{?state}}",
+                                    {'state': 'all'}):
+              data.append(d)
+
+          dump_cache(cache, m_cache)
+          return data
+
+  async def get_new_contributor_prs(org, repo, oauth_token):
+      async with aiohttp.ClientSession() as session:
+          gh = gidgethub.aiohttp.GitHubAPI(session, 'tacaswell',
+                                           oauth_token=oauth_token, cache=cache)
+          data = []
+          async for d in gh.getiter(f"/repos/{org}/{repo}/issues{{?state}}",
+                                    {'state': 'open'}):
+              if (d['author_association'] in {'CONTRIBUTOR', 'FIRST_TIME_CONTRIBUTOR'} and
+                  'pull_request' in d):
+
+                  data.append(d)
+              if len(data) > 10:
+                  break
+
+          dump_cache(cache, m_cache)
+          return data
+
+  #d_issues = await get_issues('matplotlib', 'matplotlib', oauth_token)
+  # for d in new_issues:
+  #    print(f"{d['user']['login']: <20} {d['author_association']: <24} {d['pull_request']['url']}")
+
+#+end_src
+** plotting
+
+#+begin_src python
+  def split_issuse_from_pr(all_issues):
+      issues = []
+      prs = []
+
+      for issue in all_issues:
+          if 'pull_request' in issue:
+              prs.append(issue)
+          else:
+              issues.append(issue)
+
+      return issues, prs
+
+
+  issues, prs = split_issuse_from_pr(d_issues)
+#+end_src
+
+#+begin_src python
+  import matplotlib.pyplot as plt
+
+
+  def plot_by(gh_issues, *, ax=None, freq="M", label, show_net=True, show_rolling=False):
+
+      opened = pd.Series(
+          1,
+          index=[
+              datetime.datetime.strptime(p["created_at"], "%Y-%m-%dT%H:%M:%SZ")
+              for p in gh_issues
+          ],
+      )
+      closed = pd.Series(
+          -1,
+          index=[
+              datetime.datetime.strptime(p["closed_at"], "%Y-%m-%dT%H:%M:%SZ")
+              for p in gh_issues
+              if p["state"] != "open"
+          ],
+      )
+      all_at = pd.concat([closed, opened])
+      opened_by, closed_by = map(
+          lambda x: x.groupby(pd.Grouper(freq=freq)), (opened, closed)
+      )
+      if ax is None:
+          fig, ax = plt.subplots()
+      if show_net:
+          all_at.sort_index().cumsum().plot(lw=2, ax=ax, label=f"net open {label}")
+      (close_step,) = ax.step(
+          closed_by.sum().index,
+          closed_by.sum().values,
+          where="pre",
+          label=f"{label}s closed/{freq}",
+      )
+      (open_step,) = ax.step(
+          opened_by.sum().index,
+          opened_by.sum().values,
+          where="pre",
+          label=f"{label} opened/{freq}",
+      )
+      if show_rolling:
+          for data, step in [(opened_by, open_step), (closed_by, close_step)]:
+              ax.plot(
+                  data.sum().rolling(3).mean().index,
+                  data.sum().rolling(3).mean().values,
+                  color=step.get_color(),
+                  lw=2,
+              )
+
+      ax.legend()
+#+end_src
