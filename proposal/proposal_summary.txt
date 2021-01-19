@@ -1,0 +1,58 @@
+Matplotlib is a comprehensive, community developed, Python library for
+creating static, animated, and interactive visualizations which is
+used throughout SMD community.  Historically Matplotlib has been
+developed and maintained with primarily volunteer effort, however this
+is no longer sustainable.  Supported developers will allow us to take
+on more complex projects than can be implemented by part-time
+volunteer effort alone, while executing critical day-to-day
+maintenance tasks required to keep the project healthy.  We propose to
+split the effort on this grant equally between the two primary
+activities: overhauling our internal data representation, and library
+maintenance.
+
+Matplotlib is based on visualizing data stored in Numpy arrays, which
+is a simple yet flexible data model that has been the underpinning of
+data visualization for the last few decades.  However, modern data
+structures are much richer with the ability to carry additional
+meta-data or describe massive data sets and allow performing
+operations without loading the whole data set into memory.  We propose
+to refactor Matplotlib's internal representation of data to enable
+exploiting these developments.
+
+
+An immediate motivation for this refactor is to improve Matplotlib's
+handling of data with physical units attached.  While, Matplotlib
+currently supports plotting data with physical units attached, however
+there are inconsistencies across the library.  This refactor will
+allow use to consolidate the unit handling and standardize the
+behavior across the library.  There is a broad recognition across the
+SPE of the importance of supporting physical units as an intrinsic
+component of computation.  There is on-going work in NumPy (NEP40-43),
+pandas, and xarray to add support for physical units to their
+foundational data structures.  The proposed work will ensure that
+Matplotlib can take advantage of such efforts, for seamless handling
+of data with units from computation to visualization.  Additionally,
+this refactor will lay the ground work for future enhancements such
+as, smart resampling, native consumption of structured data, seamless
+updating, and alternative data sources such as analytic functions or
+database queries.
+
+
+To sustain Matplotlib and continue to support the hundred of thousands
+of users and hundreds of downstream packages there is maintenance work
+that needs to be done.  This includes tasks like promptly fixing
+critical bugs and regressions as they are reported, producing regular
+releases, answering user questions, facilitating discussions,
+community management, and general project management.  Dedicated
+full-time developers help ensure that things happen in a consistent
+and timely manner, and provide the crucial roadmaps that will steer
+the future of the library
+
+
+Matplotlib is used throughout the SMD community, including flagship
+missions like the Hubble Space Telescope and the James Webb Space
+Telescope.  Domain specific libraries, such as AstroPy (astrophyics),
+sunpy (heliophysics), cartopy (earth science), extend Matplotlib to
+provide specialized plotting.  Given the breadth Matplotlib usage
+across the SMD divisions, small investments in Matplotlib will have
+returns across the entire SMD portfolio.
