@@ -208,13 +208,13 @@
 % some of them?
 \subsection{Matplotlib's role in scientific computing}
 
-Matplotlib~\cite{Hunter:2007} is a comprehensive Python library
-for creating static, animated, and interactive visualizations.
-It provides the visualization for missions and projects
-across all SMD divisions, including flagships like the Hubble
-Space Telescope (HST) and the James Webb Space
-Telescope~\cite{jwst_pipeline} (JWST), and instruments like the
-Curiosity Rover Mastcam~\cite{https://doi.org/10.1002/2016EA000219}.
+Matplotlib~\cite{Hunter:2007} is a comprehensive Python library for
+creating static, animated, and interactive visualizations.  It
+provides the visualization for projects across all SMD divisions,
+including flagship missions like the Hubble Space Telescope (HST) and
+the James Webb Space Telescope~\cite{jwst_pipeline} (JWST), and
+instruments like the Curiosity Rover
+Mastcam~\cite{https://doi.org/10.1002/2016EA000219}.
 
 Matplotlib is part of the Scientific Python Ecosystem (SPE), a loosely
 defined community of projects and programmers with the common goal of
@@ -227,9 +227,10 @@ SciPy~\cite{Virtanen2020}. Matplotlib is in the next ring of
 specialized, but still domain agnostic tools, and is the most
 prevalent data visualization library for the SPE.  The outer rings are
 increasingly domain-specific tools, like
-AstroPy~\cite{robitaille2013astropy} for astrophysics,
+AstroPy~\cite{astropy:2013,
+  astropy:2018} for astrophysics,
 SunPy~\cite{sunpy_community2020}  for heliophysics, and
-MetPy and Cartopy  for earth sciences; all of these use
+MetPy~\cite{metpy} and cartopy~\cite{Cartopy} for earth sciences; all of these use
 Matplotlib for specialized plotting.  This layered approach gives
 scientists and engineers convenient and powerful high-level tools
 while enabling direct access to the underlying libraries when needed.
@@ -269,8 +270,12 @@ formats including \texttt{svg}, \texttt{eps},
 Matplotlib's generality and flexibility make it readily extendable to
 many data visualization domains.  A rich ecosystem of downstream packages use
 Matplotlib as their base, providing domain-specific streamlining of
-Matplotlib's API: including yt, astropy, ArviZ, seaborn, xarray, and astropy.
-% fast\_histogram doesn't have a plot component
+Matplotlib's API: including
+yt~\cite{2011ApJS..192....9T}, AstroPy~\cite{astropy:2013,
+  astropy:2018}, ArviZ~\cite{arviz_2019},
+seaborn~\cite{waskom2020seaborn}, xarray~\cite{hoyer2017xarray},
+cartopy~\cite{Cartopy}, corner.py~\cite{corner} and
+mpl-scatter-density~\cite{mpl-scatter-density}.
 
 Matplotlib is ubiquitous in scientific computing.  Conservative
 estimates based on downloads and on usage of the documentation website
@@ -281,17 +286,13 @@ It is not usual to cite tool chains in scientific literature, so
 citation counts are likely to vastly under-represent the scientific
 use of Matplotlib.  For example, a canonical reference for
 Matplotlib~\cite{Hunter:2007} has over 12,750 citations overall and
-over 4,500 citations in ADS
-\url{https://ui.adsabs.harvard.edu/abs/2007CSE.....9...90H/abstract},
+over 4,500 citations in ADS~\cite{ads_mpl},
 while a common reference of NumPy~\cite{walt2011numpy} has over 6,800
-citations. (These counts illustrate the problem in measuring usage via
+citations. These counts illustrate the problem in measuring usage via
 citations: Matplotlib depends on NumPy, yet Matplotlib has almost
-twice as many citations.)  AstroPy~\cite{robitaille2013astropy} has
-about 4,500 citations.
+twice as many citations.
 
 \subsection{Objectives}
-
-
 
 % - need to re-engineer Matplotlib's data model
 % - have on-going work to do design and prototypes
@@ -442,7 +443,7 @@ support of physical units, this refactoring will lay the ground work for
 
 \subsubsection{General maintenance}
 
-Concurrently with rewiring Matplotlib's data model,
+While rewiring Matplotlib's data model,
 we need to sustain Matplotlib as a vibrant project and
 continue to support the hundred of thousands of users and hundreds of
 downstream packages.  To maintain Matplotlib's health we must:
@@ -477,15 +478,15 @@ bug fixes that would improve the libraries for direct users and
 downstream packages.  The large backlog is discouraging for new and
 occasional contributors and distracting for core developers.
 
-In 2020, with a grant from CZI supporting a Research Software Engineer (RSE)
-working on Matplotlib, we resolved 125-200 PRs and
-75-125 issues per month.  However, even at this rate we only
-reduced the PR backlog by 70 open PRs and held the issue
-backlog even.  As part of reducing the backlog, we were able to fix several
-long-standing bugs.  We have demonstrated that supporting maintenance
-work has a positive effect on the health of the project and
-\textbf{the additional resources requested here will further reduce,
-  but not eliminate, the maintenance backlog}.
+In 2020, with a grant from CZI supporting a Research Software Engineer
+(RSE) working on Matplotlib for 10 month, we resolved 2,056 PRs and
+999 issues.  However, even at this rate we only reduced the PR backlog
+by 70 open PRs and held the issue backlog even.  As part of reducing
+the backlog, we were able to fix several long-standing bugs.  We have
+demonstrated that supporting maintenance work has a positive effect on
+the health of the project and \textbf{the additional resources
+  requested here will further reduce, but not eliminate, the
+  maintenance backlog}.
 
 
 
@@ -503,7 +504,10 @@ almost 10M Jupyter notebooks on github found that over 3M of them have
 a direct Matplotlib import~\cite{datalore:2020}.
 
 These measures show broad impact but cover many uses outside of the
-SMD community.  Soliciting on social media for examples of Matplotlib in SMD research
+SMD community.  If we restrict the static analysis to
+\url{https://github.com/nasa}, NASA's official organization on GitHub,
+we see that 53 of the 330 hosted repositories make reference to
+Matplotlib.  Soliciting on social media for examples of Matplotlib in SMD research
 yielded a (non-exhaustive) list including:
 \begin{itemize}[noitemsep]
 \item
@@ -544,18 +548,15 @@ academic papers, plotting for news and sporting media, technical
 dash-boarding, and most modern data science applications.  As of
 2018Q2 over a third of papers published to astro-ph on the Arxiv
 contained a figure generated with
-Matplotlib~\footnote{\url{https://dxl.ncsa.illinois.edu/arxiv/index.html}},
+Matplotlib~\cite{arxvi_stats},
 with a clear upward trend.  Matplotlib has also been used in a number
-of high-profile astronomy projects including the Nobel Prize-winning
+of high-profile astronomy projects including the Nobel prize-winning
 observation of black hole merger by the Laser Interferometer
-Gravitational-Wave Observatory (LIGO) and the recent observation of
-Sagittarius A* by the Event Horizon Telescope (EHT).
-%   Support for
-% Matplotlib will improve outcomes across disciplines, but in particular
-% Matplotlib is heavily used across SMD divisions, and by scientists in
-% academia who work with NASA in engineering, planetary science,
-% astrophysics, heliophysics, and earth observation.
-%% Getting too repetitive?  I think so.
+Gravitational-Wave Observatory (LIGO), the 2020 Nobel prize-winning
+discovery of a super massive compact object at the center of our
+galaxy and the recent observation of Sagittarius A* by the Event
+Horizon Telescope (EHT).
+
 
 This proposal is another step towards Matplotlib's sustainability, and
 ability to move forward. Given the usage and the scale of the library
@@ -728,18 +729,17 @@ behavior when resolving inconsistencies.
 
 \paragraph{Refactor Planning and Design}
 
-The data pipeline refactor is a critical part of the library that touches most artists, so we require a comprehensive plan.  As part
-of developing this plan we will reach out to upstream data-structure
+The data pipeline refactor is a critical part of the library that
+touches most artists, so we require a comprehensive plan.  As part of
+developing this plan we will reach out to upstream data-structure
 libraries, such as pandas, numpy, xarray and the Consortium for Python
 Data API Standards~\footnote{https://data-apis.org/}, to downstream
 libraries, such as astropy, yt, and sunpy, and to users of the unit
-machinery, such as \texttt{unyt} (\url{https://unyt.readthedocs.io/}),
-\texttt{pint} (\url{https://pint.readthedocs.io/}),
-\texttt{astropy.units}
-(\url{https://docs.astropy.org/en/stable/units/}), and the Monte
-developers at JPL.  This will be a unique chance to change the
-internal architecture of Matplotlib and we need to ensure that we
-engage with all stakeholders.
+machinery, such as \texttt{unyt}~\cite{Goldbaum2018},
+\texttt{pint}~\cite{pint}, \texttt{astropy.units}~\cite{astropy:2013,
+  astropy:2018, astropyunits}, and the Monte developers at JPL.  This
+will be a unique chance to change the internal architecture of
+Matplotlib and we need to ensure that we engage with all stakeholders.
 
 \paragraph{API Design} The core of the refactor will be a newly developed \texttt{DataSource}
 interface.  This will provide a consistent interface between the
@@ -824,10 +824,6 @@ and is the final authority for this task.
 
 Matplotlib is a NumFOCUS Fiscally Sponsored Project.
 
-% to citation
-%The project governance is specified at
-%\url{https://github.com/matplotlib/governance/blob/master/governance.md}.
-
 Matplotlib is governed by a steering council, a Project Lead (PL), and
 several Deputy Project Leads (DPL)~\cite{gov}.  We are a community
 project and try to make all decisions, both strategic and day-to-day,
@@ -844,8 +840,6 @@ adopted the current governance model.
 
 \subsubsection{License}
 
-%(\url{https://matplotlib.org/users/license.html})
-%(\url{https://docs.python.org/3/license.html})
 Matplotlib is licensed under the Matplotlib License~\cite{mpl_lic}
 which is a derivative of the Python Software Foundation
 license~\cite{psf_lic} and is a permissive license compatible with the
@@ -1216,24 +1210,25 @@ Matplotlib is a software library and does not produce any scientific
 data as defined in E.1.2 that needs to be preserved.  Matplotlib is a
 tool used to visualize data that is acquired through other means.
 
-Matplotlib is currently developed in the open on GitHub and is
-released under a permissive license (the Matplotlib license which is a
-derivative of the PSF license and compatible with BSD-3).  All work
-done on Matplotlib as part of this grant will be done through the
-current workflow, will be publicly available, and released under the
-same license.  Matplotlib uses git for version control, thus every
-developer has the full history on their computer which provides
-significant redundancy.  Tagged releases of the software are published
-to PyPI (in both source and binary forms).  In addition, Anaconada,
-macports, homebrew, and all major Linux distributions independently
-build, package, and distribute Matplotlib.  Extensive User facing
-documentation, including install instructions and usage guides, is
-built and hosted at \url{https://matplotlib.org}.
+Matplotlib is a community library developed in the open on GitHub.
+It is released the Matplotlib license
+(\url{https://matplotlib.org/users/license.html}) is a permissive
+license that is a derivative of the PSF license
+(\url{https://docs.python.org/3/license.html}) and compatible with the
+BSD-3 license.  All work done on Matplotlib as part of this grant will
+be done through the current workflow, will be publicly available, and
+released under the same license.  Matplotlib uses git for version
+control, thus every developer has the full history on their computer
+which provides significant redundancy.  Tagged releases of the
+software are published to PyPI (in both source and binary forms).  In
+addition, Anaconada, macports, homebrew, and all major Linux
+distributions independently build, package, and distribute Matplotlib.
+Extensive User facing documentation, including install instructions
+and usage guides, is built and hosted at \url{https://matplotlib.org}.
 
 Any new libraries created as part of the ROSES award will be developed
 in the open on GitHub and will released under a permissive license.
 
-% do we need this?
 Any incidental work on other software packages, either upstream or
 downstream of Matplotlib, will follow the license and development of
 process of those projects.
