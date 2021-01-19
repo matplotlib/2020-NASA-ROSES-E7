@@ -1,3 +1,13 @@
+Here we propose full time support for a software developer and partial support
+for the Matplotlib project lead. This will allow us to take
+on more complex projects than can be implemented by part-time
+volunteer effort alone, while executing critical day-to-day
+maintenance tasks required to keep the project healthy.  We propose to
+split the effort on this grant equally between the two primary
+activities: overhauling our internal data representation with a particular
+focus on supporting physical units, and general library maintenance and
+community development.
+
 Matplotlib is a comprehensive Python library for
 creating numerical visualizations, widely used throughout the technical and
 scientific domains, and particular in the SMD community.  Matplotlib is an
@@ -10,15 +20,6 @@ users and developers, and plan for future improvements that can meet
 modern computing challenges, we are asking for modest support in terms of
 person hours.
 
-Here we propose full time support for a software developer and partial support
-for the Matplotlib project lead. This will allow us to take
-on more complex projects than can be implemented by part-time
-volunteer effort alone, while executing critical day-to-day
-maintenance tasks required to keep the project healthy.  We propose to
-split the effort on this grant equally between the two primary
-activities: overhauling our internal data representation with a particular
-focus on supporting physical units, and general library maintenance and
-community development.
 
 Matplotlib is based on visualizing data stored in Numpy arrays, which
 is a simple yet flexible data model that has been the underpinning of
