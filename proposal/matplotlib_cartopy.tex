@@ -208,13 +208,14 @@
 % some of them?
 \subsection{Matplotlib's role in scientific computing}
 
-Matplotlib~\cite{Hunter:2007} is a comprehensive open source library
-for creating static, animated, and interactive visualizations in
-Python.  It provides the visualization for missions and projects
-across all SMD divisions, including flagship missions like the Hubble
+Matplotlib~\cite{Hunter:2007} is a comprehensive Python library
+for creating static, animated, and interactive visualizations.
+It provides the visualization for missions and projects
+across all SMD divisions, including flagships like the Hubble
 Space Telescope (HST) and the James Webb Space
 Telescope~\cite{jwst_pipeline} (JWST), and instruments like the
 Curiosity Rover Mastcam~\cite{https://doi.org/10.1002/2016EA000219}.
+
 Matplotlib is part of the Scientific Python Ecosystem (SPE), a loosely
 defined community of projects and programmers with the common goal of
 advancing science through the use of the Python programming language.
@@ -226,9 +227,9 @@ SciPy~\cite{Virtanen2020}. Matplotlib is in the next ring of
 specialized, but still domain agnostic tools, and is the most
 prevalent data visualization library for the SPE.  The outer rings are
 increasingly domain-specific tools, like
-AstroPy~\cite{robitaille2013astropy} which is used for astrophysics,
-SunPy~\cite{sunpy_community2020} which is used for heliophysics, and
-MetPy and CartoPy which are used for Earth Science, all of which use
+AstroPy~\cite{robitaille2013astropy} for astrophysics,
+SunPy~\cite{sunpy_community2020}  for heliophysics, and
+MetPy and Cartopy  for earth sciences; all of these use
 Matplotlib for specialized plotting.  This layered approach gives
 scientists and engineers convenient and powerful high-level tools
 while enabling direct access to the underlying libraries when needed.
@@ -236,7 +237,7 @@ while enabling direct access to the underlying libraries when needed.
 
 \begin{wrapfigure}{r}{0.5\textwidth}
   \includegraphics[width=0.45\textwidth]{scipy-ecosystem}
-  \caption{A schematic of the Scientific Python ecossytem.  At the
+  \caption{A schematic of the Scientific Python ecosytem.  At the
     core we have the Python language itself with concentric rings of
     domain agnostic to domain specific libraries.  Both AstroPy (top
     left) and SunPy (top right), used in the astrophysics and
@@ -247,17 +248,15 @@ while enabling direct access to the underlying libraries when needed.
 \end{wrapfigure}
 
 
-
-Matplotlib is an established open source plotting
-library with a BSD-compatible license that is currently used
-throughout both the SMD science community and the wider scientific
-community.  The initial work on Matplotlib was done in 2002 and the
+Soon after its start by John D. Hunter in 2002, Matplotlib began growing as an
+open source plotting
+library with a BSD-compatible license. The
 first commits in the Matplotlib history date to early 2003.  Over the
 last 17 years Matplotlib has been actively developed and maintained by
 a vibrant, primarily volunteer, community.  Matplotlib has over 1,250
 individual contributors to the code base, with many more individuals
 having contributed in ways not easily tracked, such as answering user
-questions on the mailing list or reporting issues.
+questions on the mailing list and reporting issues.
 
 Matplotlib has a high-level API for quick plotting, such as in
 exploratory data analysis, plus a low-level API that gives full control for
@@ -267,27 +266,27 @@ for output to a variety of vector and raster
 formats including \texttt{svg}, \texttt{eps},
 \texttt{pdf}, and \texttt{png}.
 
-Matplotlib's generality and flexibility means that it is readily extendable to
+Matplotlib's generality and flexibility make it readily extendable to
 many data visualization domains.  A rich ecosystem of downstream packages use
 Matplotlib as their base, providing domain-specific streamlining of
-Matplotlib's API: including yt, astropy, ArviZ, seaborn, xarray, astropy, and
-fast\_histogram.
+Matplotlib's API: including yt, astropy, ArviZ, seaborn, xarray, and astropy.
+% fast\_histogram doesn't have a plot component
 
 Matplotlib is ubiquitous in scientific computing.  Conservative
-estimates based on downloads and web traffic on the documentation,
+estimates based on downloads and on usage of the documentation website
 indicate that Matplotlib has over a million users.  We expect that a
 large fraction of NASA SMD-sponsored projects rely on this shared
-infrastructure to some degree, but this is hard to prove in practice.
+infrastructure to some degree, but this is hard to quantify.
 It is not usual to cite tool chains in scientific literature, so
 citation counts are likely to vastly under-represent the scientific
-use of Matplotlib.  However, a canonical reference for
+use of Matplotlib.  For example, a canonical reference for
 Matplotlib~\cite{Hunter:2007} has over 12,750 citations overall and
 over 4,500 citations in ADS
 \url{https://ui.adsabs.harvard.edu/abs/2007CSE.....9...90H/abstract},
 while a common reference of NumPy~\cite{walt2011numpy} has over 6,800
-citations (these counts illustrate the problem in measuring usage via
+citations. (These counts illustrate the problem in measuring usage via
 citations: Matplotlib depends on NumPy, yet Matplotlib has almost
-twice as many citations).  AstroPy~\cite{robitaille2013astropy} has
+twice as many citations.)  AstroPy~\cite{robitaille2013astropy} has
 about 4,500 citations.
 
 \subsection{Objectives}
@@ -305,37 +304,38 @@ about 4,500 citations.
 Matplotlib is a primarily community-driven project, but we have grown
 to the point where we need supported developers with the time to
 organize, plan, and make decisions.  Supported developers will allow
-us to take on complex projects than cannot be implemented by part-time
-volunteer effort alone while still ensuring that critical day-to-day
-maintenance tasks required to keep the project healthy are done.
+us to take on more complex projects than can be implemented by part-time
+volunteer effort alone, while executing critical day-to-day
+maintenance tasks required to keep the project healthy.
 \textbf{We propose to split the effort on this grant equally between
-  overhauling our internal data representation, and library
+  the two primary activities: overhauling our internal data representation, and library
   maintenance}.
 
 
-\subsubsection{Refactor Internal Data Model}
+\subsubsection{Refactor the Internal Data Model}
 \label{sec:ridm}
 
-Matplotlib is based on visualizing data stored in (Numpy) arrays,
+Matplotlib is based on visualizing data stored in Numpy arrays,
 which is a simple yet flexible data model that has been the
 underpinning of data visualization for the last few decades.  However,
-new data types are being developed and standardized that carry
-structure and metadata beyond just the numerical values of the data.
-Physical units are a key example of metadata that is being added, and
+new data types are being developed and standardized to carry
+structure and metadata along with the numerical values of the data.
+Physical units are a key example of such metadata
 that a plotting package should handle gracefully.  Modern data
 structures can also describe massive data sets and allow performing
-operations on the data without loading the whole data set into memory
-(i.e. dask, xarray); Matplotlib should leverage and be able to work
-out of memory in concert with these packages.
+operations without loading the whole data set into memory
+(i.e. dask, xarray); Matplotlib should leverage these packages
+to work efficiently with Big Data.
 
 Eliding many of the implementation details, Matplotlib can be thought
-of as having three primary layers~\cite{AOSA_mpl}: the user facing
+of as having three primary layers~\cite{AOSA_mpl}: the user-facing plotting
 methods; the \texttt{Artist} layer; and the backends.  The core of the
-architecture is the \texttt{Artist}s which can be understood as
-objects that produce something visible in the output.  Each individual
+architecture is the set of \texttt{Artist}s which can be understood as
+objects that describe something for a backend to render to the output device.
+Each individual
 \texttt{Artist} is responsible for holding the user data and style
 information for part of the final visualization, but the exact data
-held varies between \texttt{Artist} classes.  For example,
+held varies among \texttt{Artist} classes.  For example,
 \texttt{matplotlib.text.Text} is responsible for drawing text and
 holds, among other things, the location of the text, the font family
 and size, the color, and the actual string.  Internally Matplotlib
@@ -343,7 +343,7 @@ represents a \texttt{Figure} as a tree of \texttt{Artist}s.  The
 plotting methods in Matplotlib create these objects and add them to
 the tree.  To render the final output Matplotlib walks the
 \texttt{Artist} tree depth-first and each each \texttt{Artist} is
-responsible for rendering itself to the backend.  Thus, by changing
+responsible for rendering itself via the backend.  Thus, by changing
 the backend we can change the output format from raster to vector
 without making any changes to the \texttt{Artist} tree.
 
@@ -367,71 +367,70 @@ Matplotlib to better separate the data representation from the rest of
 the library.  We are developing a consistent data access API such that
 each \texttt{Artist} will have a single \texttt{DataSource} object
 responsible for providing access to all of the data that the
-\texttt{Artist} needs.  This design will allow us to over come many of
-the issues with the current design and open the door to a variety of
+\texttt{Artist} needs.  This design will allow us to overcome many of
+the issues with the current design, opening the door to
 new functionality.  The current work is expected to produce design
 documents and a proof-of-principal implementation by the end of 2021.
 Based on this preliminary work \textbf{we propose refactoring all of
   Matplotlib to use the new data model}.  The proposed design is
 consistent with the rest of the architecture; just as the
 \texttt{Artist}s are currently agnostic to the backend used, the
-\texttt{Artist}s will be agnostic to exactly how their underlying data
-is stored.
+\texttt{Artist}s will be agnostic to the internals of its \texttt{DataSource}.
 
 An immediate motivation for this refactor is to improve
 Matplotlib's handling of data with physical units attached.  Units are
-fundamental to science and engineering, however most numerical
-software is unit-naive.  It is the user's responsibility to keep track
-of and correctly convert data to consistent units prior to any
+fundamental to science and engineering, but most numerical
+software is unit-naive.  It is the user's responsibility to
+convert data to consistent units prior to any
 computation.  Failing to do so leads to the most insidious of bugs:
 everything ``works'' but silently gives incorrect results!  There are
 several libraries which provide unit-aware data structures in Python
 that can be used with Matplotlib for unit-aware plotting.
 \textbf{This capability is currently used to support spaceflight
   operations by Monte, JPL's mission design and navigation software
-  system} and the initial development in Matplotlib was supported by
-NASA.
+  system}; NASA supported its initial development in Matplotlib.
 
 
 
 % to what extent mpl currently supports units
 
 The current support for physical units in Matplotib is based on
-inspecting the data type passed by the user.  When the unit-full data
-is passed by the user Matplotlib looks up a converter and sets
-default axis label, limits, and functions for locating and formatting
+inspecting the incoming data type.  When the the data structure supplied by
+the user includes units, Matplotlib looks for a registered converter and sets
+default axis labels, limits, and functions for locating and formatting
 the ticks.  Internally, Matplotlib uses the unit machinery to handle
-datetime and string-categorical types and third-party libraries are
-able to register their own converters.  Using this machinery users can
-control what units the data is plotting in, which may be different
-than the units it was passed in as, and specify the limits in physical
+datetime and string-categorical types. Third-party libraries are
+able to register their own converters.  With this machinery users can
+control the units in which the data is plotted, which may differ from
+the units in which it was supplied.  Axis limits may be specified
+in physical
 units.
 
 % what is wrong
-However, there are several problems with the current unit support in
-Matplotlib.  It is under-documented making it difficult for users to
-understand and use the capability and for developers to extend.
-Coupled with a lack of full test coverage of using physical units,
-over time the inconsistencies mentioned above have accumulated in the
+There are several problems with the current unit support in
+Matplotlib.  It is under-documented, making it hard for users to
+understand and use, and hard for developers to extend.  Test
+coverage is incomplete, and inconsistencies have accumulated in the
 code base.  These range from subtle inconsistencies between plotting
-methods to unit-full data simply not working with some methods.
+methods to data with units simply not working with some methods.
 \textbf{To address this we propose to use unit-handling as a
   motivating feature while doing the \texttt{DataSource} refactoring}.
-By implementing all of the unit logic in the \texttt{DataSource} we
-will be able to share the code across all \texttt{Artist}s and unify
-how we treat units across the library.
-
+Unit logic will be consolidated in the \texttt{DataSource}.
+% By implementing all of the unit logic in the \texttt{DataSource} we
+% will be able to share the code across all \texttt{Artist}s and unify
+% how we treat units across the library.
+%% The original sentence was confusing to me, and, I think, unnecessary.
 
 There is a broad recognition across the SPE of the importance of
 supporting physical units as an intrinsic component of computation.
-There is on going work in NumPy (NEP40-43), pandas, and xarray to add
-support for physical units to the foundational data structures.  The
-proposed work in Matplotlib will ensure that Matplotlib is ready to
-plotting unit-full data to provide users with a complete solution to
-working with unit-aware data.
+There is on-going work in NumPy (NEP40-43), pandas, and xarray to add
+support for physical units to their foundational data structures.  The
+proposed work will ensure that Matplotlib can take advantage
+of such efforts, for seamless handling of data with units from computation
+to visualization.
 
-In addition to fixing
-the support of physical units, this refactor will lay the ground work for
+In addition to fixing problems with the current
+support of physical units, this refactoring will lay the ground work for
 \begin{itemize}[noitemsep]
   \item smart down-sampling of plotted data based on view limits,
   \item native consumption of structured data,
@@ -443,16 +442,16 @@ the support of physical units, this refactor will lay the ground work for
 
 \subsubsection{General maintenance}
 
-At the same time as rewiring Matplotlib's data model, there is work
-that needs to be done to sustain Matplotlib as a vibrant project and
-provide support for the hundred of thousands of users and hundreds of
-downstream packages.  To maintain Matplotlib's health we need to:
+Concurrently with rewiring Matplotlib's data model,
+we need to sustain Matplotlib as a vibrant project and
+continue to support the hundred of thousands of users and hundreds of
+downstream packages.  To maintain Matplotlib's health we must:
 \begin{itemize}[noitemsep]
 \item fix critical bugs and regressions promptly as they are reported;
-\item triage Issues and PRs in terms of topic, difficulty, and
+\item make improvements while maintaining backward compatibility and
+  documenting changes;
+\item categorize Issues and PRs in terms of topic, difficulty, and
   urgency;
-\item maintain backward compatibility and extensively document
-  intentional changes;
 \item entrain new contributors to sustain and diversify the community
   developer team;
 \item maintain the continuous-integration infrastructure;
@@ -461,9 +460,10 @@ downstream packages.  To maintain Matplotlib's health we need to:
   and API changes.
 \end{itemize}
 These are tasks that are never ``done''; users find new ways to use
-the library expose previously un-detected bugs, request, or propose new
-features and the world continues to changes around us.   \textbf{Dedicated
-full-time developers help ensure that things happen in a consistent and timely manner, and provide the crucial roadmaps that will steer the future of the library}.
+the library, they expose previously un-detected bugs, they request or propose new
+features, and the world continues to changes around us.   \textbf{Dedicated
+full-time developers help ensure that things happen in a consistent and timely
+manner, and provide the crucial roadmaps that will steer the future of the library}.
 
 
 %plot?
@@ -477,12 +477,12 @@ bug fixes that would improve the libraries for direct users and
 downstream packages.  The large backlog is discouraging for new and
 occasional contributors and distracting for core developers.
 
-In 2020 Matplotlib supported a Research Software Engineer (RSE)
-working on Matplotlib, during which time we resolved 125-200 PRs and
-75-125 issues a month.  However even at this rate on net we only
-reduced the PR backlog by 70 open PRs and held even on the issue
-backlog.  As part of reducing the backlog, we were able to fix several
-long standing bugs.  We have demonstrated that supporting maintenance
+In 2020, with a grant from CZI supporting a Research Software Engineer (RSE)
+working on Matplotlib, we resolved 125-200 PRs and
+75-125 issues per month.  However, even at this rate we only
+reduced the PR backlog by 70 open PRs and held the issue
+backlog even.  As part of reducing the backlog, we were able to fix several
+long-standing bugs.  We have demonstrated that supporting maintenance
 work has a positive effect on the health of the project and
 \textbf{the additional resources requested here will further reduce,
   but not eliminate, the maintenance backlog}.
@@ -498,14 +498,13 @@ packages from PyPI~\cite{pypi_stats} and is packaged by every major
 Linux and scientific Python distribution.  Another metric to measure
 impact is static analysis of publicly available code.  According to
 github over 299k repositories and over 12k packages hosted on GitHub
-depend on Matplotlib~\cite{gh_deps:2021} and a recent study of the
+depend on Matplotlib~\cite{gh_deps:2021}. A recent study of the
 almost 10M Jupyter notebooks on github found that over 3M of them have
 a direct Matplotlib import~\cite{datalore:2020}.
 
 These measures show broad impact but cover many uses outside of the
-SMD community.  Soliciting for examples of Matplotlib in SMD research
-on social media yielded a (non-exhaustive) list of examples of using
-Matplotlib
+SMD community.  Soliciting on social media for examples of Matplotlib in SMD research
+yielded a (non-exhaustive) list including:
 \begin{itemize}[noitemsep]
 \item
   to study
@@ -533,28 +532,30 @@ Matplotlib
 \item in fundamental research on graphene~\cite{PhysRevLett.120.236802};
 \item and for work on nuclear powered rockets~\cite{leu_cerment}.
 \end{itemize}
-This list shows the breadth of the use of Matplotlib across the SMD
+This list shows the breadth Matplotlib usage across the SMD
 divisions.  \textbf{Small investments in Matplotlib will have returns across
 the entire SMD portfolio}.
 
 Maintaining Matplotlib's health and engineering for its future will
-have wide-ranging impacts for the scientific community, and NASA in
+have wide-ranging impacts for the scientific community, and for NASA in
 particular.  As pointed out above, Matplotlib is the plotting layer
 for much of the Python ecosystem.  It has been used in thousands of
 academic papers, plotting for news and sporting media, technical
 dash-boarding, and most modern data science applications.  As of
 2018Q2 over a third of papers published to astro-ph on the Arxiv
 contained a figure generated with
-Matplotlib~\footnote{\url{https://dxl.ncsa.illinois.edu/arxiv/index.html}}
-which a clear tread upward.  Matplotlib has also been used in a number
-of high-profile astronomy projects including the Nobel Prizing winning
+Matplotlib~\footnote{\url{https://dxl.ncsa.illinois.edu/arxiv/index.html}},
+with a clear upward trend.  Matplotlib has also been used in a number
+of high-profile astronomy projects including the Nobel Prize-winning
 observation of black hole merger by the Laser Interferometer
 Gravitational-Wave Observatory (LIGO) and the recent observation of
-Sagittarius A* by the Event Horizon Telescope (EHT).  Support for
-Matplotlib will improve outcomes across disciplines, but in particular
-Matplotlib is heavily used across SMD divisions, and by scientists in
-academia who work with NASA in engineering, planetary science,
-astrophysics, heliophysics, and earth observation.
+Sagittarius A* by the Event Horizon Telescope (EHT).
+%   Support for
+% Matplotlib will improve outcomes across disciplines, but in particular
+% Matplotlib is heavily used across SMD divisions, and by scientists in
+% academia who work with NASA in engineering, planetary science,
+% astrophysics, heliophysics, and earth observation.
+%% Getting too repetitive?  I think so.
 
 This proposal is another step towards Matplotlib's sustainability, and
 ability to move forward. Given the usage and the scale of the library
@@ -564,8 +565,8 @@ managers will better co-ordinate and nurture volunteer efforts, with
 the goal of growing and sustaining a diverse community of volunteer
 expert contributors.
 
-Finally, by supporting Matplotlib's core developers, they
-will better be able to plan its future and develop Matplotlib's roadmap.
+Finally, with explicit support for their time, Matplotlib's core developers
+will better be able to plan the project's future.
 This requires vision, co-ordination with the rest of the scientific
 Python community, including downstream libraries, and getting out in
 the community to get feedback.  It is very hard to provide that
@@ -574,7 +575,7 @@ leadership and vision while working a ``day job''.
 
 \subsection{Risk Management}
 
-There is minimal risk in the maintenance work.  There is large volume
+There is minimal risk in the maintenance work.  There is a large volume
 of individually small tasks that need to be addressed: the issue and
 PR backlogs.  Any dedicated effort devoted to clearing the backlog
 will have a positive impact on the project.  We have demonstrated that
@@ -585,9 +586,9 @@ efficient use of resources.
 The data pipeline refactor carries more risk.  Given the large user
 base it is imperative that changes are as backwards compatible as
 possible.  While this large user base is on one hand a lever that
-magnifies any improvements, it also makes changes more expensive.  We
+multiplies the value any improvements, it also makes changes more expensive.  We
 cannot simply change our public interface to track the internal
-refactoring, instead we must write also write code to translate the
+refactoring, instead we must also write code to translate the
 old API to the new implementation.  This engineering work makes the
 refactor more challenging and time consuming than starting from
 scratch.  We will rely on, and expand, our extensive test suite to
@@ -595,30 +596,30 @@ catch any unintentional changes early in the development process.
 
 % - need to be very careful about not breaking back-compatibility
 There is also the risk than we are underestimating the amount of work
-that will be required.  There is always a possibility that while
-refactoring that the scope of work rapidly snowball due to unexpected
-internal dependencies or edge cases that must be accounted for.
-However, even in the case that we cannot fully deliver a new data
-pipeline model, throughout the process we will be working towards
-improving library internals and significantly improve our
+that will be required.  There is always a possibility that during
+refactoring the scope of work will rapidly snowball due to unexpected
+internal dependencies or edge cases.
+However, even in the event that we cannot complete the implementation of a new data
+pipeline model within the performance period, throughout the process we will be working towards
+improving library internals and improving our
 documentation.
 
 We anticipate that all of the work can be done incrementally and will
 be merged to the default branch of Matplotlib throughout the
 performance period.  Frequently merging incremental work reduces the
 risk, and is consistent with our standard development process.  Work
-done under this proposal will not be exempt from review, and many
+done under this proposal will be reviewed in our normal fashion, and many
 small PRs are easier to review and merge than a single large PR.
 Large PRs also quickly drift out of sync with the master branch, and
 develop insurmountable rebase requirements.  The improvements, both to
 the code and documentation, will be released to users as part of our
-standard bi-yearly release cadence.
+standard semiannual release cadence.
 
-There is personnel risk that we have not yet identified the RSE who will
-be a key individual in carry out this work.  We are optimistic that we will
+There is personnel risk in that we have not yet identified the RSE who will
+be a key individual for carrying out this work.  We are optimistic that we will
 be able to recruit a qualified individual in reasonable time.  In early
 2020 we ran a similar search for a 1 year position and had a number of
-qualified candidates, one of whom in currently employed via NumFOCUS as
+qualified candidates, one of whom is currently employed via NumFOCUS as
 a RSE for Matplotlib.
 
 \subsection{Contributions of Principal  Investigator and Key Personnel}
@@ -629,7 +630,7 @@ extensive experience developing and maintaining Python libraries for
 scientists.  He has been involved with Matplotlib from 2012 and had a
 leadership role in the project from 2014.  He is also a core developer
 of h5py and has contributed to many of the other core projects of the
-SPE.  At Brookhaven National Laboratory he is the Lead architect and
+SPE.  At Brookhaven National Laboratory he is the lead architect and
 developer of the Bluesky Suite, an ecosystem of co-developed libraries
 and applications for data acquisition and management, which is being
 adopted for beamline operations at synchrotrons in the US and across
@@ -681,11 +682,11 @@ the world.
 \subsubsection{General Maintenance}
 
 Throughout the project both Dr.\ Caswell and the RSE will work on
-Matplotlib general maintenance, community engagement.  This includes,
+Matplotlib general maintenance and community engagement.  This includes,
 but is not limited to, fixing bugs, reviewing Pull Requests, answering
 user questions, welcoming new contributors to the project, and
 planning for the future.  Dr.\ Caswell will particularly focus on
-project roadmapping, and community governance.
+the project roadmap and community governance.
 
 % 4 part plan
 %  1. document how units work now, document how it should work, id problems
@@ -741,8 +742,8 @@ internal architecture of Matplotlib and we need to ensure that we
 engage with all stakeholders.
 
 \paragraph{API Design} The core of the refactor will be a newly developed \texttt{DataSource}
-interface.  This will provide a consistent interface for the
-\texttt{Artists} to their data.  This interface, and the ability to
+interface.  This will provide a consistent interface between the
+\texttt{Artists} and their data.  This interface, and the ability to
 provide alternate implementation of data storage and access, is what
 will allow the features discussed in section \ref{sec:ridm}.  This builds on our
 theoretical and proof-of-concept work that will be finished by the end of
@@ -755,15 +756,15 @@ approximately 100 \texttt{Artist} classes in Matplotlib to use the new
 data model.
 
 \paragraph{Refactor Data Layer} As mentioned above, it is critical that we maintain as much backwards
-compatible as possible in the API changes needed for the refactoring.  The variation
-between \texttt{Artist}s is both what we are trying to address and the
+compatibility as possible in the API changes needed for the refactoring.  The variation
+among \texttt{Artist}s is both what we are trying to address and the
 biggest complicating factor.  Each class well need to be handled on a
 case-by-case basis.  We anticipate that there will be significant
 collateral work, such as writing additional tests to ensure that we do
 not accidentally break current behavior, and implementing
 back-compatibility shims.  As we
-preform this refactor we will also add tests that each \texttt{Artist}
-and plotting method touched handles unit-full data correctly
+perform this refactor we will also add tests that each \texttt{Artist}
+and plotting method handles data with units correctly
 \textbf{This work will impact a majority of the library} and is the
 largest proposed change to the library in over a decade.
 
@@ -784,7 +785,7 @@ by users and third-party library developers.
 
 \subsubsection{Work Process}
 
-The Research Software Engineer (RSE), whom needs to be identified,
+The Research Software Engineer (RSE), yet to be identified,
 will devote 100\% FTE to this proposal.  They will split their time
 evenly between general maintenance and the data model refactoring.  If
 the refactoring is completed faster than expected, the RSE will devote
@@ -793,16 +794,16 @@ devote 25\% FTE to this proposal.  This time will be split between
 general maintenance (10\%), the data model refactor (10\%), and
 management of the grant and supervision of the RSE (5\%).
 
-All work under this proposal will under go the standard review process
-as any other contribution which has several advantages.  First, the
-review process encourages many small PRs which reduces risk.  Given
-our process, at least one maintainer not supported on this proposal
-will need to sign off on any changes before they are merged.  This
-will ensure that dissemination of understanding of the proposed work
-and community buy-in to the proposed work.  Finally, by merging
-changes to the default branch continuously through out the period of
+All work under this proposal will undergo the same review process
+as any other contribution.  We
+encourage many small PRs to reduce risk.  At least one maintainer not
+supported on this proposal
+will need to sign off on any changes before they are merged. This
+disseminates understanding of the proposed work and ensures
+community buy-in.  Finally, by merging
+changes to the default branch continuously throughout the period of
 work the incremental improvements will be released as part of our
-bi-yearly release cadence.
+semiannual release cadence.
 
 The RSE will present the status of the work at two conferences yearly,
 expected to be SciPy in July and one of PyData regional conferences in
