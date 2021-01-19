@@ -742,8 +742,8 @@ internal architecture of Matplotlib and we need to ensure that we
 engage with all stakeholders.
 
 \paragraph{API Design} The core of the refactor will be a newly developed \texttt{DataSource}
-interface.  This will provide a consistent interface for the
-\texttt{Artists} to their data.  This interface, and the ability to
+interface.  This will provide a consistent interface between the
+\texttt{Artists} and their data.  This interface, and the ability to
 provide alternate implementation of data storage and access, is what
 will allow the features discussed in section \ref{sec:ridm}.  This builds on our
 theoretical and proof-of-concept work that will be finished by the end of
@@ -756,15 +756,15 @@ approximately 100 \texttt{Artist} classes in Matplotlib to use the new
 data model.
 
 \paragraph{Refactor Data Layer} As mentioned above, it is critical that we maintain as much backwards
-compatible as possible in the API changes needed for the refactoring.  The variation
-between \texttt{Artist}s is both what we are trying to address and the
+compatibility as possible in the API changes needed for the refactoring.  The variation
+among \texttt{Artist}s is both what we are trying to address and the
 biggest complicating factor.  Each class well need to be handled on a
 case-by-case basis.  We anticipate that there will be significant
 collateral work, such as writing additional tests to ensure that we do
 not accidentally break current behavior, and implementing
 back-compatibility shims.  As we
 perform this refactor we will also add tests that each \texttt{Artist}
-and plotting method touched handles data with units correctly
+and plotting method handles data with units correctly
 \textbf{This work will impact a majority of the library} and is the
 largest proposed change to the library in over a decade.
 
@@ -785,7 +785,7 @@ by users and third-party library developers.
 
 \subsubsection{Work Process}
 
-The Research Software Engineer (RSE), whom needs to be identified,
+The Research Software Engineer (RSE), yet to be identified,
 will devote 100\% FTE to this proposal.  They will split their time
 evenly between general maintenance and the data model refactoring.  If
 the refactoring is completed faster than expected, the RSE will devote
@@ -794,16 +794,16 @@ devote 25\% FTE to this proposal.  This time will be split between
 general maintenance (10\%), the data model refactor (10\%), and
 management of the grant and supervision of the RSE (5\%).
 
-All work under this proposal will under go the standard review process
-as any other contribution which has several advantages.  First, the
-review process encourages many small PRs which reduces risk.  Given
-our process, at least one maintainer not supported on this proposal
-will need to sign off on any changes before they are merged.  This
-will ensure that dissemination of understanding of the proposed work
-and community buy-in to the proposed work.  Finally, by merging
-changes to the default branch continuously through out the period of
+All work under this proposal will undergo the same review process
+as any other contribution.  We
+encourage many small PRs to reduce risk.  At least one maintainer not
+supported on this proposal
+will need to sign off on any changes before they are merged. This
+disseminates understanding of the proposed work and ensures
+community buy-in.  Finally, by merging
+changes to the default branch continuously throughout the period of
 work the incremental improvements will be released as part of our
-bi-yearly release cadence.
+semiannual release cadence.
 
 The RSE will present the status of the work at two conferences yearly,
 expected to be SciPy in July and one of PyData regional conferences in
