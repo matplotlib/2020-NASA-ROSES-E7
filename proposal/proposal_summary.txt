@@ -8,17 +8,17 @@ activities: overhauling our internal data representation with a particular
 focus on supporting physical units, and general library maintenance and
 community development.
 
-Matplotlib is a comprehensive Python library for
-creating numerical visualizations, widely used throughout the technical and
-scientific domains, and particular in the SMD community.  Matplotlib is an
-open-source tool, and has been developed and maintained for the last 17 years
-primarily through volunteer effort.  However, like many other open-source
-tools, it has come to supplant commercial software as the tool of choice for
-hundreds of thousands of users, putting significant demands on the volunteer
-community.  In order to support these users, develop a vibrant community of
-users and developers, and plan for future improvements that can meet
-modern computing challenges, we are asking for modest support in terms of
-person hours.
+Matplotlib is a comprehensive Python library for creating numerical
+visualizations, widely used throughout the technical and scientific
+domains, and particular in the SMD community.  Matplotlib is an
+open-source tool, and has been developed and maintained for the last
+17 years primarily through volunteer effort.  However, like many other
+open-source tools, it has come to be the tool of choice for hundreds
+of thousands of users, putting significant demands on the volunteer
+community.  In order to support these users, develop a vibrant
+community of users and developers, and plan for future improvements
+that can meet modern computing challenges, we are asking for modest
+support in terms of person hours.
 
 
 Matplotlib is based on visualizing data stored in Numpy arrays, which
