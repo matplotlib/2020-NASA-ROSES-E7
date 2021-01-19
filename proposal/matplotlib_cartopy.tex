@@ -745,15 +745,15 @@ Matplotlib and we need to ensure that we engage with all stakeholders.
 interface.  This will provide a consistent interface between the
 \texttt{Artists} and their data.  This interface, and the ability to
 provide alternate implementation of data storage and access, is what
-will allow the features discussed in section \ref{sec:ridm}.  This builds on our
-theoretical and proof-of-concept work that will be finished by the end of
-2021.  Active work on both projects will overlap by 6 months and we
-will actively engage to ensure that the theoretical work is
-effectively translated.  We will fully specify the \texttt{DataSource}
-interface and a write a reference implementation by the end of Y1Q3.
-Concurrently we will developed a detailed schedule to refactor the
-approximately 100 \texttt{Artist} classes in Matplotlib to use the new
-data model.
+will allow the features discussed in section \ref{sec:ridm}.  This
+builds on our theoretical and proof-of-concept work that will be
+finished by the end of 2021.  Active work on both projects will
+overlap and we will actively engage to ensure that the theoretical
+work is effectively translated.  We will fully specify the
+\texttt{DataSource} interface and a write a reference implementation
+by the end of Y1Q3.  Concurrently we will developed a detailed
+schedule to refactor the approximately 100 \texttt{Artist} classes in
+Matplotlib to use the new data model.
 
 \paragraph{Refactor Data Layer} As mentioned above, it is critical that we maintain as much backwards
 compatibility as possible in the API changes needed for the refactoring.  The variation
