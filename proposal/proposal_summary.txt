@@ -1,13 +1,3 @@
-Here we propose full time support for a software developer and partial support
-for the Matplotlib Project Lead.  This will allow us to take
-on more complex projects than can be implemented by part-time
-volunteer effort alone, while executing critical day-to-day
-maintenance tasks required to keep the project healthy.  We propose to
-split the effort on this grant equally between the two primary
-activities: overhauling our internal data representation with a particular
-focus on supporting physical units, and general library maintenance and
-community development.
-
 Matplotlib is a comprehensive, community developed, Python library for
 creating static, animated, and interactive visualizations, used
 throughout the SMD community.  Matplotlib is an open-source tool, and
@@ -19,15 +9,24 @@ these users, develop a vibrant community of users and developers, and
 plan for future improvements that can meet modern computing
 challenges, we are asking for modest support in terms of person hours.
 
+Here we propose full time support for a software developer and partial
+support for the Matplotlib Project Lead.  This will allow us to take
+on more complex projects than can be implemented by part-time
+volunteer effort alone, while executing critical day-to-day
+maintenance tasks required to keep the project healthy.  We propose to
+split the effort on this grant equally between the two primary
+activities: overhauling our internal data representation with a
+particular focus on supporting physical units, and general library
+maintenance and community development.
 
 Matplotlib is based on visualizing data stored in Numpy arrays, which
 is a simple yet flexible data model that has been the underpinning of
 data visualization for the last few decades.  However, modern data
-structures are much richer; they can carry additional
-meta-data or describe massive data sets, allowing piece-wise
-operations on data sets too large to load into memory.  We propose
-to refactor Matplotlib's internal data representation to
-exploit these developments.
+structures are much richer; they can carry additional meta-data or
+describe massive data sets, allowing piece-wise operations on data
+sets too large to load into memory.  We propose to refactor
+Matplotlib's internal data representation to exploit these
+developments.
 
 
 An immediate motivation for this refactor is to improve Matplotlib's
@@ -49,15 +48,14 @@ queries.
 
 
 To sustain Matplotlib and continue to support the hundred of thousands
-of users and hundreds of downstream packages will require
-continued maintenance of the library and its community.
-This includes tasks like promptly fixing
-critical bugs and regressions as they are reported, producing regular
-releases, answering user questions, facilitating discussions,
-community management, and general project management.  Dedicated
-full-time developers help ensure that crucial tasks happen in a consistent
-and timely manner, and provide the roadmaps that will steer
-the future of the library
+of users and hundreds of downstream packages will require continued
+maintenance of the library and its community.  This includes tasks
+like promptly fixing critical bugs and regressions as they are
+reported, producing regular releases, answering user questions,
+facilitating discussions, community management, and general project
+management.  Dedicated full-time developers help ensure that crucial
+tasks happen in a consistent and timely manner, and provide the
+roadmaps that will steer the future of the library
 
 
 Matplotlib is used throughout the SMD community, including flagship
