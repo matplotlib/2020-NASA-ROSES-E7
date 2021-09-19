@@ -118,6 +118,24 @@ This only sort of works
   #    print(f"{d['user']['login']: <20} {d['author_association']: <24} {d['pull_request']['url']}")
 
 #+end_src
+** caching
+
+
+#+begin_src python
+  import json
+
+  with open('/tmp/gh_dump.json', 'w') as fout:
+      json.dump(d_issues, fout)
+#+end_src
+
+#+begin_src python
+  import json
+
+  with open('/tmp/gh_dump.json', 'r') as fin:
+      d_issues = json.load(fin)
+#+end_src
+
+
 ** plotting
 
 #+begin_src python
@@ -139,7 +157,7 @@ This only sort of works
 
 #+begin_src python
   import matplotlib.pyplot as plt
-
+  import pandas as pd
 
   def plot_by(gh_issues, *, ax=None, freq="M", label, show_net=True, show_rolling=False):
 
@@ -188,4 +206,63 @@ This only sort of works
               )
 
       ax.legend()
+#+end_src
+
+#+begin_src python
+  import matplotlib
+  import matplotlib.pyplot as plt
+  import numpy as np
+
+
+  data = {
+      "Pull Requests opened": [1656, 1752],
+      "Pull Requests closed": [1613, 1775],
+      "Issues opened": [795, 1108],
+      "Issues closed": [756, 999],
+  }
+  labels = ["2019", "2020"]
+
+  x = np.arange(len(labels))  # the label locations
+  width = 0.35  # the width of the bars
+
+  fig, (ax1, ax2) = plt.subplots(1, 2, constrained_layout=True, sharey=True)
+
+  for ax, typ in zip((ax1, ax2),["Pull Requests", "Issues"]):
+      open_lab = f"{typ} opened"
+      close_lab = f"{typ} closed"
+      rects2 = ax.bar(
+          x - width / 2,
+          data[open_lab],
+          width,
+          label='opened',
+          color="k",
+          edgecolor="w",
+          hatch="/",
+      )
+      rects1 = ax.bar(
+          x + width / 2,
+          data[close_lab],
+          width,
+          label='closed',
+          color="w",
+          edgecolor="k",
+          hatch="\\",
+      )
+      ax.bar_label(rects1, padding=3)
+      ax.bar_label(rects2, padding=3)
+      ax.set_xlabel("Year")
+      ax.set_title(typ)
+      ax.set_xticks(x)
+      ax.set_xticklabels(labels)
+      ax.spines['top'].set_visible(False)
+      ax.spines['right'].set_visible(False)
+  ax2.legend(ncol=2)
+
+  ax1.set_ylabel("#")
+  ax1.set_ylim(top=2000)
+  fig.set_size_inches(6.3, 2.75)
+
+  plt.show()
+  # ax2.bar(['2019', '2020'], data['issue closed'], color='C2', width=.7)
+  # ax2.bar(['2019', '2020'], data['issue opened'], color='C3', width=.5)
 #+end_src
