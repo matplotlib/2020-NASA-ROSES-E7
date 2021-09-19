@@ -1,6 +1,10 @@
 # 2020-NASA-ROSES-E7
 Grant proposal responding to the 2020 NASA ROSES E7 solicitation.
 
+This proposal [was selected for
+funding](https://discourse.matplotlib.org/t/maplotlib-selected-for-nasa-roses-ostfl-2020/22303)
+as 1 of [8 (out of
+61)](https://nspires.nasaprs.com/external/viewrepositorydocument/cmdocumentid=843923/solicitationId=%7B958CF134-D655-E512-B5AD-84501D14A0C1%7D/viewSolicitationDocument=1/OSTFL20%20Abstracts.pdf) proposals on August 23, 2021.
 
 ## Important links
 
